@@ -1,0 +1,2172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>摇爻好运小馆</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#08080e;--bg2:#10101a;--ink:#e8e0d0;--ink2:#9a9080;
+  --red:#c43c3c;--red2:#e85050;--gold:#d4a847;--gold2:#b08830;
+  --dark:#050508;--glow:rgba(212,168,71,0.15);
+}
+html{scroll-behavior:smooth}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
+body{
+  font-family:'KaiTi','STKaiti','FangSong','SimSun',serif;
+  color:var(--ink);
+}
+
+/* ====================== BACKGROUND EFFECTS ====================== */
+#bgCanvas{position:fixed;inset:0;z-index:1;pointer-events:none}
+
+.mist{
+  position:fixed;z-index:4;pointer-events:none;
+  width:300%;height:200px;left:-100%;
+  filter:blur(60px);
+}
+.mist-1{
+  bottom:10%;
+  background:linear-gradient(90deg,
+    transparent 0%, rgba(160,150,130,0.04) 15%, rgba(180,170,150,0.07) 35%,
+    rgba(160,150,130,0.05) 55%, transparent 75%);
+  animation:mistFlow 25s linear infinite;
+}
+.mist-2{
+  top:30%;height:140px;
+  background:linear-gradient(90deg,
+    transparent 0%, rgba(180,170,150,0.04) 25%, rgba(200,190,170,0.06) 50%,
+    rgba(180,170,150,0.04) 75%, transparent 100%);
+  animation:mistFlow 35s linear infinite reverse;
+}
+.mist-3{
+  bottom:40%;height:100px;
+  background:linear-gradient(90deg,
+    transparent 10%, rgba(180,170,150,0.035) 30%, rgba(160,150,130,0.055) 60%, transparent 85%);
+  animation:mistFlow 30s linear infinite;
+}
+@keyframes mistFlow{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(33%)}
+}
+
+/* ====================== MAIN LAYOUT ====================== */
+#app{
+  width:100%;height:100vh;overflow-y:auto;overflow-x:hidden;
+  position:relative;z-index:10;
+  scrollbar-width:none;
+}
+#app::-webkit-scrollbar{display:none}
+
+.stage{
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 32px 60px;min-height:100vh;position:relative;
+}
+.stage.active{display:flex;animation:stageIn 1s cubic-bezier(0.16,1,0.3,1) both}
+@keyframes stageIn{
+  0%{opacity:0;transform:scale(0.95);filter:blur(8px)}
+  100%{opacity:1;transform:scale(1);filter:blur(0)}
+}
+
+/* ====================== TYPOGRAPHY ====================== */
+.title{
+  font-size:clamp(56px,12vw,96px);letter-spacing:0.3em;color:var(--ink);
+  font-weight:normal;line-height:1.2;position:relative;
+  text-shadow:0 0 60px rgba(212,168,71,0.2), 0 0 120px rgba(212,168,71,0.1);
+}
+.title::after{
+  content:'';position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);
+  width:60%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  animation:lineGlow 3s ease-in-out infinite;
+}
+@keyframes lineGlow{
+  0%,100%{opacity:0.3;width:40%}
+  50%{opacity:1;width:70%}
+}
+.subtitle{
+  font-size:clamp(18px,3vw,24px);color:var(--ink2);letter-spacing:0.5em;
+  margin-top:16px;
+}
+.desc{
+  font-size:clamp(16px,2.5vw,20px);line-height:2.2;color:var(--ink2);
+  text-align:center;max-width:480px;margin-top:40px;letter-spacing:0.1em;
+}
+
+/* ====================== DECORATIONS ====================== */
+.divider{
+  width:clamp(120px,30vw,240px);height:1px;margin:28px auto;position:relative;
+  background:linear-gradient(90deg,transparent,var(--gold2),transparent);
+}
+.divider::before,.divider::after{
+  content:'◆';position:absolute;top:-7px;color:var(--gold);font-size:10px;
+  text-shadow:0 0 10px var(--gold);
+}
+.divider::before{left:-14px}
+.divider::after{right:-14px}
+
+.seal{
+  margin-top:48px;width:80px;height:80px;border:2px solid var(--red);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--red);font-size:24px;letter-spacing:4px;
+  transform:rotate(-12deg);opacity:0.5;line-height:1.1;
+  text-shadow:0 0 20px rgba(196,60,60,0.3);
+  animation:sealPulse 4s ease-in-out infinite;
+}
+@keyframes sealPulse{0%,100%{opacity:0.4}50%{opacity:0.7}}
+
+/* ====================== BUTTONS ====================== */
+.btn{
+  display:inline-block;padding:18px 56px;margin-top:40px;position:relative;
+  background:transparent;color:var(--gold);font-size:clamp(18px,3vw,22px);
+  letter-spacing:0.4em;border:1px solid var(--gold2);
+  cursor:pointer;font-family:inherit;overflow:hidden;
+  transition:all 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(212,168,71,0.1),rgba(212,168,71,0.02));
+  opacity:0;transition:opacity 0.4s;
+}
+.btn:hover::before{opacity:1}
+.btn:hover{
+  border-color:var(--gold);box-shadow:0 0 40px rgba(212,168,71,0.15),inset 0 0 40px rgba(212,168,71,0.05);
+  transform:translateY(-2px);letter-spacing:0.5em;
+}
+.btn:active{transform:scale(0.97)}
+.btn-small{padding:14px 40px;font-size:clamp(16px,2.5vw,18px);letter-spacing:0.3em}
+.btn-disabled{opacity:0.15;pointer-events:none;cursor:default}
+.btn-enabled{opacity:1;pointer-events:auto;cursor:pointer}
+
+/* ====================== QUESTION INPUT ====================== */
+.question-area{
+  width:100%;max-width:460px;margin-top:24px;
+  overflow:hidden;max-height:0;opacity:0;
+  transition:all 0.6s cubic-bezier(0.16,1,0.3,1);
+}
+.question-area.show{max-height:260px;opacity:1}
+.question-label{
+  font-size:clamp(14px,2vw,17px);color:var(--ink2);letter-spacing:0.15em;
+  margin-bottom:10px;text-align:center;
+}
+.question-input{
+  width:100%;min-height:88px;max-height:160px;padding:14px 18px;resize:vertical;
+  background:rgba(20,20,35,0.6);border:1px solid rgba(212,168,71,0.12);
+  color:var(--ink);font-family:inherit;font-size:clamp(15px,2.2vw,18px);
+  line-height:1.8;letter-spacing:0.05em;outline:none;
+  transition:border-color 0.3s;
+}
+.question-input:focus{border-color:rgba(212,168,71,0.35)}
+.question-input::placeholder{color:rgba(154,144,128,0.5);letter-spacing:0.1em}
+.question-hint{
+  font-size:clamp(11px,1.5vw,13px);color:rgba(154,144,128,0.4);
+  text-align:right;margin-top:6px;letter-spacing:0.08em;
+}
+.user-question-display{
+  text-align:center;padding:12px 20px;margin-bottom:16px;
+  font-size:clamp(14px,2vw,17px);color:var(--ink2);
+  border:1px dashed rgba(212,168,71,0.12);
+  background:rgba(212,168,71,0.02);letter-spacing:0.06em;line-height:1.8;
+  font-style:italic;
+}
+
+/* ====================== CATEGORY ====================== */
+.cat-title{font-size:clamp(28px,5vw,40px);letter-spacing:0.3em}
+.cat-sub{font-size:clamp(14px,2vw,18px);color:var(--ink2);margin:8px 0 32px;letter-spacing:0.3em}
+.cat-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,2vw,20px);
+  width:100%;max-width:480px;
+}
+.cat-card{
+  aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border:1px solid rgba(212,168,71,0.2);cursor:pointer;
+  transition:all 0.4s cubic-bezier(0.16,1,0.3,1);position:relative;overflow:hidden;
+  background:rgba(212,168,71,0.02);
+}
+.cat-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at center,rgba(212,168,71,0.08),transparent 70%);
+  opacity:0;transition:opacity 0.4s;
+}
+.cat-card:hover::before{opacity:1}
+.cat-card:hover{
+  border-color:var(--gold);transform:translateY(-4px);
+  box-shadow:0 8px 32px rgba(0,0,0,0.3),0 0 20px rgba(212,168,71,0.1);
+}
+.cat-card.selected{
+  border-color:var(--red);background:rgba(196,60,60,0.08);
+  box-shadow:0 0 30px rgba(196,60,60,0.15);
+}
+.cat-card .icon{font-size:clamp(32px,6vw,48px);margin-bottom:8px;filter:drop-shadow(0 0 8px rgba(255,255,255,0.1))}
+.cat-card .label{font-size:clamp(16px,2.5vw,20px);letter-spacing:0.2em;color:var(--ink)}
+
+/* ====================== CASTING ====================== */
+.cast-title{font-size:clamp(24px,4vw,36px);letter-spacing:0.3em}
+.cast-round{
+  font-size:clamp(16px,2.5vw,22px);color:var(--gold);margin:8px 0 32px;
+  letter-spacing:0.4em;text-shadow:0 0 20px rgba(212,168,71,0.3);
+}
+.coins-area{
+  display:flex;gap:clamp(20px,4vw,36px);align-items:center;justify-content:center;
+  height:200px;margin-bottom:24px;perspective:800px;
+}
+.coin{
+  width:clamp(80px,14vw,110px);height:clamp(80px,14vw,110px);
+  border-radius:50%;position:relative;transform-style:preserve-3d;
+}
+.coin-face{
+  position:absolute;inset:0;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  backface-visibility:hidden;
+  background:radial-gradient(circle at 35% 35%,#e8c860,#c8a84e 40%,#a08030 80%,#887020);
+  box-shadow:0 4px 20px rgba(0,0,0,0.5),0 0 30px rgba(212,168,71,0.15),
+    inset 0 1px 3px rgba(255,255,255,0.3);
+}
+.coin-face::after{
+  content:'';width:clamp(18px,3vw,26px);height:clamp(18px,3vw,26px);
+  border:2px solid #806820;background:var(--bg);
+}
+.coin-back{transform:rotateY(180deg)}
+.coin-front .coin-char{
+  position:absolute;font-size:clamp(10px,1.8vw,14px);color:#604010;font-weight:bold;
+}
+.coin-front .coin-char:nth-child(1){top:12%;left:50%;transform:translateX(-50%)}
+.coin-front .coin-char:nth-child(2){bottom:12%;left:50%;transform:translateX(-50%)}
+.coin-front .coin-char:nth-child(3){left:12%;top:50%;transform:translateY(-50%)}
+.coin-front .coin-char:nth-child(4){right:12%;top:50%;transform:translateY(-50%)}
+
+@keyframes coinToss{
+  0%{transform:translateY(0) rotateX(0deg)}
+  40%{transform:translateY(-150px) rotateX(900deg)}
+  100%{transform:translateY(0) rotateX(var(--fr,1800deg))}
+}
+
+.cast-result{
+  min-height:36px;font-size:clamp(16px,2.5vw,20px);color:var(--red2);
+  letter-spacing:0.2em;margin-bottom:20px;
+  opacity:0;transition:opacity 0.6s;text-shadow:0 0 20px rgba(232,80,80,0.3);
+}
+.cast-result.show{opacity:1}
+.cast-btns{display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap}
+
+.yao-progress{
+  display:flex;flex-direction:column-reverse;gap:10px;
+  margin-bottom:28px;min-height:160px;align-items:center;
+}
+.yao-line{
+  display:flex;align-items:center;gap:10px;
+  animation:yaoAppear 0.6s cubic-bezier(0.16,1,0.3,1);
+}
+@keyframes yaoAppear{from{opacity:0;transform:scaleX(0) translateY(10px)}to{opacity:1;transform:scaleX(1) translateY(0)}}
+.yao-line .yang{
+  width:clamp(100px,20vw,140px);height:clamp(10px,1.5vw,14px);
+  background:var(--ink);border-radius:2px;
+  box-shadow:0 0 10px rgba(232,224,208,0.2);
+}
+.yao-line .yin{display:flex;gap:clamp(10px,2vw,16px)}
+.yao-line .yin span{
+  width:clamp(44px,9vw,62px);height:clamp(10px,1.5vw,14px);
+  background:var(--ink);border-radius:2px;
+  box-shadow:0 0 10px rgba(232,224,208,0.2);
+}
+.yao-line .yang.moving{background:var(--red2);box-shadow:0 0 15px rgba(232,80,80,0.4)}
+.yao-line .yin.moving span{background:var(--red2);box-shadow:0 0 15px rgba(232,80,80,0.4)}
+.yao-line .moving-dot{
+  width:10px;height:10px;border-radius:50%;background:var(--red2);flex-shrink:0;
+  box-shadow:0 0 10px rgba(232,80,80,0.5);animation:dotPulse 2s infinite;
+}
+@keyframes dotPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.7)}}
+.yao-line .stable-dot{width:10px;height:10px;flex-shrink:0}
+.yao-num{font-size:clamp(13px,2vw,16px);color:var(--ink2);width:24px;text-align:right}
+
+/* ====================== REVEAL ====================== */
+.reveal-section{text-align:center;width:100%}
+.gua-display{
+  display:flex;justify-content:center;gap:clamp(40px,8vw,80px);
+  align-items:flex-start;margin:32px 0;flex-wrap:wrap;
+}
+.gua-box{text-align:center}
+.gua-box .gua-label{
+  font-size:clamp(14px,2vw,18px);color:var(--ink2);margin-bottom:10px;letter-spacing:0.3em
+}
+.gua-box .gua-name{
+  font-size:clamp(40px,8vw,64px);letter-spacing:0.2em;
+  text-shadow:0 0 40px rgba(212,168,71,0.2);
+}
+.gua-box .gua-fullname{
+  font-size:clamp(14px,2vw,18px);color:var(--ink2);letter-spacing:0.2em;margin-bottom:16px
+}
+.gua-lines{display:flex;flex-direction:column-reverse;gap:8px;align-items:center}
+.gua-lines .yang{
+  width:clamp(80px,16vw,120px);height:clamp(8px,1.2vw,12px);
+  background:var(--ink);border-radius:1px;box-shadow:0 0 8px rgba(232,224,208,0.15);
+}
+.gua-lines .yin{display:flex;gap:clamp(8px,1.5vw,14px)}
+.gua-lines .yin span{
+  width:clamp(35px,7vw,53px);height:clamp(8px,1.2vw,12px);
+  background:var(--ink);border-radius:1px;box-shadow:0 0 8px rgba(232,224,208,0.15);
+}
+.gua-lines .yang.moving{background:var(--red2);box-shadow:0 0 12px rgba(232,80,80,0.3)}
+.gua-lines .yin.moving span{background:var(--red2);box-shadow:0 0 12px rgba(232,80,80,0.3)}
+.arrow{
+  font-size:clamp(28px,5vw,44px);color:var(--gold);margin-top:60px;
+  text-shadow:0 0 20px rgba(212,168,71,0.3);
+}
+.gua-xiang{
+  font-size:clamp(16px,2.5vw,20px);line-height:2;color:var(--ink2);
+  margin:20px auto;max-width:460px;letter-spacing:0.1em;
+}
+.tri-label{font-size:clamp(12px,1.8vw,15px);color:var(--ink2);margin-top:10px;letter-spacing:0.1em}
+
+/* ====================== RESULT ====================== */
+.result-section{width:100%;max-width:580px}
+.result-header{
+  font-size:clamp(32px,6vw,52px);letter-spacing:0.2em;text-align:center;
+  margin-bottom:8px;text-shadow:0 0 40px rgba(212,168,71,0.15);
+}
+.result-sub{
+  text-align:center;font-size:clamp(14px,2vw,18px);color:var(--ink2);
+  letter-spacing:0.3em;margin-bottom:32px;
+}
+.result-block{
+  margin-bottom:28px;padding:24px 28px;
+  border-left:2px solid rgba(212,168,71,0.2);
+  background:linear-gradient(90deg,rgba(212,168,71,0.03),transparent);
+  opacity:0;transform:translateX(-20px);
+  transition:all 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.result-block.show{opacity:1;transform:translateX(0)}
+.result-title{
+  font-size:clamp(18px,3vw,24px);letter-spacing:0.3em;color:var(--gold);
+  margin-bottom:14px;
+}
+.result-content{font-size:clamp(15px,2.2vw,19px);line-height:2.2;color:var(--ink)}
+.result-content p{margin-bottom:10px}
+.fortune-badge{
+  display:inline-block;padding:8px 28px;margin:10px 4px;
+  border:1px solid;font-size:clamp(16px,2.5vw,20px);letter-spacing:0.3em;
+}
+.fortune-ji{border-color:#3d9d3d;color:#5dbd5d;background:rgba(60,160,60,0.08);
+  box-shadow:0 0 20px rgba(60,160,60,0.15);text-shadow:0 0 10px rgba(60,160,60,0.3)}
+.fortune-xiong{border-color:var(--red);color:var(--red2);background:rgba(196,60,60,0.08);
+  box-shadow:0 0 20px rgba(196,60,60,0.15);text-shadow:0 0 10px rgba(196,60,60,0.3)}
+.fortune-ping{border-color:var(--ink2);color:var(--ink2);background:rgba(154,144,128,0.08)}
+
+.restart-area{text-align:center;margin-top:28px;padding-top:24px;
+  border-top:1px solid rgba(212,168,71,0.1)}
+
+/* ====================== HISTORY ====================== */
+.history-header{
+  display:flex;align-items:center;justify-content:space-between;
+  width:100%;max-width:600px;margin-bottom:24px;
+}
+.history-back{
+  background:none;border:none;color:var(--ink2);font-family:inherit;
+  font-size:clamp(15px,2.2vw,18px);cursor:pointer;padding:8px 16px;
+  letter-spacing:0.15em;transition:color 0.3s;
+}
+.history-back:hover{color:var(--gold)}
+.history-empty{
+  color:var(--ink2);font-size:clamp(16px,2.5vw,20px);
+  letter-spacing:0.2em;margin-top:60px;text-align:center;line-height:2;
+}
+.history-list{
+  width:100%;max-width:600px;display:flex;flex-direction:column;gap:14px;
+  padding-bottom:40px;
+}
+.history-card{
+  display:flex;align-items:center;gap:16px;
+  padding:18px 22px;cursor:pointer;position:relative;
+  border:1px solid rgba(212,168,71,0.08);
+  background:linear-gradient(135deg,rgba(20,20,35,0.7),rgba(15,15,28,0.5));
+  backdrop-filter:blur(6px);
+  transition:all 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+.history-card:hover{
+  border-color:rgba(212,168,71,0.25);
+  background:linear-gradient(135deg,rgba(30,28,50,0.8),rgba(20,18,38,0.6));
+  transform:translateX(4px);
+  box-shadow:0 0 30px rgba(212,168,71,0.06);
+}
+.history-card .hc-icon{
+  font-size:28px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(212,168,71,0.12);flex-shrink:0;
+}
+.history-card .hc-body{flex:1;min-width:0}
+.history-card .hc-name{
+  font-size:clamp(16px,2.5vw,20px);color:var(--ink);letter-spacing:0.15em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.history-card .hc-meta{
+  font-size:clamp(12px,1.8vw,14px);color:var(--ink2);margin-top:4px;
+  letter-spacing:0.08em;
+}
+.history-card .hc-fortune{
+  flex-shrink:0;padding:4px 14px;font-size:clamp(12px,1.8vw,15px);
+  letter-spacing:0.2em;border:1px solid;
+}
+.history-card .hc-delete{
+  position:absolute;top:8px;right:10px;
+  background:none;border:none;color:var(--ink2);font-size:16px;
+  cursor:pointer;opacity:0;transition:opacity 0.3s;padding:4px 8px;
+}
+.history-card:hover .hc-delete{opacity:0.5}
+.history-card .hc-delete:hover{opacity:1;color:var(--red)}
+
+.btn-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;align-items:center;margin-top:40px}
+.btn-ghost{
+  display:inline-block;padding:14px 40px;
+  background:transparent;color:var(--ink2);font-size:clamp(16px,2.5vw,18px);
+  letter-spacing:0.3em;border:1px solid rgba(154,144,128,0.2);
+  cursor:pointer;font-family:inherit;transition:all 0.3s;
+}
+.btn-ghost:hover{color:var(--gold);border-color:rgba(212,168,71,0.3)}
+
+/* ====================== RESULT TABS ====================== */
+.result-tabs{
+  display:flex;justify-content:center;gap:0;margin-bottom:32px;
+  border:1px solid rgba(212,168,71,0.15);width:fit-content;margin-left:auto;margin-right:auto;
+}
+.result-tab{
+  padding:10px 32px;font-size:clamp(14px,2vw,17px);letter-spacing:0.25em;
+  background:transparent;color:var(--ink2);border:none;
+  cursor:pointer;font-family:inherit;transition:all 0.3s;position:relative;
+}
+.result-tab.active{
+  color:var(--gold);background:rgba(212,168,71,0.08);
+}
+.result-tab.active::after{
+  content:'';position:absolute;bottom:0;left:20%;right:20%;height:1px;
+  background:var(--gold);
+}
+.result-tab:hover:not(.active){color:var(--ink)}
+.result-pane{display:none}
+.result-pane.active{display:block}
+.detail-section{
+  margin-bottom:32px;padding:20px 24px;
+  border:1px solid rgba(212,168,71,0.06);
+  background:linear-gradient(135deg,rgba(20,20,35,0.5),rgba(15,15,28,0.3));
+}
+.detail-section-title{
+  font-size:clamp(17px,2.5vw,22px);color:var(--gold);letter-spacing:0.25em;
+  margin-bottom:16px;padding-bottom:10px;
+  border-bottom:1px solid rgba(212,168,71,0.1);
+}
+.detail-section p{
+  font-size:clamp(14px,2vw,17px);line-height:2.2;color:var(--ink);margin-bottom:8px;
+}
+.detail-section .sub-label{
+  color:var(--gold2);font-size:clamp(13px,1.8vw,16px);letter-spacing:0.15em;
+  margin:14px 0 6px;display:block;
+}
+.detail-trigram-row{
+  display:flex;gap:20px;margin:12px 0;flex-wrap:wrap;
+}
+.detail-tri-box{
+  flex:1;min-width:160px;padding:14px 18px;
+  border:1px solid rgba(212,168,71,0.08);
+  background:rgba(212,168,71,0.02);text-align:center;
+}
+.detail-tri-box .tri-name{font-size:clamp(20px,3vw,28px);color:var(--ink);letter-spacing:0.15em}
+.detail-tri-box .tri-desc{font-size:clamp(12px,1.6vw,14px);color:var(--ink2);margin-top:6px;line-height:1.8}
+.yao-detail-row{
+  display:flex;align-items:flex-start;gap:14px;padding:10px 0;
+  border-bottom:1px solid rgba(212,168,71,0.04);
+}
+.yao-detail-row:last-child{border-bottom:none}
+.yao-detail-row .yao-pos{
+  flex-shrink:0;width:52px;text-align:center;
+  font-size:clamp(13px,1.8vw,15px);color:var(--gold);letter-spacing:0.1em;
+  padding-top:2px;
+}
+.yao-detail-row .yao-type{
+  flex-shrink:0;width:60px;text-align:center;padding:2px 0;
+  font-size:clamp(12px,1.6vw,14px);letter-spacing:0.08em;
+}
+.yao-detail-row .yao-type.yang{color:#5dbd5d}
+.yao-detail-row .yao-type.yin{color:var(--red2)}
+.yao-detail-row .yao-type.moving{
+  border:1px solid rgba(212,168,71,0.3);color:var(--gold);
+  background:rgba(212,168,71,0.05);
+}
+.yao-detail-row .yao-text{
+  flex:1;font-size:clamp(13px,1.8vw,16px);line-height:2;color:var(--ink);
+}
+.elem-rel{
+  display:inline-block;padding:3px 12px;margin:4px;
+  font-size:clamp(13px,1.8vw,15px);letter-spacing:0.1em;
+  border:1px solid rgba(212,168,71,0.1);
+}
+
+/* ====================== MODAL ====================== */
+.modal-overlay{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);
+  display:flex;align-items:center;justify-content:center;
+  animation:fadeOverlay 0.3s;
+}
+@keyframes fadeOverlay{from{opacity:0}to{opacity:1}}
+.modal-box{
+  background:var(--bg2);border:1px solid rgba(212,168,71,0.2);
+  border-radius:16px;padding:40px 36px;text-align:center;
+  max-width:340px;width:90%;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 40px rgba(212,168,71,0.05);
+  animation:modalPop 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+@keyframes modalPop{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}
+.modal-text{
+  font-size:clamp(16px,2.5vw,20px);margin-bottom:28px;
+  line-height:1.8;color:var(--ink);
+}
+.modal-btns{display:flex;gap:14px;justify-content:center}
+
+/* ====================== SOUND TOGGLE ====================== */
+.sound-toggle{
+  position:fixed;top:16px;right:16px;z-index:50;
+  width:42px;height:42px;border-radius:50%;
+  border:1px solid rgba(212,168,71,0.2);
+  background:rgba(16,16,26,0.75);color:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:18px;
+  backdrop-filter:blur(8px);
+  transition:all 0.3s;user-select:none;
+}
+.sound-toggle:hover{border-color:var(--gold);color:var(--gold)}
+.sound-toggle.muted{opacity:0.45}
+
+/* ====================== RESPONSIVE ====================== */
+@media(max-width:480px){
+  .stage{padding:24px 20px 40px}
+  .coins-area{gap:14px}
+  .gua-display{gap:28px}
+  .cat-grid{gap:10px}
+  .result-block{padding:18px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- Background layers -->
+<canvas id="bgCanvas"></canvas>
+<div class="mist mist-1"></div>
+<div class="mist mist-2"></div>
+<div class="mist mist-3"></div>
+
+<div id="app">
+  <!-- Stage 1: Welcome -->
+  <div id="stage-welcome" class="stage active">
+    <div class="title">摇爻好运小馆</div>
+    <div class="subtitle">周 易 六 爻 占 卜</div>
+    <div class="divider"></div>
+    <div class="desc">
+      善易者不占，善占者不言<br>
+      心诚则灵，意正则明<br><br>
+      以三枚铜钱摇爻天机<br>
+      六摇成卦，以断吉凶
+    </div>
+    <button class="btn" onclick="goToStage('category')">开始摇爻</button>
+    <button class="btn btn-small" style="margin-top:16px;border-color:var(--ink2);color:var(--ink2)" onclick="goToStage('history')">历史记录</button>
+    <div class="seal">好运</div>
+  </div>
+
+  <!-- Stage 2: Category -->
+  <div id="stage-category" class="stage">
+    <div class="cat-title">请选摇爻类别</div>
+    <div class="cat-sub">选定类别，写下心中所问</div>
+    <div class="divider"></div>
+    <div class="cat-grid" id="catGrid">
+      <div class="cat-card" data-cat="career" onclick="selectCat(this)"><div class="icon">🏛</div><div class="label">事业</div></div>
+      <div class="cat-card" data-cat="love" onclick="selectCat(this)"><div class="icon">🎴</div><div class="label">感情</div></div>
+      <div class="cat-card" data-cat="wealth" onclick="selectCat(this)"><div class="icon">🪙</div><div class="label">财运</div></div>
+      <div class="cat-card" data-cat="health" onclick="selectCat(this)"><div class="icon">🏺</div><div class="label">健康</div></div>
+      <div class="cat-card" data-cat="study" onclick="selectCat(this)"><div class="icon">📜</div><div class="label">学业</div></div>
+      <div class="cat-card" data-cat="general" onclick="selectCat(this)"><div class="icon">☯</div><div class="label">综合</div></div>
+    </div>
+    <div class="question-area" id="questionArea">
+      <div class="question-label">把你想问的事情写下来</div>
+      <textarea class="question-input" id="questionInput" placeholder="比如：最近想跳槽去大厂，不知道时机对不对..." maxlength="200"></textarea>
+      <div class="question-hint">选填，但写了会让解卦更贴合你的情况</div>
+    </div>
+    <button class="btn btn-small btn-disabled" id="btnConfirmCat" onclick="confirmCat()">开始摇卦</button>
+  </div>
+
+  <!-- Stage 3: Casting -->
+  <div id="stage-casting" class="stage">
+    <div class="cast-title">虔心摇卦</div>
+    <div class="cast-round" id="castRound">第 一 摇</div>
+    <div class="coins-area" id="coinsArea">
+      <div class="coin" id="coin0">
+        <div class="coin-face coin-front"><span class="coin-char">乾</span><span class="coin-char">隆</span><span class="coin-char">宝</span><span class="coin-char">通</span></div>
+        <div class="coin-face coin-back"></div>
+      </div>
+      <div class="coin" id="coin1">
+        <div class="coin-face coin-front"><span class="coin-char">乾</span><span class="coin-char">隆</span><span class="coin-char">宝</span><span class="coin-char">通</span></div>
+        <div class="coin-face coin-back"></div>
+      </div>
+      <div class="coin" id="coin2">
+        <div class="coin-face coin-front"><span class="coin-char">乾</span><span class="coin-char">隆</span><span class="coin-char">宝</span><span class="coin-char">通</span></div>
+        <div class="coin-face coin-back"></div>
+      </div>
+    </div>
+    <div class="cast-result" id="castResult"></div>
+    <div class="yao-progress" id="yaoProgress"></div>
+    <div class="cast-btns">
+      <button class="btn btn-small" id="btnCast" onclick="castCoins()">摇 卦</button>
+      <button class="btn btn-small btn-ghost" id="btnQuickCast" onclick="quickCast()">一键摇卦</button>
+    </div>
+    <button class="btn btn-small btn-ghost" id="btnAbandon" style="margin-top:20px;border-color:var(--ink2);color:var(--ink2);font-size:14px" onclick="showAbandonModal()">放弃摇爻</button>
+  </div>
+
+  <!-- Stage 4: Reveal -->
+  <div id="stage-reveal" class="stage">
+    <div class="reveal-section" id="revealContent"></div>
+    <button class="btn btn-small" onclick="goToStage('result')" style="margin-top:24px">查看解卦</button>
+  </div>
+
+  <!-- Stage 5: Result -->
+  <div id="stage-result" class="stage">
+    <div class="result-section">
+      <div id="resultHeader"></div>
+      <div class="result-tabs">
+        <button class="result-tab active" onclick="switchResultTab('brief')">简 要</button>
+        <button class="result-tab" onclick="switchResultTab('detail')">详 解</button>
+      </div>
+      <div id="resultBrief" class="result-pane active"></div>
+      <div id="resultDetail" class="result-pane"></div>
+    </div>
+    <div class="restart-area">
+      <div class="btn-row">
+        <button class="btn btn-small" onclick="restart()">重新摇爻</button>
+        <button class="btn btn-small" style="border-color:var(--ink2);color:var(--ink2)" onclick="goToStage('history')">历史记录</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 6: History -->
+  <div id="stage-history" class="stage">
+    <div class="cat-title">摇爻记录</div>
+    <div class="cat-sub">往 事 回 溯</div>
+    <div class="divider"></div>
+    <div id="historyContainer"></div>
+    <div class="btn-row" style="margin-top:24px">
+      <button class="btn btn-small" onclick="restart()">重新摇爻</button>
+      <button class="btn btn-small" id="btnClearHistory" style="border-color:var(--red);color:var(--red)" onclick="clearHistory()">清空记录</button>
+    </div>
+  </div>
+
+  <!-- Stage 7: History Detail -->
+  <div id="stage-historyDetail" class="stage">
+    <div class="result-section" id="historyDetailContent"></div>
+    <div class="restart-area">
+      <div class="btn-row">
+        <button class="btn btn-small" onclick="goToStage('history')">返回记录</button>
+        <button class="btn btn-small" style="border-color:var(--ink2);color:var(--ink2)" onclick="restart()">重新摇爻</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Abandon Modal -->
+  <div class="modal-overlay" id="abandonModal" style="display:none">
+    <div class="modal-box">
+      <div class="modal-text">确定要放弃本次摇爻吗？<br><span style="font-size:0.85em;color:var(--ink2)">当前进度将不会保存</span></div>
+      <div class="modal-btns">
+        <button class="btn btn-small" onclick="confirmAbandon()">确定放弃</button>
+        <button class="btn btn-small btn-ghost" onclick="closeAbandonModal()">继续摇爻</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sound Toggle -->
+<button class="sound-toggle" id="soundToggle" onclick="toggleSound()" title="音效开关">🔊</button>
+
+<script>
+// ================= TEXT POOLS (inline) =================
+/**
+ * 智能选段：keywords 与问题文本匹配越多越优先；无匹配或同分时随机。
+ * 每项：{ text: string, keywords?: string[] }，briefRead 用 {CORE} 占位插入卦象原文。
+ */
+function pickSmartVariant(items, questionRaw) {
+  if (!items || !items.length) return '';
+  var q = (questionRaw || '').trim();
+  if (!q) {
+    return items[Math.floor(Math.random() * items.length)].text;
+  }
+  var best = [];
+  var max = 0;
+  for (var i = 0; i < items.length; i++) {
+    var it = items[i];
+    var kws = it.keywords || [];
+    var sc = 0;
+    for (var j = 0; j < kws.length; j++) {
+      if (q.indexOf(kws[j]) !== -1) sc++;
+    }
+    if (sc > max) {
+      max = sc;
+      best = [it];
+    } else if (sc === max && sc > 0) {
+      best.push(it);
+    }
+  }
+  var pool = max > 0 ? best : items;
+  return pool[Math.floor(Math.random() * pool.length)].text;
+}
+
+var TEXT_POOLS = {briefRead:{t2:[{text:'说实话，卦象相当不错。{CORE} 现在对你来说是个好时机，大胆去做就对了，别犹豫太久反而错过了窗口期。',keywords:['机会','时机','冲','试']},{text:'卦象偏旺，气势很足。{CORE} 适合主动推进：把计划落地、把话说开，别拖着等"更完美的一天"。',keywords:['推进','落地','计划','项目']},{text:'整体很亮，像顺风行船。{CORE} 你可以更自信一点，把资源用在刀刃上，别分散火力。',keywords:['自信','资源','重点']},{text:'这卦带着"上行"的味道。{CORE} 利于争取、展示、谈判——把优势摆到台面上更容易成。',keywords:['争取','谈判','面试','升职']},{text:'吉象明显，阻力不大。{CORE} 关键是行动要连贯：一口气做完比断断续续更占便宜。',keywords:['坚持','连贯','做完']},{text:'卦气偏阳，宜动不宜拖。{CORE} 该约的会约起来，该签的字别过夜，趁热打铁。',keywords:['签约','合作','约']},{text:'运势在线，容错率也高。{CORE} 就算有小失误也容易补救，别因怕错而不动。',keywords:['怕','错','犹豫']},{text:'像是"有人推你一把"的卦。{CORE} 贵人、机会往往藏在你愿意开口的那一步里。',keywords:['贵人','帮助','介绍']},{text:'整体偏顺，适合加码投入。{CORE} 时间、精力、钱——投在最重要的一件事上回报更明显。',keywords:['投入','时间','钱']},{text:'卦象鼓舞人心。{CORE} 先把最小可行的一步迈出去，后面会越走越顺。',keywords:['第一步','开始','试试']},{text:'气势充沛，宜扩张与整合。{CORE} 把碎片资源拧成一股绳，你会更占便宜。',keywords:['整合','团队','资源']}],t3:[{text:'整体来看还是挺正面的。{CORE} 虽然不是那种"万事大吉"的完美状态，但只要你稳住节奏、不急不躁，结果不会让你失望的。',keywords:['稳','节奏','别急']},{text:'属于"小确幸型"的好运。{CORE} 别指望一夜翻盘，但持续做正确的事，会慢慢变好。',keywords:['慢慢','持续','积累']},{text:'偏暖，但不算爆。{CORE} 适合修修补补、优化流程，把细节做好，分数就会上去。',keywords:['细节','优化','流程']},{text:'好事在酝酿中。{CORE} 你可以把期待调得务实一点：小步前进，反而更稳。',keywords:['期待','务实','小步']},{text:'整体向好，只是没那么夸张。{CORE} 把精力放在可控项：作息、沟通、执行，就会加分。',keywords:['沟通','作息','执行']},{text:'像春天的毛毛雨——润物无声。{CORE} 别急着要结果，先把关系、习惯养顺。',keywords:['关系','习惯','养']},{text:'吉中带平，胜在可持续。{CORE} 别透支自己，留点余量，后面更舒服。',keywords:['透支','累','余量']},{text:'方向没错，只差火候。{CORE} 再坚持一阵，你会看到反馈从"隐约"变"清楚"。',keywords:['坚持','反馈','清楚']},{text:'属于"越做越顺"的类型。{CORE} 前三天可能平淡，后面会越走越省力。',keywords:['三天','平淡','省力']},{text:'整体正面，但别贪快。{CORE} 把每一步验收好，比盲目加速更划算。',keywords:['快','验收','加速']},{text:'小吉之运，贵在知足与迭代。{CORE} 每次改进一点点，就会超过大多数人。',keywords:['改进','迭代','一点点']}],t4:[{text:'怎么说呢，目前的状态比较平——不算好也不算坏。{CORE} 我的建议是，先别急着做大动作，观察一下再说。有时候"不动"也是一种智慧。',keywords:['观察','等等','别急']},{text:'卦象中性，像雾天开车。{CORE} 先把能见度提高：信息收齐、风险列清，再决定踩不踩油门。',keywords:['风险','信息','清楚']},{text:'不温不火，适合盘整。{CORE} 整理资料、复盘、补短板，比强行破局更划算。',keywords:['复盘','整理','补短']},{text:'平淡里有空间。{CORE} 你可以悄悄升级技能或人脉，别声张，先蓄力。',keywords:['技能','人脉','学习']},{text:'吉凶都不极端，重在选择。{CORE} 把选项缩到两三个，逐个排除，比纠结更省力。',keywords:['选择','纠结','选项']},{text:'像停潮期，适合修船。{CORE} 处理旧账、旧情绪、旧流程，后面浪来了才扛得住。',keywords:['旧账','情绪','处理']},{text:'卦气平稳，忌大起大落。{CORE} 控制节奏，别被外界带跑，反而能捡到便宜。',keywords:['节奏','外界','带跑']},{text:'平运，宜守中道。{CORE} 不求一鸣惊人，但求少犯错、少返工。',keywords:['返工','犯错','稳']},{text:'现在像待机状态。{CORE} 把身体、财务、关系的"底线"守住，就很加分。',keywords:['身体','财务','底线']},{text:'局面胶着时，先换信息再换策略。{CORE} 多问一句、多看一眼，常常就破局了。',keywords:['问','看','破局']},{text:'平而不死，转机靠积累。{CORE} 每天进步一点点，时间站在你这边。',keywords:['每天','一点点','时间']}],t5:[{text:'坦白讲，现在时机不太理想。{CORE} 但也不用太焦虑，这只是一个阶段性的低谷，耐心等一等，转机比你想的要来得快。',keywords:['焦虑','压力','烦']},{text:'卦象带一点逆风。{CORE} 先求不败：少承诺、少树敌、少透支，把基本盘稳住。',keywords:['承诺','树敌','透支']},{text:'像走夜路，看得见一点光就行。{CORE} 别急着全速前进，先避开坑，再谈收获。',keywords:['坑','避开','夜']},{text:'阻力偏强，宜迂回。{CORE} 换条路、换个人、换个时间窗口，往往就好很多。',keywords:['换','迂回','时间']},{text:'小凶不等于完蛋，而是提醒。{CORE} 把预期调低一点，把准备做厚一点。',keywords:['预期','准备','调低']},{text:'运势偏弱，宜收缩。{CORE} 砍掉次要任务，只保留最重要的20%。',keywords:['砍','任务','重要']},{text:'现在容易踩雷。{CORE} 合同、金钱、口舌——这三类事慢一点、看清楚一点。',keywords:['合同','钱','口舌']},{text:'像手机低电量模式。{CORE} 先充电（休息、复盘、求助），再谈高性能输出。',keywords:['休息','求助','复盘']},{text:'不顺时最忌硬刚。{CORE} 退一步不是怂，是为了下次更有力地出手。',keywords:['硬','刚','退']},{text:'卦象提醒：先止损再谋进。{CORE} 该停就停，别追加沉没成本。',keywords:['止损','沉没','停']},{text:'低谷期，拼的是韧性。{CORE} 把小事做对，信心会一点点回来。',keywords:['韧性','小事','信心']}],t6:[{text:'我得跟你说实话，目前这个卦象确实不太乐观。{CORE} 现在最重要的不是往前冲，而是先稳住阵脚。退一步不是认输，是为了下次走得更远。',keywords:['冲','急','慌']},{text:'卦象偏冷，像逆风加雨。{CORE} 先保命线：健康、现金流、关键关系，别赌运气。',keywords:['健康','现金流','赌']},{text:'这不是"努力就一定赢"的窗口。{CORE} 先活下来、稳住盘，再谈翻盘。',keywords:['活','稳','翻盘']},{text:'凶象多在结构问题。{CORE} 别重复同一种错误十次，先改结构（方法/人/环境）。',keywords:['结构','方法','环境']},{text:'现在最容易情绪决策。{CORE} 重要决定延后48小时，你会感谢自己。',keywords:['情绪','决定','后悔']},{text:'像走钢丝，先求平衡。{CORE} 少承诺、少扩张、少解释，先把自己站稳。',keywords:['平衡','扩张','解释']},{text:'运势吃紧，忌孤注一掷。{CORE} 分散风险，留后路，比一把梭更聪明。',keywords:['风险','梭','后路']},{text:'这卦像提醒你看医生式的预警。{CORE} 该修就修，该停就停，别硬扛。',keywords:['扛','硬','停']},{text:'局面不利时，沉默是金。{CORE} 少争论、少曝光，把能量留给修复。',keywords:['争论','曝光','沉默']},{text:'先避锋，再谋局。{CORE} 不是不做，而是换更安全的打法。',keywords:['安全','换','锋']},{text:'最暗的夜后常有黎明，但前提是你要活到黎明。{CORE} 先稳住基本盘，别透支。',keywords:['夜','黎明','基本盘']}]},briefSum:{t2:[{text:'你现在运势很好，不管是手上正在做的事还是心里想的计划，都可以放手去试试。相信你自己的判断，这个时候你的直觉大概率是对的。当然了，顺风顺水的时候也别飘，保持谦虚，好运才能持续。',keywords:['计划','试试','直觉']},{text:'整体能量偏强，适合把关键动作往前排：该谈就谈，该定就定。别拖到心气散了。',keywords:['谈','定','拖']},{text:'好运在线，但别贪多。把最重要的一件事打穿，比十件半吊子更值。',keywords:['贪','重要','专注']},{text:'你现在的胜率偏高，适合承担可控风险。记得留一手备用方案，就更稳。',keywords:['风险','方案','备用']},{text:'运势像顺风，适合扩张影响力：展示作品、争取资源、主动链接人。',keywords:['展示','资源','链接']},{text:'这是"越做越顺"的阶段。把习惯变好（睡眠、节奏、复盘），好运会被放大。',keywords:['睡眠','复盘','习惯']},{text:'你容易得到外界助力。别害羞，该求助就求助，该表达就表达。',keywords:['求助','表达','助力']},{text:'好运也考验边界：该拒绝就拒绝，别让烂事消耗你。',keywords:['拒绝','消耗','边界']},{text:'适合把承诺落地：说到做到，你的信用会换来更大的机会。',keywords:['承诺','信用','机会']},{text:'运势旺时最忌飘。把目标写清楚、步骤写清楚，你会走得更稳更远。',keywords:['目标','步骤','飘']},{text:'这是加分期：学习、锻炼、社交都能事半功倍，别浪费窗口。',keywords:['学习','锻炼','社交']}],t3:[{text:'总的来说不需要担心，事情在往好的方向走。可能中间会有点小磕绊，但都不是什么大问题。保持你现在的节奏就好，别被外界的噪音干扰了。踏踏实实走，该来的都会来。',keywords:['担心','噪音','节奏']},{text:'小吉之运，胜在可持续。别追求一步到位，追求每天都比昨天好一点。',keywords:['一步','每天','一点']},{text:'整体偏暖，适合优化：流程、沟通、时间管理——改一点就赚一点。',keywords:['优化','沟通','时间']},{text:'你会看到"缓慢的回报"。别急着换赛道，先把手里这张牌打好。',keywords:['赛道','回报','慢']},{text:'这运势适合稳扎稳打：先小赢，再中赢，别一上来就押太大。',keywords:['稳','小赢','押']},{text:'好事在积累中。把细节做漂亮，别人会默默给你加分。',keywords:['细节','漂亮','加分']},{text:'别被短期波动吓到。拉长时间看，你是在上坡，只是坡度不陡。',keywords:['波动','上坡','时间']},{text:'适合把生活也照顾好：睡眠和运动在线，运气会更听话。',keywords:['睡眠','运动','生活']},{text:'这阶段最值钱的是耐心。耐心等反馈、等合作、等结果。',keywords:['耐心','合作','反馈']},{text:'你可以更主动一点，但别用力过猛。点到为止，刚刚好。',keywords:['主动','过猛','刚好']},{text:'小吉常藏在"把小事做对"里。别忽视那些看起来不起眼的环节。',keywords:['小事','环节','忽视']}],t4:[{text:'现在就是一个"蓄力期"——表面上看没什么进展，但其实你做的每一个准备都在为之后的爆发积攒能量。别急，也别丧，把该做的做好，时候到了自然会有结果。',keywords:['蓄力','准备','丧']},{text:'平淡期最忌瞎忙。先做减法：砍掉低价值事务，你会轻松很多。',keywords:['减法','忙','价值']},{text:'这运势适合沉淀：读书、练技能、整理资源。后面会用得上。',keywords:['读书','技能','整理']},{text:'别用别人的高光时刻审判自己。你只是在不同的季节。',keywords:['别人','季节','审判']},{text:'平运时，信息比情绪重要。多收集事实，少下结论。',keywords:['事实','情绪','信息']},{text:'适合建立系统：记账、复盘、清单。系统会帮你省意志力。',keywords:['记账','清单','系统']},{text:'这阶段像种田：松土、浇水、除虫，急不得。',keywords:['急','种田','浇水']},{text:'你可以把目标拆小，让每天都有"完成感"，心态会稳很多。',keywords:['拆','完成','心态']},{text:'平运不是停滞，是校准。校准方向、校准预期、校准节奏。',keywords:['校准','方向','预期']},{text:'别频繁换策略。给当前方法足够长的试验期。',keywords:['换','策略','试验']},{text:'把身体当项目管：睡眠、饮食、运动——底盘稳了，事才顺。',keywords:['饮食','底盘','身体']}],t5:[{text:'我知道你现在可能有点焦虑，但真的不用太紧张。低谷期谁都有，关键是怎么度过。避开不必要的冲突和冒险，把精力留给最重要的事。等这段时间过去，你会发现自己反而变得更强了。',keywords:['焦虑','紧张','冲突']},{text:'逆风期先求不败：少树敌、少透支、少承诺。活下来就有翻盘资格。',keywords:['树敌','透支','承诺']},{text:'这运势考验你的止损能力。该停就停，别追加沉没成本。',keywords:['止损','沉没','停']},{text:'别在情绪最高点做决定。重要事延后，你会更清醒。',keywords:['情绪','决定','清醒']},{text:'把问题缩小：先解决最痛的一个点，别试图一次解决所有。',keywords:['痛','一次','解决']},{text:'低谷时，睡眠和现金流是底线。守住底线，再谈进攻。',keywords:['睡眠','现金流','底线']},{text:'这阶段适合求助：专业的人、靠谱的朋友，都能帮你省弯路。',keywords:['求助','专业','朋友']},{text:'别跟别人比进度。你只要比昨天的自己更稳，就已经赢了。',keywords:['进度','昨天','稳']},{text:'小凶常来自疏忽：合同、健康、口舌。这三类事慢一点。',keywords:['合同','健康','口舌']},{text:'把期待调低，把准备做厚。你会更踏实。',keywords:['期待','准备','踏实']},{text:'逆风时，练习"慢半拍"。慢不是怂，是更少的错。',keywords:['慢','错','怂']}],t6:[{text:'听起来可能有点严肃，但这个时候最需要的就是冷静。别冲动做决定，别跟人硬碰硬，能退让就退让，能观望就观望。把自己照顾好，把重要的东西守住。没有过不去的坎儿，只是时候未到。',keywords:['冲动','硬','冷静']},{text:'这运势像暴雨天，先找屋檐。别逞强，先避险再谋进。',keywords:['暴雨','逞强','避险']},{text:'最重要是保命线：身心健康、钱袋子、关键关系。其他先放一放。',keywords:['身心','钱','关系']},{text:'别孤注一掷。分散风险，留后路，比一把梭更可能活下来。',keywords:['梭','风险','后路']},{text:'凶运最怕重复错误。停下来复盘：同样的问题别再犯第三次。',keywords:['复盘','错误','停']},{text:'把社交降噪：少争论、少解释，把能量留给修复和建设。',keywords:['争论','解释','降噪']},{text:'这时别做重大扩张。先收缩、先修复、先恢复信用与体力。',keywords:['扩张','收缩','体力']},{text:'你可以把它当成"系统升级前的黑屏"。黑屏会过去，但别乱按键。',keywords:['黑屏','乱','升级']},{text:'越是难，越要睡得着。睡眠是免费的回血道具。',keywords:['睡','回血','难']},{text:'先稳住自己，再谈翻盘。稳住本身就是在赢。',keywords:['稳','翻盘','赢']},{text:'把目标换成"本周只做好三件小事"。小胜利会救心态。',keywords:['本周','小事','胜利']}]},detailSum:{t2:[{text:'一句话总结：现在是属于你的好时机。不管你正在做什么、计划做什么，天时地利都站在你这边。大胆去行动吧，但记得保持清醒——越是顺风顺水的时候，越要谦虚谨慎。人在高处，"稳"比"快"更重要。',keywords:['时机','计划','快']},{text:'一句话总结：窗口已开。把关键动作排到最前，别被琐事淹没。',keywords:['窗口','琐事','关键']},{text:'一句话总结：运势偏强，适合主动出击。但记得留备用方案，别单线押注。',keywords:['主动','备用','押注']},{text:'一句话总结：顺风期，放大优势比补短板更划算。先赢一场再迭代。',keywords:['优势','短板','迭代']},{text:'一句话总结：好运需要承接能力。把作息与节奏调好，你会接得更稳。',keywords:['作息','承接','节奏']},{text:'一句话总结：适合争取与展示。别藏锋藏到没人看见。',keywords:['争取','展示','藏']},{text:'一句话总结：能量旺时最忌贪多。只做最重要的20%。',keywords:['贪','重要','20']},{text:'一句话总结：把"说到做到"做到极致，你的信用会换来更大机会。',keywords:['信用','机会','做到']},{text:'一句话总结：好运也考验边界。该拒绝就拒绝，保护专注力。',keywords:['拒绝','专注','边界']},{text:'一句话总结：把胜利变成系统：复盘、沉淀、可复制。',keywords:['复盘','系统','沉淀']},{text:'一句话总结：旺运时，谦虚是保险丝。别飘，别浪。',keywords:['谦虚','飘','浪']}],t3:[{text:'一句话总结：方向是对的，节奏可以再稳一点。你不需要跟任何人比速度，按自己的节奏来就好。途中遇到小挫折别灰心，那都是正常的。保持耐心和信心，你走的每一步都算数。',keywords:['节奏','耐心','挫折']},{text:'一句话总结：小吉靠积累。每天进步一点点，时间会站在你这边。',keywords:['每天','积累','时间']},{text:'一句话总结：别急着要结果，先把过程做扎实。扎实会反过来给你好结果。',keywords:['结果','过程','扎实']},{text:'一句话总结：这运势适合"微调"。沟通、习惯、方法——改一点就赚一点。',keywords:['微调','沟通','习惯']},{text:'一句话总结：把期待调务实，把执行做连续。你会更舒服。',keywords:['务实','执行','期待']},{text:'一句话总结：好事在酝酿。别频繁换赛道，给当前策略足够试验期。',keywords:['酝酿','赛道','策略']},{text:'一句话总结：小吉最忌心浮。心浮时去睡觉、去走路、去写下来。',keywords:['浮','睡','写']},{text:'一句话总结：把大目标拆小，让每天都有完成感。',keywords:['拆','完成','目标']},{text:'一句话总结：这阶段，关系比硬扛重要。好好说话，事就好办一半。',keywords:['关系','说话','硬扛']},{text:'一句话总结：别被短期波动吓到。拉长时间，你是在上坡。',keywords:['波动','上坡','长']},{text:'一句话总结：小吉是"温柔的前进"。别停，但也别透支。',keywords:['温柔','前进','透支']}],t4:[{text:'一句话总结：现在是积蓄能量的阶段。表面上看似乎没什么进展，但实际上你做的每一个准备、学的每一点东西，都是在为之后的"起飞"打地基。别急，好戏在后头。',keywords:['积蓄','准备','地基']},{text:'一句话总结：平淡期最适合做减法。砍掉低价值事务，你会轻松很多。',keywords:['减法','价值','轻松']},{text:'一句话总结：别用别人的高光审判自己。你在自己的季节里耕种。',keywords:['别人','季节','耕种']},{text:'一句话总结：平运时，事实比情绪重要。多收集信息，少下结论。',keywords:['事实','情绪','信息']},{text:'一句话总结：建立系统：复盘、清单、节奏。系统替你省意志力。',keywords:['系统','清单','复盘']},{text:'一句话总结：像种田，急不得。松土浇水除虫，后面才有收成。',keywords:['种田','急','收成']},{text:'一句话总结：把目标拆到周、到天。可执行胜过空想的宏大。',keywords:['周','天','执行']},{text:'一句话总结：平运是校准期：校准方向、预期与资源。',keywords:['校准','资源','预期']},{text:'一句话总结：别频繁换招。给方法足够长的试验期再判断。',keywords:['换','试验','方法']},{text:'一句话总结：底盘稳了（睡眠、身体、现金流），事才会顺。',keywords:['底盘','睡眠','现金流']},{text:'一句话总结：蓄力期最值钱的是耐心。耐心等风来。',keywords:['耐心','风','蓄力']}],t5:[{text:'一句话总结：短期内会有些不顺，但不至于过不去。关键是保持冷静、控制情绪、不冲动做决定。把注意力放在"什么是最重要的"上面，其他的暂时都放一放。过了这个坎儿，你会变得更强。',keywords:['不顺','冲动','情绪']},{text:'一句话总结：逆风先求不败。少承诺、少树敌、少透支。',keywords:['不败','承诺','树敌']},{text:'一句话总结：止损比翻盘更重要。先停住流血点。',keywords:['止损','翻盘','流血']},{text:'一句话总结：别在夜里做决定。重要事等太阳出来再谈。',keywords:['夜','决定','太阳']},{text:'一句话总结：把问题缩小到一个最痛点，逐个击破。',keywords:['痛','击破','缩小']},{text:'一句话总结：底线三件事：睡眠、钱、关键关系。先守住。',keywords:['睡眠','钱','关系']},{text:'一句话总结：低谷适合求助。专业与靠谱朋友能省弯路。',keywords:['求助','专业','朋友']},{text:'一句话总结：别比进度，比韧性。活下来就有翻盘资格。',keywords:['进度','韧性','活']},{text:'一句话总结：疏忽三件套：合同、健康、口舌。慢一点。',keywords:['合同','健康','口舌']},{text:'一句话总结：把期待调低，把准备做厚。你会更踏实。',keywords:['期待','准备','踏实']},{text:'一句话总结：逆风练的是"慢半拍"。慢减少错。',keywords:['慢','错','逆风']}],t6:[{text:'一句话总结：确实不太容易，但你撑得住。现在不是拼命往前冲的时候，是收缩战线、保存实力的时候。把你最在意的东西守护好——健康、家人、存款——其他的慢慢来。低谷不是终点，是弯道。',keywords:['撑','冲','存款']},{text:'一句话总结：先避险再谋进。暴雨天先找屋檐。',keywords:['避险','暴雨','屋檐']},{text:'一句话总结：保命线优先：身心、现金流、关键关系。',keywords:['身心','现金流','关系']},{text:'一句话总结：别孤注一掷。分散风险，留后路。',keywords:['孤注','风险','后路']},{text:'一句话总结：停下来复盘，别第三次掉进同一个坑。',keywords:['复盘','坑','停']},{text:'一句话总结：社交降噪：少争论，把能量留给修复。',keywords:['争论','降噪','修复']},{text:'一句话总结：先收缩修复，再谈扩张。顺序不能反。',keywords:['收缩','扩张','顺序']},{text:'一句话总结：黑屏会过去，但别乱按键。稳住操作。',keywords:['黑屏','乱','稳']},{text:'一句话总结：睡眠是免费回血。再难也要睡得着。',keywords:['睡','回血','难']},{text:'一句话总结：稳住本身就是赢。先站住，再走。',keywords:['稳','站','赢']},{text:'一句话总结：本周只做三件小事，小胜利救心态。',keywords:['本周','小事','心态']}]},action:{t2:[{text:'✅ 推荐你做的：积极出击、把握机会、启动新计划、主动社交。<br>⛔ 别踩的坑：过于膨胀、花钱大手大脚、忽视细节和风险。',keywords:['机会','社交','计划']},{text:'✅ 推荐：把关键会议/谈判排期；展示成果；争取资源。<br>⛔ 别踩坑：同时开太多战线、承诺过头、熬夜透支。',keywords:['谈判','会议','熬夜']},{text:'✅ 推荐：推进最重要的一个项目；联系关键人；做可交付物。<br>⛔ 别踩坑：轻视合同细节、忽略备份、情绪化决策。',keywords:['合同','备份','项目']},{text:'✅ 推荐：主动表达需求；建立合作；扩大可见度。<br>⛔ 别踩坑：骄傲得罪人、乱投资、忽视健康。',keywords:['合作','投资','健康']},{text:'✅ 推荐：把目标写下来；拆解步骤；每天推进一点点。<br>⛔ 别踩坑：贪多、拖延、完美主义不动手。',keywords:['目标','拖延','完美']},{text:'✅ 推荐：学习新技能；锻炼；维护高质量人脉。<br>⛔ 别踩坑：无效忙碌、刷手机代偿、透支信用。',keywords:['学习','锻炼','手机']},{text:'✅ 推荐：把"下一步"具体到时间地点人物。<br>⛔ 别踩坑：只说大话不落地、忽视风险清单。',keywords:['落地','风险','下一步']},{text:'✅ 推荐：复盘胜利原因，把它变成可复用方法。<br>⛔ 别踩坑：飘、轻视对手、忽略合规。',keywords:['复盘','合规','对手']},{text:'✅ 推荐：主动求助与授权，让团队分担。<br>⛔ 别踩坑：什么都自己扛到爆。',keywords:['求助','团队','扛']},{text:'✅ 推荐：把好运沉淀成资产（作品、关系、储蓄）。<br>⛔ 别踩坑：月光、冲动消费、口头承诺过多。',keywords:['储蓄','消费','作品']},{text:'✅ 推荐：保持谦虚与感谢，运气更持久。<br>⛔ 别踩坑：树敌、炫耀、轻视小事。',keywords:['谦虚','感谢','炫耀']}],t3:[{text:'✅ 推荐你做的：稳步推进、巩固已有成果、多结交靠谱的人。<br>⛔ 别踩的坑：贪多嚼不烂、好高骛远、频繁变换方向。',keywords:['稳','靠谱','方向']},{text:'✅ 推荐：小步试错；收集反馈；迭代优化。<br>⛔ 别坑：一次想赢很大、忽视细节、情绪上头。',keywords:['试错','反馈','情绪']},{text:'✅ 推荐：固定节奏工作；每周复盘；维护睡眠。<br>⛔ 别坑：熬夜硬扛、盲目加杠杆。',keywords:['复盘','睡眠','杠杆']},{text:'✅ 推荐：把沟通说清楚；把预期对齐；把承诺可控。<br>⛔ 别坑：含糊其辞、拖延回复。',keywords:['沟通','预期','承诺']},{text:'✅ 推荐：深耕一个主战场，再谈扩展。<br>⛔ 别坑：频繁换赛道。',keywords:['深耕','赛道','扩展']},{text:'✅ 推荐：建立清单与模板，提高效率。<br>⛔ 别坑：低水平重复忙碌。',keywords:['清单','模板','效率']},{text:'✅ 推荐：主动社交但别讨好；真诚比套路长久。<br>⛔ 别坑：无效社交熬夜应酬。',keywords:['社交','真诚','应酬']},{text:'✅ 推荐：把健康当项目：运动+饮食+睡眠。<br>⛔ 别坑：用咖啡硬撑。',keywords:['健康','运动','咖啡']},{text:'✅ 推荐：理财偏稳健；先存应急金。<br>⛔ 别坑：跟风投机。',keywords:['理财','应急','投机']},{text:'✅ 推荐：每天完成一件小事，积累信心。<br>⛔ 别坑：空想不行动。',keywords:['小事','行动','信心']},{text:'✅ 推荐：对人对己都温柔一点，运气更顺。<br>⛔ 别坑：自我攻击与焦虑循环。',keywords:['温柔','焦虑','自我']}],t4:[{text:'✅ 推荐你做的：给自己充电、看书学习、健身、梳理人际关系。<br>⛔ 别踩的坑：大额投资、冲动跳槽、跟人起冲突。',keywords:['学习','健身','投资']},{text:'✅ 推荐：整理信息与资料；做中长期规划；体检。<br>⛔ 别坑：情绪化辞职、借贷扩张。',keywords:['整理','规划','体检']},{text:'✅ 推荐：减少无效社交；保护专注力。<br>⛔ 别坑：报复性熬夜、冲动购物。',keywords:['社交','专注','购物']},{text:'✅ 推荐：修旧账（人情/金钱/工作）；清理环境。<br>⛔ 别坑：拖延到爆雷。',keywords:['旧账','拖延','清理']},{text:'✅ 推荐：练一项可迁移技能。<br>⛔ 别坑：盲目考证不实践。',keywords:['技能','考证','实践']},{text:'✅ 推荐：把现金流表做清楚；控制固定支出。<br>⛔ 别坑：透支信用卡。',keywords:['现金流','支出','信用卡']},{text:'✅ 推荐：温和沟通，避免误解升级。<br>⛔ 别坑：冷战与阴阳怪气。',keywords:['沟通','冷战','误解']},{text:'✅ 推荐：用清单管理生活与工作。<br>⛔ 别坑：同时多线程失控。',keywords:['清单','多线程','失控']},{text:'✅ 推荐：每周一次复盘，调整策略。<br>⛔ 别坑：机械重复不反思。',keywords:['复盘','反思','策略']},{text:'✅ 推荐：多走路、多晒太阳、多喝水。<br>⛔ 别坑：久坐不动。',keywords:['走路','太阳','久坐']},{text:'✅ 推荐：把"想做的事"写进日历。<br>⛔ 别坑：只停留在愿望层。',keywords:['日历','愿望','行动']}],t5:[{text:'✅ 推荐你做的：降低预期、减少社交、集中精力做最重要的事。<br>⛔ 别踩的坑：冲动做大决定、跟人硬刚、把所有鸡蛋放一个篮子里。',keywords:['预期','硬刚','决定']},{text:'✅ 推荐：先睡眠与饮食；再谈高强度输出。<br>⛔ 别坑：靠酒精/熬夜硬扛。',keywords:['睡眠','饮食','酒精']},{text:'✅ 推荐：重要决定延后48小时；写下来利弊。<br>⛔ 别坑：夜里下单、夜里分手式沟通。',keywords:['决定','夜里','利弊']},{text:'✅ 推荐：收缩战线，只做20%关键事。<br>⛔ 别坑：扩张与借钱投资。',keywords:['收缩','借钱','投资']},{text:'✅ 推荐：寻求专业帮助（法律/医疗/财务）。<br>⛔ 别坑：鸵鸟心态。',keywords:['专业','法律','鸵鸟']},{text:'✅ 推荐：修复信任与沟通；少说狠话。<br>⛔ 别坑：拉黑一切/撕破脸。',keywords:['信任','狠话','沟通']},{text:'✅ 推荐：建立止损线；该停就停。<br>⛔ 别坑：沉没成本绑架。',keywords:['止损','沉没','停']},{text:'✅ 推荐：少看刺激信息，保护心态。<br>⛔ 别坑：跟人网络对线。',keywords:['心态','信息','对线']},{text:'✅ 推荐：每天只解决一个小问题。<br>⛔ 别坑：想一夜翻盘。',keywords:['小','一夜','问题']},{text:'✅ 推荐：把现金留在手里，增强安全感。<br>⛔ 别坑：高杠杆。',keywords:['现金','杠杆','安全']},{text:'✅ 推荐：向靠谱朋友求助，别独自硬扛。<br>⛔ 别坑：封闭自己。',keywords:['求助','朋友','扛']}],t6:[{text:'✅ 推荐你做的：休息、存钱、远离是非、照顾好身体。<br>⛔ 别踩的坑：任何冒险行为、借钱投资、争强好胜。',keywords:['休息','存钱','是非']},{text:'✅ 推荐：最小化风险暴露；暂停扩张计划。<br>⛔ 别坑：赌博式决策。',keywords:['风险','扩张','赌博']},{text:'✅ 推荐：优先医疗与安全；该检查就检查。<br>⛔ 别坑：硬扛不治。',keywords:['医疗','安全','检查']},{text:'✅ 推荐：现金流为王；减少一切非必要支出。<br>⛔ 别坑：以贷养贷。',keywords:['现金流','贷','支出']},{text:'✅ 推荐：重要沟通书面留痕；避免口头扯皮。<br>⛔ 别坑：冲动签约。',keywords:['书面','签约','扯皮']},{text:'✅ 推荐：断开消耗型关系/合作。<br>⛔ 别坑：反复被同一类人伤害。',keywords:['消耗','关系','合作']},{text:'✅ 推荐：每天散步、晒太阳、规律吃饭。<br>⛔ 别坑：极端节食或暴饮。',keywords:['散步','吃饭','极端']},{text:'✅ 推荐：寻求心理咨询或信任的人倾诉。<br>⛔ 别坑：自我攻击。',keywords:['倾诉','心理','攻击']},{text:'✅ 推荐：把目标缩到"本周活下去+三件小事"。<br>⛔ 别坑：空想翻盘。',keywords:['本周','小事','活']},{text:'✅ 推荐：远离酒局是非与高风险社交。<br>⛔ 别坑：逞能逞强。',keywords:['酒','社交','逞能']},{text:'✅ 推荐：相信时间，但先把自己照顾好。<br>⛔ 别坑：与世界为敌。',keywords:['时间','照顾','世界']}]},fortuneTranslate:{t2:[{text:'这是一个非常正面的卦。古人用这种措辞的时候，基本上就是在告诉你：放心大胆去做。你现在的运势很旺，正是适合行动的时候。',keywords:['行动','做','放心']},{text:'卦辞偏吉，重在"行"。把计划落到具体动作，比空想更值钱。',keywords:['计划','动作','行']},{text:'古人这语气，等于给你开绿灯：宜进不宜拖。抓住窗口。',keywords:['拖','窗口','进']},{text:'这卦强调顺势：风来了就扬帆，别等风过了再后悔。',keywords:['顺势','扬帆','后悔']},{text:'整体是"成事之象"，但成事靠执行：清单、节点、责任人写清楚。',keywords:['执行','清单','责任']},{text:'你可以理解成：资源与机会更偏向你这边，主动去争取更划算。',keywords:['资源','机会','争取']},{text:'这卦也提醒你：吉运要配自律，别浪。自律让好运延长。',keywords:['自律','浪','延长']},{text:'翻译成人话：别怂，但别莽——大胆假设，小心验证。',keywords:['怂','莽','验证']},{text:'古人是在说：天时不错，人和要靠你自己去补。',keywords:['天时','人和','补']},{text:'这卦适合谈合作、谈推进、谈落地。把话说透、把事做穿。',keywords:['合作','落地','推进']},{text:'整体像"上行电梯"，你不动电梯也会动，但你要站上去。',keywords:['电梯','站','动']}],t3:[{text:'这卦挺不错的，虽然不是那种"天选之人"的逆天好运，但该有的好事儿都不会少。古人的意思大概是：顺着来，别着急，会好的。',keywords:['别急','顺','好']},{text:'偏吉但温和：像春天，慢慢来也能绿。',keywords:['春','慢慢','温和']},{text:'古人是在劝你：别贪快，把过程做稳，结果自然不差。',keywords:['快','稳','过程']},{text:'这卦强调"守中"：不过度、不极端，反而更长久。',keywords:['守中','极端','长久']},{text:'可以理解成：有希望，但需要耐心兑换。',keywords:['希望','耐心','兑换']},{text:'翻译：别被短期波动吓到，拉长时间看是向上的。',keywords:['波动','长期','向上']},{text:'这卦适合微调与优化，而不是推倒重来。',keywords:['微调','优化','重来']},{text:'古人提醒你：小吉靠积累，别轻视日常努力。',keywords:['积累','日常','努力']},{text:'整体是"可进可守"，你更缺哪样就补哪样。',keywords:['进','守','补']},{text:'这卦像温开水：不刺激，但解渴。',keywords:['温','解渴','刺激']},{text:'翻译成人话：别幻想一步登天，一步步就很强。',keywords:['一步','登天','强']}],t4:[{text:'这卦不好不坏，很中性。古人想说的是：现在不是做大事的时候，但也没什么危险。稳住，别浪，就行了。',keywords:['稳','大事','危险']},{text:'中性卦像雾天：看得清一步走一步，别冲刺。',keywords:['雾','一步','冲刺']},{text:'古人劝你：先修内功，别急着出风头。',keywords:['内功','风头','急']},{text:'这卦强调观察与等待：信息不全时别下重注。',keywords:['观察','等待','重注']},{text:'翻译：不是没机会，而是机会藏在细节里。',keywords:['细节','机会','藏']},{text:'整体像盘整期：整理、复盘、清理，比盲动好。',keywords:['盘整','复盘','盲动']},{text:'古人提醒你：平运最忌心浮，心浮易出错。',keywords:['心浮','错','平']},{text:'这卦适合把生活与工作系统化管理。',keywords:['系统','管理','生活']},{text:'翻译成人话：别跟别人比，先把自己的节奏找回来。',keywords:['节奏','比','自己']},{text:'中性不是无为，而是"做对小事"。',keywords:['小事','无为','对']},{text:'这卦像停潮：别硬出海，先修船。',keywords:['停潮','修船','硬']}],t5:[{text:'这卦带了一些提醒的意味。古人在暗示你：前面有点小障碍，别硬闯，绕一绕或者等一等会更好。',keywords:['障碍','硬','绕']},{text:'偏逆风：先避险，再谈收益。',keywords:['逆风','避险','收益']},{text:'古人这语气是保护你：别逞强，先求不败。',keywords:['逞强','不败','保护']},{text:'这卦强调迂回：换路、换人、换时间。',keywords:['迂回','换','时间']},{text:'翻译：不是没希望，而是代价会更高，别硬付。',keywords:['代价','希望','硬']},{text:'这卦像提醒你看路：坑在前，慢就是快。',keywords:['坑','慢','快']},{text:'古人劝你：收缩战线，先守住基本盘。',keywords:['收缩','基本盘','守']},{text:'整体需要你更谨慎：合同、金钱、口舌都慢一点。',keywords:['合同','钱','口舌']},{text:'翻译成人话：先活下来，再谈翻盘。',keywords:['活','翻盘','谈']},{text:'这卦像黄灯：可以走，但要踩刹车。',keywords:['黄灯','刹车','走']},{text:'古人是在说：退一步是为下一步蓄力。',keywords:['退','蓄力','一步']}],t6:[{text:'不瞒你说，这卦确实偏不利。但古人说这些不是吓唬你，而是提醒你：现在不是进攻的时候，稳住比什么都重要。',keywords:['进攻','稳','利']},{text:'偏凶象：像逆风加雨，先找屋檐。',keywords:['逆风','雨','屋檐']},{text:'古人是在保护你：别赌，别孤注一掷。',keywords:['赌','孤注','保护']},{text:'这卦强调止损与修复：先止血，再谈增长。',keywords:['止损','修复','止血']},{text:'翻译：不是没路，而是路更窄，要更小心。',keywords:['窄','小心','路']},{text:'这卦像红色预警：先保命线（身心、钱、关系）。',keywords:['预警','命','钱']},{text:'古人劝你：退一步，不是认输，是为了不倒下。',keywords:['退','认输','倒下']},{text:'整体需要你降低预期、提高准备。',keywords:['预期','准备','降低']},{text:'翻译成人话：先别想着赢很大，先别输很惨。',keywords:['赢','输','惨']},{text:'这卦像深夜行车：开慢点，开灯，系好安全带。',keywords:['夜','慢','安全']},{text:'古人提醒你：最难时，最忌情绪决策。',keywords:['情绪','决策','难']}]}};
+
+// CAT POOLS (career, love, wealth, health, study, general) - inline from liuyao-cat-pools.js
+TEXT_POOLS.cat={career:{t2:[{text:'你的事业运现在真的很好。简单说就是：你想做的事情，现在做大概率能成。不管是争取升职、跳槽、还是自己创业，这个时间窗口都很不错。领导对你的印象好，同事也愿意配合你。不过有一点——越是顺的时候，越别膨胀，保持专注和谦虚，好运才能持续更久。',keywords:['升职','跳槽','创业','领导']},{text:'工作上现在是"顺风期"。适合把关键项目往前推、把成果摆上台面。面试、述职、争取资源都更有利。提醒：别同时开太多战线，抓住一个主战场打穿它。',keywords:['项目','面试','述职','资源']},{text:'事业气场偏强，适合谈薪、谈岗、谈合作。你开口更容易被认真听。把目标写清楚、证据准备足，胜率会更高。',keywords:['谈薪','合作','岗位']},{text:'这阶段贵人运不错，容易遇到愿意带你一把的人。主动汇报、主动对齐预期，你会更占便宜。',keywords:['贵人','汇报','对齐']},{text:'适合扩张影响力：跨部门协作、对外曝光、做代表作。别害羞，能见度就是机会。',keywords:['协作','曝光','作品']},{text:'执行力会被放大：同样的努力，更容易被看见。把交付做漂亮，比说漂亮话更管用。',keywords:['执行','交付','努力']},{text:'如果你正考虑换赛道，这窗口值得一试，但要做足调研与备选方案。',keywords:['换','赛道','调研']},{text:'管理层的朋友：这阶段适合立规矩、建流程，团队效率会明显提升。',keywords:['管理','流程','团队']},{text:'创业/副业：适合验证需求、拿第一批付费用户，别一上来就铺太大。',keywords:['创业','副业','用户']},{text:'大厂螺丝钉也能加分：把指标做穿、把文档写清，你会更容易被看见。',keywords:['大厂','指标','文档']},{text:'旺运时最忌飘：承诺别过头，节奏别乱。稳一点，赢面更大。',keywords:['承诺','节奏','飘']}],t3:[{text:'事业运整体向好，但不是那种大开大合的状态。现在更适合做"锦上添花"的事——在现有的位置上做出亮点，而不是搞颠覆性的大动作。如果你在考虑跳槽或者大变动，我的建议是再等等，现在的积累还没到最佳收割期。踏踏实实把手头的活儿干漂亮，机会自然会找到你。',keywords:['跳槽','变动','积累']},{text:'属于稳步上升：别急着换舞台，先把角色演好。小胜累积成大胜。',keywords:['稳','角色','胜']},{text:'适合优化工作流：模板化、自动化、减少返工。你会更轻松。',keywords:['流程','返工','模板']},{text:'这阶段适合"修关系"：跨部门沟通顺一点，后面事就好办一点。',keywords:['沟通','跨部门','关系']},{text:'如果你在学习新技能，这运势能帮你把学习变成产出。别只学不用。',keywords:['技能','学习','产出']},{text:'小吉不等于躺赢：把每周目标写清楚，你会更踏实。',keywords:['目标','周','踏实']},{text:'想转岗可以试探，但别裸辞式硬冲。先内部机会、外部面试并行了解。',keywords:['转岗','裸辞','面试']},{text:'这阶段别跟同事硬杠，赢了嘴输了局不划算。',keywords:['同事','杠','局']},{text:'把你的成果用数据说话：复盘、对比、截图留痕，后面都用得上。',keywords:['数据','复盘','留痕']},{text:'适合找导师/前辈聊一次，你会少走很多弯路。',keywords:['导师','前辈','聊']},{text:'小吉靠耐心：别三天换方向，给方法四周试用期。',keywords:['耐心','方向','试用']}],t4:[{text:'说实话现在事业上比较平淡，没什么特别好的机遇，但也没什么大风险。这种时候别焦虑，也别躺平——利用这段相对安静的时间给自己充充电吧。学个新技能、拓展一下人脉、把之前没空做的事情补上。等风来了，你得准备好。',keywords:['焦虑','躺平','学习']},{text:'平淡期适合整理简历、作品集、项目复盘。机会来时你会接得住。',keywords:['简历','作品','复盘']},{text:'这阶段别频繁跳槽念头，先把当下做穿，再谈下一站。',keywords:['跳槽','当下','站']},{text:'适合把"可迁移能力"练出来：写作、表达、数据分析。',keywords:['数据','表达','写作']},{text:'工作上别背不该背的锅：留痕、对齐、确认需求。',keywords:['锅','留痕','需求']},{text:'如果你感觉卡住，多半是信息不够：去找行业内的人聊五次。',keywords:['卡住','信息','行业']},{text:'这运势适合低调攒人品：帮同事一把，后面会回旋到你身上。',keywords:['人品','同事','帮']},{text:'别盲目考证，先搞清楚岗位到底要什么。',keywords:['考证','岗位','盲目']},{text:'把会议变少、把输出变多：少开无效会，多交付结果。',keywords:['会议','输出','结果']},{text:'适合建立个人工作系统：清单、日历、复盘表。',keywords:['日历','清单','系统']},{text:'平淡不是失败，是土壤。你在扎根。',keywords:['平淡','扎根','土壤']}],t5:[{text:'事业上可能会碰到一些不顺心的事——跟领导意见不合、项目进展不顺、或者周围人不太配合你。别急着硬碰硬，现在不是逞强的时候。低调一点，先把自己的事做好，少参与办公室的争斗。这段时间过去之后会好很多，但现在真的要忍一忍。',keywords:['领导','项目','办公室']},{text:'逆风期先求不败：少承诺、少站队、少背锅。把证据链做清楚。',keywords:['承诺','站队','证据']},{text:'这阶段别硬刚裁员/绩效争议，先找规则与法律边界。',keywords:['裁员','绩效','法律']},{text:'项目延期很正常，先把风险点写出来，逐个拆。',keywords:['延期','风险','拆']},{text:'别在情绪最高点辞职，先睡两晚再决定。',keywords:['辞职','情绪','决定']},{text:'同事摩擦时，书面确认比口头争吵有用。',keywords:['摩擦','书面','同事']},{text:'这运势适合"修内功"：技能、作品、健康，别只盯着外部评价。',keywords:['内功','作品','评价']},{text:'如果你被PUA式打压，先记录事实，再考虑换环境。',keywords:['PUA','打压','记录']},{text:'少参加无效内卷：把精力放在可积累的东西上。',keywords:['内卷','积累','精力']},{text:'找靠谱朋友或前辈聊，别一个人扛到爆。',keywords:['前辈','扛','聊']},{text:'忍不是怂，是为了更漂亮的反击时机。',keywords:['忍','反击','时机']}],t6:[{text:'事业方面的确压力不小。可能有些不好的信号——岗位不稳、项目出问题、或者你自己也有些迷茫。我的建议是：现在最重要的不是往上冲，而是先稳住自己。把手头的事情做好，储备好后路，别冲动做决定。低谷是暂时的，但冲动的决定可能是长期的。',keywords:['岗位','项目','迷茫']},{text:'先保命线：现金流、劳动合同、关键证据。别赌。',keywords:['现金流','合同','证据']},{text:'这阶段忌大幅扩张：停招聘、停加杠杆、停盲目投资。',keywords:['扩张','杠杆','投资']},{text:'如果你已经很累，优先休息与就医，别硬扛到崩。',keywords:['累','休息','就医']},{text:'别在群里公开撕，成本往往比你想象的大。',keywords:['群','撕','成本']},{text:'把简历悄悄更新起来，但不要冲动裸辞。',keywords:['简历','裸辞','冲动']},{text:'这运势像暴雨天：先找屋檐，再谈赶路。',keywords:['暴雨','屋檐','赶路']},{text:'若涉及赔偿/离职，优先咨询专业人士。',keywords:['赔偿','离职','律师']},{text:'把目标缩到本周三件事：活下来、稳住盘、留后路。',keywords:['本周','稳住','后路']},{text:'最难时最忌自我攻击。你只是在逆风，不是无能。',keywords:['逆风','攻击','无能']},{text:'先活下来，春天会来的。',keywords:['活','春','来']}]},love:{t2:[{text:'感情运太好了。如果你单身，最近真的很容易遇到对眼的人——可能是社交场合、朋友聚会、甚至偶然的相遇。大胆一点去互动吧。如果你有对象，这段时间感情会特别甜，适合一起做点有仪式感的事情。总之就是：爱就大声说出来，别怂。',keywords:['单身','约会','表白']},{text:'桃花偏旺，适合主动约、主动表达好感。别等对方猜。',keywords:['桃花','主动','好感']},{text:'有伴：适合旅行、见家长、聊未来规划。',keywords:['旅行','家长','未来']},{text:'冷战中的情侣：这窗口更容易和解，先低头不代表输。',keywords:['冷战','和解','低头']},{text:'异地恋：适合定规则、定见面节奏，信任会更稳。',keywords:['异地','信任','见面']},{text:'复合议题：如果双方都想修，这阶段更有机会谈开。',keywords:['复合','谈','修']},{text:'别玩暧昧太久，确认关系要趁早，省得内耗。',keywords:['暧昧','确认','内耗']},{text:'这运势也提醒你：好感情需要边界，别过度牺牲。',keywords:['边界','牺牲','感情']},{text:'适合一起做点新体验：课程、运动、共同目标。',keywords:['体验','运动','目标']},{text:'你会更容易被温柔对待，也更容易温柔对人。',keywords:['温柔','对待','人']},{text:'爱要大声，也要落地：时间、承诺、行动一致。',keywords:['承诺','行动','时间']}],t3:[{text:'感情运还不错。单身的话会有一些缘分出现，但可能不是那种一见钟情的类型，更像是日久生情——别着急下结论，多给彼此一些时间。有对象的话最近感情比较温馨，偶尔制造一点小浪漫就更好了。记住，好的感情不是轰轰烈烈，而是细水长流。',keywords:['单身','日久','浪漫']},{text:'小吉：适合慢慢了解，别急着定义关系。',keywords:['了解','定义','关系']},{text:'有伴：小摩擦正常，好好说话就能解决一半。',keywords:['摩擦','说话','解决']},{text:'如果你在意安全感，这阶段适合把底线聊清楚。',keywords:['安全感','底线','聊']},{text:'相亲/介绍类缘分：别以貌取人，多看价值观。',keywords:['相亲','价值观','介绍']},{text:'别用冷战惩罚对方，惩罚的往往是两个人。',keywords:['冷战','惩罚','两个人']},{text:'这运势适合一起规划小钱钱：消费观对齐很重要。',keywords:['钱','消费','规划']},{text:'想表白可以试探式表达，别一上来就重压。',keywords:['表白','试探','压力']},{text:'感情里别比较前任：比较一次，伤一次。',keywords:['前任','比较','伤']},{text:'给彼此留空间：黏太紧反而容易窒息。',keywords:['空间','黏','窒息']},{text:'小吉靠经营：约会、礼物、倾听，都是加分项。',keywords:['约会','礼物','倾听']}],t4:[{text:'感情上目前比较平淡。单身的朋友暂时可能没有太令人心动的邂逅，但这不是坏事——有时候一个人的时光正好用来搞清楚自己到底想要什么样的另一半。有伴的话，日子比较按部就班，想想有没有什么能一起做的新鲜事。感情也需要经营，别让它变成了"室友关系"。',keywords:['单身','平淡','室友']},{text:'平淡期适合复盘：你喜欢什么、不能接受什么，写下来。',keywords:['复盘','接受','喜欢']},{text:'有伴：一起做点小事也能升温：做饭、散步、聊天。',keywords:['做饭','散步','聊天']},{text:'别用"忙"逃避沟通，忙是感情的慢性毒药。',keywords:['忙','沟通','逃避']},{text:'单身别急着脱单，先把自己过得舒服。',keywords:['脱单','舒服','自己']},{text:'这阶段适合观察对方的一致性：言行是否长期对齐。',keywords:['观察','一致','言行']},{text:'别被社交媒体秀恩爱绑架，你们有自己的节奏。',keywords:['朋友圈','节奏','秀']},{text:'想推进关系，就用可执行的小请求：见面频率、回复速度。',keywords:['推进','频率','回复']},{text:'感情平淡有时是亲密的前奏，别误判为不爱。',keywords:['平淡','亲密','爱']},{text:'适合一起学点新东西，创造共同记忆。',keywords:['学','记忆','共同']},{text:'先把自己情绪照顾好，才能更好地爱人。',keywords:['情绪','照顾','爱人']}],t5:[{text:'感情上可能有点磕磕碰碰。单身的话，要注意分辨——不是每个对你示好的人都值得投入真心的。有伴的话，最近可能容易为一些鸡毛蒜皮的事吵架。深呼吸，别在气头上说狠话——说出去的话收不回来的。退一步，站在对方角度想想，很多问题都不是什么大事。',keywords:['吵架','分辨','狠话']},{text:'逆风期忌翻旧账：旧事重提只会火上浇油。',keywords:['旧账','火','提']},{text:'如果你怀疑忠诚，先证据再质问，别靠猜。',keywords:['忠诚','证据','猜']},{text:'异地恋更容易误会：多视频，少冷战。',keywords:['异地','误会','视频']},{text:'分手边缘：先停战48小时，再谈去留。',keywords:['分手','停战','去留']},{text:'别把工作压力泼到伴侣身上，他是爱人不是沙包。',keywords:['工作','压力','伴侣']},{text:'这阶段别做重大承诺（订婚/借钱），等情绪平稳。',keywords:['订婚','借钱','承诺']},{text:'想挽回先改自己可改的部分，别只要求对方。',keywords:['挽回','改','要求']},{text:'如果你被消耗，记得设边界：爱不是无限透支。',keywords:['消耗','边界','透支']},{text:'找朋友倾诉可以，别让朋友替你下最终决定。',keywords:['倾诉','朋友','决定']},{text:'吵完要复盘：到底在争什么，别争输赢。',keywords:['复盘','输赢','争']}],t6:[{text:'感情方面确实有些棘手。可能是对方态度让你摸不透，可能是你们之间出现了信任危机，也可能你正在经历一段不那么舒服的关系。我想跟你说的是：别委曲求全，也别破罐破摔。先照顾好自己的情绪，该放下的就放下。一个人也可以过得很好，而好的缘分永远不会让你太辛苦。',keywords:['信任','委屈','分手']},{text:'先安全：若涉及暴力/威胁，优先求助警方与机构。',keywords:['暴力','威胁','安全']},{text:'这阶段忌纠缠式挽回：越缠越贬值。',keywords:['纠缠','挽回','缠']},{text:'如果你已经心碎，先停联系一段时间，让脑子降温。',keywords:['心碎','联系','降温']},{text:'别用新欢快速填洞，洞还在，只是换了形状。',keywords:['新欢','填','洞']},{text:'涉及财产/子女/婚姻，务必咨询专业人士。',keywords:['财产','子女','婚姻']},{text:'你可以难过，但别用伤害自己的方式发泄。',keywords:['难过','伤害','发泄']},{text:'离开不对的人，是给自己未来让路。',keywords:['离开','未来','不对']},{text:'把爱先留给自己：睡眠、吃饭、运动。',keywords:['自己','睡','吃']},{text:'时间会冲淡，但你也要主动走向新生活。',keywords:['时间','新生活','冲淡']},{text:'好的缘分不辛苦到让你怀疑自己。',keywords:['辛苦','怀疑','缘分']}]},wealth:{t2:[{text:'财运很旺！不管是工资收入还是额外进账，最近都有增加的趋势。如果你一直在观望某个投资机会，现在可以认真考虑出手了——当然，不是让你all in，而是在承受范围内适度加仓。做生意的朋友订单量可能会上升。不过我多嘴一句：赚到手了记得存一些，别全花了。',keywords:['投资','加仓','生意']},{text:'正财偏财都偏顺，但记得风控：分散、止损、留现金。',keywords:['分散','止损','现金']},{text:'适合谈加薪/谈单/谈合作分成，把条款写清楚。',keywords:['加薪','分成','条款']},{text:'这阶段容易有意外之喜：退款、奖金、旧账回笼。',keywords:['奖金','退款','回笼']},{text:'别炫富，别借钱给不熟的人，守住成果。',keywords:['炫富','借钱','熟']},{text:'有副业想法可以试，但别影响主业底盘。',keywords:['副业','主业','试']},{text:'适合把资产配置做一次体检：保险、应急金、负债率。',keywords:['资产','保险','负债']},{text:'旺运时最忌冲动消费：先放购物车三天。',keywords:['消费','冲动','购物车']},{text:'做生意：回款与现金流优先，利润其次。',keywords:['回款','现金流','利润']},{text:'投资上：不懂不投，先学习再下手。',keywords:['不懂','学习','投']},{text:'把好运沉淀成储蓄，比炫耀更高级。',keywords:['储蓄','炫耀','沉淀']}],t3:[{text:'财运还行，细水长流的那种。大富大贵可能还没到时候，但日常收入稳定，偶尔有点小惊喜——可能是一笔意外的退款、朋友还钱、或者小投资有了回报。这段时间适合做稳健的理财，别碰高风险的东西。少买两个不必要的东西，月底看账单你会感谢自己的。',keywords:['理财','退款','稳健']},{text:'小吉：适合定投、定期、低风险工具。',keywords:['定投','定期','低风险']},{text:'别追热点币/概念股，容易被割。',keywords:['热点','概念股','割']},{text:'这阶段适合记账：你知道钱去哪，钱就听话。',keywords:['记账','钱','去哪']},{text:'朋友借钱：写借条、设期限，别不好意思。',keywords:['借钱','借条','期限']},{text:'想提高收入，优先提升可交易能力：技能、作品、客户。',keywords:['收入','技能','客户']},{text:'消费上：把"想要"和"需要"分开。',keywords:['想要','需要','消费']},{text:'小惊喜别乱花，先放进应急金。',keywords:['惊喜','应急','金']},{text:'别为面子买单：面子贵，里子更贵。',keywords:['面子','里子','买单']},{text:'这运势适合"慢慢变富"，别图快。',keywords:['慢','富','快']},{text:'兼职可以试，但别签不明合同。',keywords:['兼职','合同','不明']}],t4:[{text:'财运比较平，不亏不赚的状态。现在不适合做大的投资决策——不管是买房、买股票还是创业投入，都建议再观望一下。当然，也不需要太焦虑，至少财务状况是稳定的。趁这段时间好好梳理一下自己的收支，看看有没有能优化的地方。',keywords:['买房','股票','观望']},{text:'平淡期适合整理：账单、订阅、自动扣费。',keywords:['账单','订阅','扣费']},{text:'别盲目加杠杆，先算最坏情况。',keywords:['杠杆','最坏','算']},{text:'这阶段更适合储蓄型目标：先存够安全垫。',keywords:['储蓄','安全','垫']},{text:'别跟风口跑，你更容易被割。',keywords:['风口','割','跑']},{text:'学习理财知识比频繁交易更划算。',keywords:['理财','交易','学习']},{text:'大额支出延后三个月，你会更清醒。',keywords:['大额','延后','清醒']},{text:'别用消费缓解情绪，越缓解越空。',keywords:['消费','情绪','空']},{text:'副业可以探索，但别一上来就重投入。',keywords:['副业','投入','探索']},{text:'把信用卡额度当诱惑，不是实力。',keywords:['信用卡','诱惑','额度']},{text:'财务平淡往往是暴风雨前的整理期，别浪费。',keywords:['整理','暴风雨','浪费']}],t5:[{text:'财运上要稍微注意一下。可能会有一些意外开销——比如东西坏了要修、突然需要随份子、或者之前投的什么亏了。别慌，但也别继续往里投了。这段时间的原则是"守"：控制支出、推迟大件采购、对"稳赚不赔"的说法打个问号。',keywords:['开销','份子','亏']},{text:'逆风时先止血：停掉不必要订阅与冲动下单。',keywords:['止血','订阅','下单']},{text:'别借钱投资，尤其杠杆。',keywords:['借钱','杠杆','投资']},{text:'这阶段适合要回款、清欠款、谈分期。',keywords:['回款','欠款','分期']},{text:'别信熟人高收益项目，先看合同与主体。',keywords:['熟人','高收益','合同']},{text:'大额支出必须两人商量，别独断。',keywords:['大额','商量','独断']},{text:'如果你已经亏损，别加仓摊平，先停。',keywords:['亏损','加仓','摊平']},{text:'现金为王：手里有钱，心里不慌。',keywords:['现金','慌','王']},{text:'这运势像漏财口：检查自动扣费与遗忘会员。',keywords:['漏财','会员','扣费']},{text:'别用赌博心态翻本，越翻越深。',keywords:['赌博','翻本','深']},{text:'守住基本盘，比博一把更重要。',keywords:['基本盘','博','守']}],t6:[{text:'财务方面确实有压力。可能是收入减少、支出增加、或者投资踩了坑。我知道这很焦虑，但越是这种时候越不能乱来。千万别借钱去投资、别赌博、别信"保本高回报"。先把必要的开支保住，非必要的全砍掉。这段时间过去了再慢慢恢复，钱亏了可以再赚，但如果因为冲动把窟窿越搞越大就麻烦了。',keywords:['收入','投资','坑']},{text:'先盘点：现金流、负债、固定支出，写在纸上。',keywords:['现金流','负债','盘点']},{text:'立刻停掉高风险投机与加杠杆。',keywords:['投机','杠杆','停']},{text:'能协商延期就协商：贷款、房租、供应商。',keywords:['协商','贷款','房租']},{text:'别孤注一掷想翻本，先活下来。',keywords:['孤注','翻本','活']},{text:'找专业人士处理债务结构，别自己硬扛。',keywords:['债务','专业','扛']},{text:'这阶段忌担保，忌联名账户乱用。',keywords:['担保','联名','账户']},{text:'把生活成本压到可控线，面子先放一边。',keywords:['成本','面子','控']},{text:'任何"内部消息"都当噪音处理。',keywords:['消息','内部','噪音']},{text:'钱可以亏，别把人亏进去（关系、健康）。',keywords:['关系','健康','人']},{text:'熬过现金流危机，你会变强，但别靠赌。',keywords:['危机','强','赌']}]},health:{t2:[{text:'身体状况很好！精力充沛、免疫力也在线。现在特别适合开始一个新的运动计划——跑步、游泳、瑜伽什么都行，身体给你的反馈会很积极。但是呢，越是感觉自己身体好，越别放飞自我——熬夜、暴饮暴食这种还是要控制，别透支健康的本钱。',keywords:['运动','熬夜','免疫']},{text:'体能窗口好，适合上强度训练，但循序渐进。',keywords:['体能','强度','循序']},{text:'这阶段适合体检：早发现早安心。',keywords:['体检','早','安心']},{text:'如果你要减脂增肌，现在更容易坚持。',keywords:['减脂','增肌','坚持']},{text:'别忽视拉伸与热身，旺运时也别浪伤。',keywords:['拉伸','热身','伤']},{text:'睡眠好，运气更好：尽量固定作息。',keywords:['睡眠','作息','固定']},{text:'多喝水、少含糖饮料，你会明显感觉更轻松。',keywords:['水','糖','饮料']},{text:'心理健康也在线，适合处理拖延与焦虑。',keywords:['心理','拖延','焦虑']},{text:'有旧伤可以安排复健，恢复更快。',keywords:['旧伤','复健','恢复']},{text:'别空腹狂咖啡，胃会记仇。',keywords:['咖啡','胃','空腹']},{text:'把健康当资产经营，你会赚回时间。',keywords:['资产','时间','健康']}],t3:[{text:'身体整体没什么大问题，但有些小信号需要留意——比如偶尔的头疼、肩膀酸、睡不太好。这些都不是大事，但说明你的身体在提醒你：该注意劳逸结合了。多喝水、少熬夜、偶尔做做拉伸，这些小习惯坚持了差别会很大。',keywords:['头疼','肩膀','睡']},{text:'小吉：适合建立微习惯：走楼梯、站立办公、眼保健。',keywords:['习惯','眼','站']},{text:'别久坐一小时不动，设个闹钟起来走走。',keywords:['久坐','闹钟','走']},{text:'如果你压力大，试试呼吸训练与冥想。',keywords:['压力','呼吸','冥想']},{text:'这阶段别节食极端，均衡更重要。',keywords:['节食','均衡','极端']},{text:'小毛病别拖：牙、皮肤、过敏都去看看。',keywords:['牙','皮肤','过敏']},{text:'把屏幕时间砍一点，睡眠会回报你。',keywords:['屏幕','睡眠','砍']},{text:'想运动从每周三次开始，别一次把自己练废。',keywords:['运动','三次','废']},{text:'情绪和身体互通：少生闷气，多说出来。',keywords:['情绪','闷气','说']},{text:'体检项目不懂就问医生，别百度自我恐吓。',keywords:['体检','百度','医生']},{text:'健康是复利，别小看每天多走的两千步。',keywords:['复利','步','走']}],t4:[{text:'健康方面总体还行，但属于那种"不上不下"的状态——没生病，但也算不上活力满满。建议你从饮食和作息两个方面调整一下：三餐尽量规律、睡眠保证7小时以上。如果很久没体检了，抽空做一个也不错，至少心里有底。',keywords:['作息','体检','三餐']},{text:'平淡期适合调脾胃：少油少糖，规律进食。',keywords:['脾胃','油','糖']},{text:'别用熬夜换效率，越换越亏。',keywords:['熬夜','效率','亏']},{text:'如果你总疲惫，先查睡眠与甲状腺等基础项。',keywords:['疲惫','甲状腺','睡眠']},{text:'运动从走路开始，别一上来就马拉松。',keywords:['走路','马拉松','运动']},{text:'久坐族：每小时起来两分钟，比周末突击更有用。',keywords:['久坐','周末','突击']},{text:'别乱吃补剂，先吃饭吃菜。',keywords:['补剂','菜','饭']},{text:'心理健康也别忽视：烦躁持续两周就值得重视。',keywords:['烦躁','心理','两周']},{text:'把喝水当成任务，完成率会改变状态。',keywords:['喝水','任务','状态']},{text:'眼睛干涩少刷短视频，热敷更有效。',keywords:['眼睛','短视频','热敷']},{text:'不上不下时，最适合做"基础保养"。',keywords:['保养','基础','上下']}],t5:[{text:'健康方面需要多关注一下。可能最近容易疲劳、或者有些旧毛病在反复。别硬撑着觉得"没事"，该去看医生就去看，早发现早处理永远比拖着好。饮食尽量清淡，运动量适中别过猛。另外情绪也会影响身体，尽量保持心情舒畅。',keywords:['疲劳','旧病','医生']},{text:'这阶段忌硬扛：该检查检查，该休息休息。',keywords:['扛','检查','休息']},{text:'如果你失眠，先从睡眠卫生做起：床只用来睡。',keywords:['失眠','床','睡']},{text:'别用酒精助眠，它会偷走深睡。',keywords:['酒精','助眠','深睡']},{text:'疼痛别忍：骨科、牙科都可能拖成大问题。',keywords:['疼痛','骨科','牙科']},{text:'情绪很差时，优先保证吃饭与睡眠。',keywords:['情绪','吃饭','睡']},{text:'这运势像黄灯：别极限训练，先恢复。',keywords:['极限','训练','恢复']},{text:'如果你有慢性病，遵医嘱比自学更靠谱。',keywords:['慢病','医嘱','自学']},{text:'工作再忙，也别连续熬夜三天。',keywords:['熬夜','工作','连续']},{text:'体检异常别自己吓自己，找医生解读。',keywords:['异常','解读','吓']},{text:'身体会记仇：你忽略的，它迟早要你还。',keywords:['忽略','记仇','还']}],t6:[{text:'健康方面我得认真跟你说一下：如果你现在有任何不舒服的感觉，请一定去医院检查，别自己扛。这段时间身体比较脆弱，需要格外的照顾。充足的休息、清淡的饮食、适量的运动——三件事做好就够了。工作和其他事情先放一放，没什么比身体更重要的。',keywords:['不舒服','医院','扛']},{text:'红色预警：胸痛、气短、剧烈头痛，别等，直接就医。',keywords:['胸痛','头痛','气短']},{text:'这阶段把运动降到"能完成"的强度，别攀比。',keywords:['运动','强度','攀比']},{text:'如果你已经在吃药，别擅自停。',keywords:['药','停','擅自']},{text:'心理危机同样要就医，别觉得丢人。',keywords:['心理','危机','丢人']},{text:'别用加班证明价值，价值先建立在活着。',keywords:['加班','价值','活']},{text:'睡眠少于六小时长期扛，会反噬所有计划。',keywords:['六小时','睡眠','计划']},{text:'如果你暴饮暴食或完全吃不下，都值得重视。',keywords:['暴食','吃不下','重视']},{text:'先把身体稳住，再谈赚钱与面子。',keywords:['身体','赚钱','面子']},{text:'别信偏方治大病，科学第一。',keywords:['偏方','科学','大病']},{text:'你愿意为自己停下来，身体才愿意好起来。',keywords:['停','好','愿意']}]},study:{t2:[{text:'学习运超好的！最近你的脑子很清楚，看东西学东西都特别快，是那种"开了挂"的状态。如果要考试的话，放心大胆冲，你的准备已经够了。如果在学新东西，现在正是黄金期，能学多少学多少。唯一要注意的是别骄傲，觉得自己"已经很强了"就松懈了。',keywords:['考试','学习','冲']},{text:'记忆力与理解力在线，适合啃难书、做难题。',keywords:['记忆','难题','书']},{text:'这阶段适合报班/找老师，效率会翻倍。',keywords:['报班','老师','效率']},{text:'如果你要考证，冲刺期就放在现在。',keywords:['考证','冲刺','证']},{text:'别只输入不输出：做题、写作、复述才是真学会。',keywords:['输出','做题','复述']},{text:'学习小组很利你，讨论一次胜过自己闷头一天。',keywords:['小组','讨论','闷头']},{text:'旺运时也要防粗心：审题、验算、检查。',keywords:['粗心','审题','验算']},{text:'适合挑战更高目标，但别同时开太多科。',keywords:['目标','科','同时']},{text:'这运势像加速器：每天多学一小时，差距会拉开。',keywords:['一小时','差距','加速']},{text:'把难题拆小，你会越战越勇。',keywords:['难题','拆','勇']},{text:'别骄傲，保持空杯，你会更强。',keywords:['骄傲','空杯','强']}],t3:[{text:'学习运不错，付出努力就能看到成果的那种。可能不会一下子拿到最顶尖的成绩，但稳步进步是完全没问题的。建议你重点关注薄弱环节——越是不擅长的越要花时间去啃。另外，找一两个靠谱的学习伙伴互相督促，效果会比你一个人死磕好得多。',keywords:['薄弱','伙伴','死磕']},{text:'小吉：适合制定周计划，周周复盘。',keywords:['周计划','复盘','周']},{text:'别只刷题不总结，总结才是分数的复利。',keywords:['刷题','总结','分数']},{text:'如果你拖延，先用番茄钟开个小头。',keywords:['拖延','番茄','头']},{text:'这阶段适合补短板，别只练擅长的舒适区。',keywords:['短板','舒适','补']},{text:'英语/数学这类需要积累的，别指望一夜奇迹。',keywords:['英语','数学','积累']},{text:'找老师问清"错因分类"，比盲目刷题有用。',keywords:['错因','老师','盲目']},{text:'学习环境与手机隔离一小时，你会感谢自己。',keywords:['手机','环境','隔离']},{text:'小进步也值得奖励，别只盯着名次。',keywords:['进步','奖励','名次']},{text:'别熬夜透支，睡眠好记忆才好。',keywords:['熬夜','记忆','睡']},{text:'稳步就是最快的路。',keywords:['稳','快','路']}],t4:[{text:'学习上目前比较平淡，既没有突然开窍的感觉，也没什么大的退步。这种时候比较考验毅力——因为看不到明显进步，很容易想放弃。别。保持你的学习习惯，即使效率一般也要坚持。回头去看基础知识，很多人的瓶颈就是基础没打牢。',keywords:['基础','毅力','放弃']},{text:'平淡期适合回炉基础：概念、公式、错题本。',keywords:['错题','公式','概念']},{text:'别频繁换方法，给一种方法足够长时间。',keywords:['方法','时间','换']},{text:'如果你走神严重，试试分段学习25分钟。',keywords:['走神','分段','分钟']},{text:'别跟别人比进度，只跟昨天的自己比。',keywords:['进度','昨天','比']},{text:'这阶段适合整理资料与笔记，体系化。',keywords:['笔记','资料','体系']},{text:'学习倦怠时，先睡一会儿比硬撑强。',keywords:['倦怠','睡','硬撑']},{text:'别用假努力感动自己：时间≠吸收。',keywords:['假努力','吸收','时间']},{text:'每天固定同一时间学习，形成惯性。',keywords:['固定','惯性','时间']},{text:'瓶颈常是方法问题，不是智商问题。',keywords:['瓶颈','智商','方法']},{text:'平淡是在扎根，别误判为没希望。',keywords:['扎根','希望','平淡']}],t5:[{text:'学习上可能遇到了一些瓶颈——怎么学都学不进去、越复习越觉得啥也不会。别慌，这种感觉很正常，很多人都经历过。换个学习方法试试——比如从刷题变成看视频讲解，或者从一个人学变成找人讨论。有时候你只是累了，休息一两天再战也完全来得及。',keywords:['瓶颈','复习','累']},{text:'逆风期降低目标：先完成再完美。',keywords:['目标','完成','完美']},{text:'别自我攻击，攻击只会更学不进去。',keywords:['攻击','学','自我']},{text:'如果你焦虑到失眠，先处理睡眠再谈成绩。',keywords:['焦虑','失眠','睡眠']},{text:'这阶段忌攀比：越比越慌。',keywords:['攀比','慌','比']},{text:'把任务拆到25分钟可完成，降低启动成本。',keywords:['25','拆','启动']},{text:'找老师或同学问清一道，胜过自己闷一天。',keywords:['老师','同学','闷']},{text:'别用熬夜换时长，效率会反噬。',keywords:['熬夜','时长','效率']},{text:'如果你真想放弃，先休息两天再决定。',keywords:['放弃','休息','决定']},{text:'瓶颈是信号：该换策略，不是该否定自己。',keywords:['策略','否定','信号']},{text:'你还能坐在这里学，就已经很勇敢。',keywords:['勇敢','坐','学']}],t6:[{text:'学习方面确实有点辛苦。注意力很难集中、东西记不住、或者一坐下来就烦——这些都说明你的状态需要调整。与其硬撑着低效学习，不如先给自己放个短假：好好睡一觉、出去走走、做点开心的事。"磨刀不误砍柴工"不是鸡汤，是真的。等状态恢复了再学，效率会翻倍。',keywords:['注意力','记不住','烦']},{text:'先停学几天不是罪，硬学才是。',keywords:['停','硬学','罪']},{text:'如果你抑郁情绪很重，优先求助专业人士。',keywords:['抑郁','求助','专业']},{text:'这阶段把目标改成"每天只学30分钟也行"。',keywords:['30','目标','分钟']},{text:'别跟别人比，先把自己从坑里拉出来。',keywords:['坑','比','拉']},{text:'身体和情绪先稳住，再谈成绩。',keywords:['身体','情绪','成绩']},{text:'如果你已经厌学严重，考虑换环境或换方式。',keywords:['厌学','环境','方式']},{text:'别用极端惩罚逼自己，越逼越反噬。',keywords:['惩罚','逼','反噬']},{text:'你能承认辛苦，就已经在进步。',keywords:['辛苦','承认','进步']},{text:'学习不是唯一价值，但你值得被温柔对待。',keywords:['价值','温柔','值得']},{text:'等风来之前，先让自己喘口气。',keywords:['喘','风','气']}]},general:{t2:[{text:'运势真的很好！生活各方面都呈现出一种上升的趋势。工作上有进展、感情上有温度、财务上也比较充裕。这种好运期不是天天有的，好好珍惜，把你一直想做但没做的事情提上日程吧。自信地去行动，你值得拥有好的结果。',keywords:['生活','工作','感情']},{text:'整体像顺风：适合主动推进你最重要的三件事。',keywords:['三件','推进','主动']},{text:'这阶段你更容易被看见，别藏。',keywords:['看见','藏','容易']},{text:'好运需要承接：作息、情绪、关系先稳。',keywords:['作息','情绪','关系']},{text:'适合许愿式行动：写下来，然后去做第一步。',keywords:['许愿','第一步','写']},{text:'别贪多，抓住一个主目标打穿。',keywords:['贪','目标','穿']},{text:'这运势也提醒你：谦虚让好运更久。',keywords:['谦虚','久','好运']},{text:'你会更容易遇到愿意帮你的人，开口很重要。',keywords:['帮','开口','人']},{text:'把好运沉淀成习惯，比一次性兴奋更值钱。',keywords:['习惯','沉淀','兴奋']},{text:'别浪：风险控制与底线思维要有。',keywords:['风险','底线','浪']},{text:'自信点，你比想象中更能扛事。',keywords:['自信','扛','事']}],t3:[{text:'总体来说挺好的，虽然不是"天选之人"的神仙运，但日子过得舒心有盼头。生活中的小确幸会不断出现——可能是一顿好吃的、一个好消息、或者跟朋友的一次愉快聚会。别贪心，知足的人运气一般不会太差。好好享受当下吧。',keywords:['日子','朋友','好消息']},{text:'小吉：别急着要结果，过程也很值钱。',keywords:['结果','过程','急']},{text:'这阶段适合把生活整理舒服：房间、作息、关系。',keywords:['房间','作息','舒服']},{text:'你会更容易遇到小惊喜，别忽略它。',keywords:['惊喜','忽略','小']},{text:'别跟别人比高光，比自己的进步。',keywords:['高光','进步','比']},{text:'把感恩当成日常，运气会更顺。',keywords:['感恩','顺','日常']},{text:'小确幸靠发现：一杯茶、一场日落都算。',keywords:['茶','日落','确幸']},{text:'这运势适合慢慢来，快不一定好。',keywords:['慢','快','来']},{text:'别心浮，心浮容易做错选择。',keywords:['心浮','选择','错']},{text:'把三件小事做好，你会更踏实。',keywords:['小事','踏实','三']},{text:'知足不是躺平，是清醒。',keywords:['知足','躺平','清醒']}],t4:[{text:'运势比较平淡，没什么特别好的消息，但也没什么坏事发生。这种状态其实很适合"内修"——看看书、健健身、理理财、想想接下来的人生规划。很多成功都是在这种"无聊"的日子里默默积累出来的。所以别觉得平淡就是浪费时间。',keywords:['内修','书','规划']},{text:'平淡期适合整理人生优先级：什么最重要？',keywords:['优先级','人生','整理']},{text:'别用忙碌骗自己，忙不等于前进。',keywords:['忙碌','前进','骗']},{text:'这阶段适合断舍离：物品、关系、目标。',keywords:['断舍离','关系','目标']},{text:'把身体照顾好，是一切的地基。',keywords:['身体','地基','照顾']},{text:'别被焦虑绑架，焦虑多半来自比较。',keywords:['焦虑','比较','绑架']},{text:'学习、锻炼、睡眠，三件小事复利最大。',keywords:['锻炼','睡眠','复利']},{text:'这运势像种田：急不得。',keywords:['种田','急','得']},{text:'把"无聊"当成沉淀，你会后来居上。',keywords:['无聊','沉淀','居上']},{text:'别频繁换人生计划，给计划一年试用期。',keywords:['计划','一年','试用']},{text:'平淡里藏着选择权，别浪费。',keywords:['选择','浪费','藏']}],t5:[{text:'最近运势有点弱，做事可能不太顺、心情也不太好。这些我都理解。但跟你说句掏心窝的话：低谷期不丢人，熬过去就是你的底气。少做决定、少跟人争、多关注自己。等这阵子过去，你会发现，你比自己以为的要坚强得多。',keywords:['心情','低谷','争']},{text:'逆风时先保命线：睡眠、钱、关系。',keywords:['逆风','命','钱']},{text:'别在夜里做人生大决定。',keywords:['夜','决定','人生']},{text:'少看刺激信息，保护心态。',keywords:['信息','心态','刺激']},{text:'这阶段适合求助，别独自硬扛。',keywords:['求助','扛','独自']},{text:'把目标缩到本周可完成，你会好过一点。',keywords:['本周','目标','好过']},{text:'别跟别人比惨或比强，都比伤自己。',keywords:['比惨','伤','比强']},{text:'如果你很丧，允许自己丧一会儿，但设时限。',keywords:['丧','时限','允许']},{text:'低谷会过去，但别用冲动延长低谷。',keywords:['低谷','冲动','延长']},{text:'你还能站起来，就已经很厉害。',keywords:['站','厉害','起来']},{text:'先把自己稳住，世界会慢慢好起来。',keywords:['稳','世界','好']}],t6:[{text:'运势确实不太好，我理解你可能有些焦虑甚至沮丧。但记住一句话：没有永远的低谷，就像没有永远的高峰。现在最重要的三件事——照顾好身体、管好钱包、远离是非。不用去想"怎么翻盘"，先把自己稳住就是最大的胜利。春天一定会来的。',keywords:['焦虑','沮丧','钱包']},{text:'先活下来：睡眠、吃饭、安全。',keywords:['活','安全','吃']},{text:'别孤注一掷改变人生，先小步修复。',keywords:['孤注','人生','小步']},{text:'这阶段忌重大承诺与高风险决策。',keywords:['承诺','风险','重大']},{text:'如果你很痛苦，请寻求专业帮助。',keywords:['痛苦','专业','帮助']},{text:'远离消耗你的人与事，先断联也是一种勇敢。',keywords:['消耗','断联','勇敢']},{text:'把目标改成"本周不更糟"，就很棒。',keywords:['本周','糟','棒']},{text:'别自我攻击，你已经在尽力。',keywords:['攻击','尽力','自我']},{text:'时间会帮你，但你也要伸手自救。',keywords:['时间','自救','伸手']},{text:'最难时也别做伤害自己的事。',keywords:['伤害','难','自己']},{text:'春天会来，但你要活到春天。',keywords:['春','活','来']}]}};
+
+// ================= INK WASH CANVAS =================
+(function(){
+var C=document.getElementById('bgCanvas'),X=C.getContext('2d'),W=0,H=0,t=0;
+function resize(){W=C.width=innerWidth;H=C.height=innerHeight;}
+addEventListener('resize',resize);resize();
+
+function sn(x){var s=Math.sin(x*127.1+311.7)*43758.5;return s-Math.floor(s);}
+function sm(x){var i=Math.floor(x),f=x-i,u=f*f*(3-2*f);return sn(i)*(1-u)+sn(i+1)*u;}
+function fbm(x,n){var v=0,a=.5,f=1;for(var i=0;i<n;i++){v+=a*sm(x*f);a*=.5;f*=2;}return v;}
+
+/* -------- MOUNTAINS -------- */
+var MTS=[];
+function buildMts(){
+  MTS=[];
+  [{y:.42,h:.19,sd:0,a:.05,sp:.008,d:6},
+   {y:.50,h:.16,sd:50,a:.07,sp:.015,d:5},
+   {y:.58,h:.14,sd:100,a:.10,sp:.025,d:5},
+   {y:.66,h:.11,sd:200,a:.14,sp:.04,d:4}
+  ].forEach(function(c){
+    var pts=[],steps=Math.ceil(W/3)+1;
+    for(var i=0;i<=steps;i++)pts.push(fbm(c.sd+i*.04,c.d));
+    c.pts=pts;c.steps=steps;MTS.push(c);
+  });
+}
+buildMts();addEventListener('resize',buildMts);
+
+function drawMts(){
+  MTS.forEach(function(m){
+    var by=H*m.y,dr=Math.sin(t*m.sp)*6;
+    X.beginPath();X.moveTo(-5,H);
+    for(var i=0;i<=m.steps;i++)
+      X.lineTo((i/m.steps)*W+dr,by-m.pts[i]*H*m.h);
+    X.lineTo(W+5,H);X.closePath();
+    X.fillStyle='rgba(180,175,165,'+m.a+')';X.fill();
+  });
+}
+
+/* -------- MOON -------- */
+function drawMoon(){
+  var mx=W*.22,my=H*.12;
+  var g=X.createRadialGradient(mx,my,4,mx,my,140);
+  g.addColorStop(0,'rgba(255,252,242,0.15)');
+  g.addColorStop(.12,'rgba(250,246,236,0.09)');
+  g.addColorStop(.45,'rgba(235,230,220,0.035)');
+  g.addColorStop(1,'rgba(200,195,185,0)');
+  X.fillStyle=g;X.beginPath();X.arc(mx,my,140,0,6.3);X.fill();
+  X.fillStyle='rgba(255,252,242,0.10)';
+  X.beginPath();X.arc(mx,my,20,0,6.3);X.fill();
+}
+
+/* -------- ATMOSPHERE -------- */
+function drawAtmosphere(){
+  var cx=W*.66,cy=H*.42,r=Math.max(W,H)*.50;
+  var g=X.createRadialGradient(cx,cy,r*.04,cx,cy,r);
+  g.addColorStop(0,'rgba(248,244,232,0.33)');
+  g.addColorStop(.18,'rgba(232,227,215,0.25)');
+  g.addColorStop(.40,'rgba(200,195,183,0.14)');
+  g.addColorStop(.65,'rgba(155,150,140,0.06)');
+  g.addColorStop(1,'rgba(100,95,85,0)');
+  X.fillStyle=g;X.fillRect(0,0,W,H);
+  var mx=W*.55+Math.sin(t*.18)*30,my=H*.58+Math.cos(t*.14)*20;
+  var g2=X.createRadialGradient(mx,my,5,mx,my,H*.26);
+  g2.addColorStop(0,'rgba(242,238,226,0.10)');
+  g2.addColorStop(1,'rgba(200,195,185,0)');
+  X.fillStyle=g2;X.fillRect(0,0,W,H);
+}
+
+/* -------- DRIFTING MIST CLOUDS -------- */
+var MCLD=[];
+for(var i=0;i<8;i++)MCLD.push({
+  x:Math.random()*W*1.5,y:H*.22+Math.random()*H*.48,
+  rx:90+Math.random()*200,ry:22+Math.random()*55,
+  spd:.1+Math.random()*.28,a:.025+Math.random()*.04
+});
+function drawMistClouds(){
+  MCLD.forEach(function(c){
+    c.x+=c.spd;
+    if(c.x-c.rx>W){c.x=-c.rx*2;c.y=H*.22+Math.random()*H*.48;}
+    var g=X.createRadialGradient(c.x,c.y,0,c.x,c.y,c.rx);
+    g.addColorStop(0,'rgba(228,223,213,'+c.a+')');
+    g.addColorStop(.55,'rgba(212,207,197,'+(c.a*.5)+')');
+    g.addColorStop(1,'rgba(200,195,185,0)');
+    X.fillStyle=g;
+    X.beginPath();X.ellipse(c.x,c.y,c.rx,c.ry,0,0,6.3);X.fill();
+  });
+}
+
+/* -------- GROUND FOG -------- */
+function drawGroundFog(){
+  var g=X.createLinearGradient(0,H*.76,0,H);
+  g.addColorStop(0,'rgba(200,195,185,0)');
+  g.addColorStop(.3,'rgba(200,195,185,0.05)');
+  g.addColorStop(.65,'rgba(185,180,170,0.08)');
+  g.addColorStop(1,'rgba(160,155,145,0.03)');
+  X.fillStyle=g;X.fillRect(0,H*.73,W,H*.27);
+}
+
+/* -------- DISTANT BIRDS -------- */
+var BIRDS=[];
+for(var i=0;i<3;i++)BIRDS.push({
+  x:Math.random()*W,y:H*.08+Math.random()*H*.18,
+  spd:.25+Math.random()*.35,sz:3+Math.random()*4,ph:Math.random()*6.3
+});
+function drawBirds(){
+  BIRDS.forEach(function(b){
+    b.x+=b.spd;b.y+=Math.sin(t*.7+b.ph)*.12;
+    if(b.x>W+50){b.x=-30;b.y=H*.08+Math.random()*H*.18;}
+    var wg=Math.sin(t*3.2+b.ph)*b.sz*.4;
+    X.strokeStyle='rgba(50,48,44,0.22)';X.lineWidth=1;X.lineCap='round';
+    X.beginPath();
+    X.moveTo(b.x-b.sz,b.y+wg);X.lineTo(b.x,b.y);X.lineTo(b.x+b.sz,b.y+wg);
+    X.stroke();
+  });
+}
+
+/* -------- WARRIOR -------- */
+function drawWarrior(){
+  var sc=H/680;
+  var cx=W<600?W*.55:W*.67;
+  var footY=H*.87;
+  var sw=Math.sin(t*.3)*1.5;
+  var br=Math.sin(t*.5)*1.2;
+  var cw=Math.sin(t*.7)*26;
+  var cw2=Math.sin(t*1.1+.5)*18;
+
+  X.save();
+  X.translate(cx+sw,footY);
+  X.scale(sc,sc);
+
+  var gl=X.createRadialGradient(0,-250,15,0,-230,340);
+  gl.addColorStop(0,'rgba(255,250,240,0.12)');
+  gl.addColorStop(.4,'rgba(240,235,225,0.06)');
+  gl.addColorStop(1,'rgba(220,215,205,0)');
+  X.fillStyle=gl;X.beginPath();X.arc(0,-230,340,0,6.3);X.fill();
+
+  var DK='rgba(10,10,16,0.93)';
+
+  /* ink bleed aura */
+  X.globalAlpha=.12;X.fillStyle='rgba(10,10,16,1)';
+  X.beginPath();
+  X.moveTo(0,-494+br);
+  X.quadraticCurveTo(-20,-474,-40,-448);
+  X.bezierCurveTo(-46,-398,-39,-312,-35,-228);
+  X.bezierCurveTo(-37,-142,-44,-68,-52,6);
+  X.lineTo(46,6);
+  X.bezierCurveTo(80+cw2*.3,-12,150+cw*.45,-58,204+cw,-126);
+  X.bezierCurveTo(228+cw*1.15,-172,214+cw*1.05,-272,162+cw*.6,-352);
+  X.bezierCurveTo(118+cw*.3,-404,66,-426,34,-448);
+  X.quadraticCurveTo(18,-474,0,-494+br);
+  X.closePath();X.fill();
+  X.globalAlpha=1;
+
+  /* main silhouette */
+  X.fillStyle=DK;
+  X.beginPath();
+  X.moveTo(0,-484+br);
+  X.quadraticCurveTo(-15,-468,-32,-442);
+  X.bezierCurveTo(-38,-398,-33,-314,-28,-230);
+  X.bezierCurveTo(-30,-150,-35,-76,-44,0);
+  X.lineTo(40,0);
+  X.bezierCurveTo(72+cw2*.3,-18,142+cw*.45,-66,196+cw,-134);
+  X.bezierCurveTo(222+cw*1.15,-180,208+cw*1.05,-276,156+cw*.6,-356);
+  X.bezierCurveTo(112+cw*.3,-406,60,-426,28,-442);
+  X.quadraticCurveTo(13,-468,0,-484+br);
+  X.closePath();X.fill();
+
+  /* head */
+  X.beginPath();X.arc(0,-484+br,18,0,6.3);X.fill();
+
+  /* left robe flutter */
+  X.globalAlpha=.88;
+  var lf=Math.sin(t*1.0)*11;
+  X.beginPath();
+  X.moveTo(-29,-195);
+  X.bezierCurveTo(-44-lf,-130,-56-lf*1.3,-62,-48-lf,0);
+  X.lineTo(-44,0);
+  X.bezierCurveTo(-38,-55,-33,-120,-29,-195);
+  X.closePath();X.fill();
+  X.globalAlpha=1;
+
+  /* belt / sash */
+  X.strokeStyle='rgba(160,155,145,0.15)';X.lineWidth=5;X.lineCap='round';
+  X.beginPath();X.moveTo(-29,-262);X.quadraticCurveTo(0,-272,24,-262);X.stroke();
+  X.lineWidth=3;
+  var st=Math.sin(t*.9)*9;
+  X.beginPath();X.moveTo(-29,-262);
+  X.quadraticCurveTo(-42-st,-238,-52-st*1.4,-208);X.stroke();
+
+  /* hair streaming upward */
+  X.strokeStyle=DK;X.lineCap='round';
+  for(var h=0;h<7;h++){
+    X.lineWidth=3.2-h*.35;
+    var hw=Math.sin(t*1.4+h*.6)*(4+h*3.8);
+    var hl=32+h*14;
+    X.beginPath();
+    X.moveTo(-10+h*4.5,-502+br);
+    X.quadraticCurveTo(-14+h*3.5+hw*.35,-502+br-hl*.5,-18+h*2.5+hw,-502+br-hl);
+    X.stroke();
+  }
+
+  /* cape inner folds */
+  X.strokeStyle='rgba(40,40,52,0.20)';X.lineWidth=1.3;
+  X.beginPath();X.moveTo(55+cw*.12,-340);
+  X.quadraticCurveTo(115+cw*.42,-210,158+cw*.72,-75);X.stroke();
+  X.beginPath();X.moveTo(82+cw*.22,-290);
+  X.quadraticCurveTo(142+cw*.52,-160,175+cw*.82,-25);X.stroke();
+  X.beginPath();X.moveTo(112+cw*.32,-245);
+  X.quadraticCurveTo(160+cw*.62,-135,190+cw*.88,5);X.stroke();
+
+  /* torn cape strips flying off edge */
+  X.fillStyle='rgba(10,10,16,0.65)';
+  for(var s=0;s<7;s++){
+    var sy=-200+s*52;
+    var sx=Math.sin(t*1.5+s*1.2)*13;
+    var pg=(sy+200)/364;
+    var edgeX=125+pg*80+cw*(.5+pg*.6)+sx;
+    var sLen=12+s*3+Math.sin(t*2+s)*5;
+    var sW=1.5+s*.35;
+    X.save();X.translate(edgeX,sy);X.rotate(.3+Math.sin(t*1.8+s)*.4);
+    X.fillRect(0,-sW/2,sLen,sW);X.restore();
+  }
+
+  /* cape edge wisps */
+  X.strokeStyle='rgba(10,10,16,0.48)';X.lineWidth=2;X.lineCap='round';
+  for(var w=0;w<5;w++){
+    var wy=-90+w*50;
+    var wx=Math.sin(t*1.6+w*1.1)*16;
+    var pg2=(wy+90)/290;
+    var bx=148+cw*(.6+pg2*.5)+wx+pg2*42;
+    X.beginPath();X.moveTo(bx,wy);
+    X.quadraticCurveTo(bx+20+wx*.5,wy+14,bx+42+wx*1.1,wy+6);X.stroke();
+  }
+
+  /* sword 1 (up-right) */
+  X.strokeStyle='rgba(12,12,20,0.90)';X.lineWidth=2.8;X.lineCap='round';
+  X.beginPath();X.moveTo(14,-410);X.lineTo(92,-572+br*.5);X.stroke();
+  X.lineWidth=1.8;
+  X.beginPath();X.moveTo(92,-572+br*.5);X.lineTo(99,-600+br*.5);X.stroke();
+  X.lineWidth=5;
+  X.beginPath();X.moveTo(9,-402);X.lineTo(20,-418);X.stroke();
+
+  /* sword 2 (up-left) */
+  X.strokeStyle='rgba(12,12,20,0.88)';X.lineWidth=2.2;
+  X.beginPath();X.moveTo(-18,-413);X.lineTo(-82,-582+br*.3);X.stroke();
+  X.lineWidth=3.5;
+  X.beginPath();X.moveTo(-80,-578+br*.3);X.lineTo(-88,-606+br*.3);X.stroke();
+
+  X.restore();
+
+  /* ground dust */
+  var dg=X.createRadialGradient(cx,footY,0,cx,footY,130*sc);
+  dg.addColorStop(0,'rgba(195,190,180,0.09)');
+  dg.addColorStop(.4,'rgba(175,170,160,0.04)');
+  dg.addColorStop(1,'rgba(150,145,135,0)');
+  X.fillStyle=dg;
+  X.beginPath();X.ellipse(cx,footY,130*sc,32*sc,0,0,6.3);X.fill();
+}
+
+/* -------- GROUND VEGETATION -------- */
+function drawGroundVeg(){
+  var cx=W<600?W*.55:W*.67;
+  var gy=H*.87;
+  var sc=H/680;
+  X.strokeStyle='rgba(10,10,16,0.13)';X.lineWidth=1;X.lineCap='round';
+  for(var i=0;i<24;i++){
+    var gx=cx-180*sc+i*16*sc+Math.sin(i*2.7)*12*sc;
+    var gh=(6+Math.sin(i*3.14)*8)*sc;
+    var gw=Math.sin(t*1.2+i*.8)*3*sc;
+    X.beginPath();X.moveTo(gx,gy);
+    X.quadraticCurveTo(gx+gw,gy-gh,gx+gw*1.5,gy-gh*1.3);X.stroke();
+  }
+}
+
+/* -------- DARK DEBRIS -------- */
+var DB=[];for(var i=0;i<80;i++)DB.push(mkD(1));
+function mkD(init){
+  var big=Math.random()>.65;
+  return{
+    x:init?Math.random()*2000:W*.48+Math.random()*W*.28,
+    y:init?Math.random()*2000:H*.12+Math.random()*H*.65,
+    w:big?3+Math.random()*8:1+Math.random()*2.5,
+    h:big?1+Math.random()*2.5:.3+Math.random()*1,
+    vx:-1+Math.random()*4.8,vy:-.7+Math.random()*2.4,
+    rot:Math.random()*6.3,vr:(Math.random()-.5)*.16,
+    a:big?.22+Math.random()*.32:.08+Math.random()*.18,
+    life:.5+Math.random()*.5
+  };
+}
+function drawDebris(){
+  for(var i=0;i<DB.length;i++){
+    var d=DB[i];d.x+=d.vx;d.y+=d.vy+Math.sin(t*2+i)*.35;d.rot+=d.vr;d.life-=.001;
+    if(d.x<-30||d.x>W+30||d.y<-30||d.y>H+30||d.life<=0){DB[i]=mkD(0);continue;}
+    X.save();X.translate(d.x,d.y);X.rotate(d.rot);
+    X.globalAlpha=d.a*d.life;
+    X.fillStyle='rgba(16,16,24,0.9)';
+    X.fillRect(-d.w/2,-d.h/2,d.w,d.h);
+    X.restore();
+  }
+  X.globalAlpha=1;
+}
+
+/* -------- WIND STREAKS -------- */
+var SK=[];for(var i=0;i<22;i++)SK.push({x:Math.random()*W*1.5,y:Math.random()*H,len:40+Math.random()*120,spd:3+Math.random()*5.5,a:.025+Math.random()*.05});
+function drawStreaks(){
+  SK.forEach(function(s){
+    s.x+=s.spd;s.y-=s.spd*.08;
+    if(s.x>W+200){s.x=-s.len-50;s.y=Math.random()*H;}
+    X.strokeStyle='rgba(200,195,185,'+s.a+')';X.lineWidth=.5;
+    X.beginPath();X.moveTo(s.x,s.y);X.lineTo(s.x+s.len,s.y-s.len*.06);X.stroke();
+  });
+}
+
+/* -------- FLOATING PARTICLES -------- */
+var PT=[];for(var i=0;i<35;i++)PT.push({x:Math.random()*2000,y:Math.random()*2000,sz:.4+Math.random()*2.2,vx:(Math.random()-.3)*.3,vy:-.05-Math.random()*.2,a:.06+Math.random()*.17,gold:Math.random()>.88});
+function drawParticles(){
+  PT.forEach(function(p){
+    p.x+=p.vx+Math.sin(t+PT.indexOf(p))*.1;p.y+=p.vy;
+    if(p.x<-10||p.x>W+10||p.y<-10){p.x=Math.random()*W;p.y=H+10;}
+    X.beginPath();X.arc(p.x,p.y,p.sz,0,6.3);
+    X.fillStyle=p.gold?'rgba(212,168,71,'+p.a+')':'rgba(215,210,200,'+p.a+')';
+    X.fill();
+  });
+}
+
+/* -------- INK SPLATTERS -------- */
+var ISP=[];
+function drawInkSplat(){
+  if(Math.random()<.005&&ISP.length<4){
+    var sx=W*.5+Math.random()*W*.25,sy=H*.25+Math.random()*H*.45,dr=[];
+    for(var j=0;j<5+Math.floor(Math.random()*7);j++){
+      var a=Math.random()*6.3,spd=.5+Math.random()*2.2;
+      dr.push({x:sx,y:sy,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd,r:1.5+Math.random()*6,a:.10+Math.random()*.13});
+    }
+    ISP.push({dr:dr,life:1,dec:.004+Math.random()*.006});
+  }
+  for(var i=ISP.length-1;i>=0;i--){
+    var s=ISP[i];s.life-=s.dec;
+    if(s.life<=0){ISP.splice(i,1);continue;}
+    s.dr.forEach(function(d){
+      d.x+=d.vx;d.y+=d.vy;d.vx*=.97;d.vy*=.97;
+      X.globalAlpha=s.life*d.a;
+      X.beginPath();X.arc(d.x,d.y,d.r*s.life,0,6.3);
+      X.fillStyle='rgba(16,16,24,0.85)';X.fill();
+    });
+  }
+  X.globalAlpha=1;
+}
+
+/* -------- VIGNETTE -------- */
+function drawVignette(){
+  var g=X.createRadialGradient(W*.5,H*.45,W*.22,W*.5,H*.45,W*.72);
+  g.addColorStop(0,'rgba(8,8,14,0)');
+  g.addColorStop(1,'rgba(8,8,14,0.35)');
+  X.fillStyle=g;X.fillRect(0,0,W,H);
+}
+
+/* -------- FOREGROUND MIST -------- */
+function drawFgMist(){
+  var g=X.createLinearGradient(0,H*.83,0,H);
+  g.addColorStop(0,'rgba(200,195,185,0)');
+  g.addColorStop(.5,'rgba(195,190,180,0.025)');
+  g.addColorStop(1,'rgba(180,175,165,0)');
+  X.fillStyle=g;X.fillRect(0,H*.83,W,H*.17);
+}
+
+/* -------- MAIN LOOP -------- */
+function animate(){
+  try{
+    t+=.016;
+    X.fillStyle='#08080e';
+    X.fillRect(0,0,W,H);
+    drawMoon();
+    drawAtmosphere();
+    drawMistClouds();
+    drawMts();
+    drawGroundFog();
+    drawBirds();
+    drawStreaks();
+    drawWarrior();
+    drawGroundVeg();
+    drawDebris();
+    drawInkSplat();
+    drawParticles();
+    drawVignette();
+    drawFgMist();
+  }catch(e){}
+  requestAnimationFrame(animate);
+}
+animate();
+})();
+
+// ================= STATE =================
+let state = { category:'', question:'', round:0, lines:[], casting:false };
+const ROUND_NAMES = ['第 一 摇','第 二 摇','第 三 摇','第 四 摇','第 五 摇','第 六 摇'];
+const CAT_NAMES = {career:'事业',love:'感情',wealth:'财运',health:'健康',study:'学业',general:'综合'};
+const CAT_IDX = {career:0,love:1,wealth:2,health:3,study:4,general:5};
+
+// ================= TRIGRAMS =================
+const TRI = [
+  {name:'坤',nat:'地',elem:'土'},{name:'震',nat:'雷',elem:'木'},
+  {name:'坎',nat:'水',elem:'水'},{name:'兑',nat:'泽',elem:'金'},
+  {name:'艮',nat:'山',elem:'土'},{name:'离',nat:'火',elem:'火'},
+  {name:'巽',nat:'风',elem:'木'},{name:'乾',nat:'天',elem:'金'}
+];
+
+// ================= 64 HEXAGRAMS =================
+const H = {
+'7_7':[1,'乾','乾为天','元亨利贞','天行健，君子以自强不息',
+  ['大吉，事业如日中天，宜大胆进取','情投意合，感情热烈而真挚','财运亨通，利于投资和拓展','精力充沛，但须防过劳','学运大旺，金榜题名可期','大吉之象，诸事顺遂亨通'],
+  ['潜龙勿用，时机未到宜蛰伏','见龙在田，崭露头角遇贵人','终日乾乾，谨小慎微防差错','或跃在渊，伺机而动待时机','飞龙在天，大展鸿图事业旺','亢龙有悔，盛极必衰宜谦逊'],1],
+'0_0':[2,'坤','坤为地','元亨，利牝马之贞','地势坤，君子以厚德载物',
+  ['宜守不宜攻，辅佐他人可成事','温柔包容方得真情，勿急躁','稳健理财为上，忌冒险投机','调养为主，注重食疗和休息','踏实用功胜过取巧，基础为要','柔顺为吉，顺势而为不可强求'],
+  ['履霜坚冰至，防微杜渐','直方大，不习无不利','含章可贞，待时而动','括囊无咎，谨慎守成','黄裳元吉，中道而行','龙战于野，刚柔相争'],2],
+'1_2':[3,'屯','水雷屯','元亨利贞，勿用有攸往','云雷屯，君子以经纶',
+  ['创业维艰，不宜急进，打好基础','感情初起波折多，耐心方可修成正果','财运暂滞，不可盲目投入','注意肠胃不适，保持规律作息','学业初始困难，坚持即有突破','万事开头难，耐心坚持终有成'],
+  ['磐桓利居贞，先立足根基','屯如邅如，暂时不顺','即鹿无虞，勿轻举妄动','求婚媾往吉，主动出击','屯其膏，小贞吉大贞凶','乘马班如泣血涟如，暂忍退守'],5],
+'2_4':[4,'蒙','山水蒙','亨，匪我求童蒙','山下出泉，君子以果行育德',
+  ['宜虚心求教，贵人指点后可进','感情懵懂期，多沟通了解对方','理财知识不足，先学习后投资','注意体检，早发现早处理','求学正当时，拜师学艺大吉','启蒙之象，多学多问方得明'],
+  ['发蒙利用刑人，严以律己','包蒙吉，宽容待人有福','勿用取女，感情忌冲动','困蒙之吝，闭塞不通需求变','童蒙之吉，虚心受教','击蒙，不利为寇利御寇'],4],
+'7_2':[5,'需','水天需','有孚光亨，利涉大川','云上于天，君子以饮食宴乐',
+  ['时机未到，耐心等待自有良机','缘分将至，从容以待勿焦急','财运将来但需等待，忌操之过急','饮食调养身体，心态放松','准备充分再行动，厚积薄发','等待之卦，诚信守候终得偿'],
+  ['需于郊，利用恒，耐心等候','需于沙，虽有小言终吉','需于泥，致寇至需谨慎','需于血，出自穴居等待','需于酒食，贞吉中正待时','入于穴，有不速之客来终吉'],3],
+'2_7':[6,'讼','天水讼','有孚窒惕，中吉终凶','天与水违行，君子以作事谋始',
+  ['是非争端多，以和为贵退一步','感情有争执，冷静沟通化矛盾','财务纠纷需注意，签约要谨慎','情绪影响健康，避免郁结于心','学业上争强好胜反不利','争讼之象，退让为吉争则凶'],
+  ['不永所事，小有言终吉','不克讼，归而逋，无大咎','食旧德，贞厉终吉','不克讼，命渝安贞吉','讼元吉，得中正之道','或锡之鞶带，终朝三褫'],5],
+'2_0':[7,'师','地水师','贞丈人吉','地中有水，君子以容民畜众',
+  ['宜以团队之力成事，统领有方可胜','感情需要责任与担当，主动守护','合伙理财为佳，团队协作获利','注意血压和循环系统','集体学习效率更高，互帮互助','出师之象，纪律严明方可成功'],
+  ['师出以律，否臧凶','在师中吉，领导有方','师或舆尸，用人不当有凶','师左次，进退有序无咎','田有禽利执言，因势利导','大君有命，论功行赏'],4],
+'0_2':[8,'比','水地比','吉，原筮元永贞','地上有水，先王以建万国亲诸侯',
+  ['广结善缘，贵人扶助事业兴','感情和睦，亲近相处有真情','财运靠人脉，合作共赢','心情愉悦身体好，多与人交往','同窗互助，学业进步更快','亲比之象，团结合作万事兴'],
+  ['有孚比之无咎，诚信为本','比之自内，守正得吉','比之匪人，择友需慎','外比之贤，向外寻求帮助','显比，不诫方来上下得吉','比之无首凶，错失良机'],2],
+'7_6':[9,'小畜','风天小畜','亨，密云不雨','风行天上，君子以懿文德',
+  ['小有积累但难有大突破，积蓄力量','感情有小进展，离圆满尚差一步','小有积蓄，大财未至','小恙不碍，注意预防','知识渐积，火候未到','蓄而未发之象，继续积累等待时机'],
+  ['复自道，何其咎吉','牵复吉，志在内也','舆说辐，夫妻反目需和','有孚血去惕出无咎','有孚挛如，诚信得助','既雨既处，德积载吉但勿过'],3],
+'3_7':[10,'履','天泽履','履虎尾不咥人亨','上天下泽，君子以辩上下',
+  ['如履薄冰但终平安，谨慎行事','感情中需注意分寸，礼到情自通','投资有风险但可控，小心行事','行走运动注意安全，防扭伤','考试有惊无险，心态放平','履险如夷之象，小心驶得万年船'],
+  ['素履往无咎，朴实前行','履道坦坦，中正自守','眇能视跛能履，量力而行','履虎尾愬愬终吉','夬履贞厉，果断但有风险','视履考祥其旋元吉'],3],
+'7_0':[11,'泰','地天泰','小往大来吉亨','天地交泰，后以裁成天地之道',
+  ['大吉，事业上下一心，蒸蒸日上','感情融洽和谐，琴瑟和鸣','财运大通，收入丰厚','身心康泰，万事顺意','学业通达，成绩斐然','三阳开泰之象，万事大吉'],
+  ['拔茅茹以其汇征吉','包荒用冯河，包容得吉','无平不陂，盛极防衰','翩翩不富以其邻，真诚待人','帝乙归妹，大吉大利','城复于隍，盛转衰之兆'],1],
+'0_7':[12,'否','天地否','否之匪人，不利君子贞','天地不交，君子以俭德辟难',
+  ['事业受阻，宜守不宜攻','感情疏离，沟通不畅需忍耐','财运低迷，保守理财为上','身体欠佳，注意调理','学业不顺，换个方法试试','闭塞不通之象，耐心等待转机'],
+  ['拔茅茹以其汇贞吉','包承小人吉','包羞，忍辱负重','有命无咎，转运将至','休否大人吉，否极泰来','倾否，先否后喜终吉'],6],
+'5_7':[13,'同人','天火同人','同人于野亨','天与火同人，君子以类族辨物',
+  ['团队合作大吉，志同道合共成业','志趣相投之人出现，社交场合有缘','众人合作理财获利，合伙吉','心态开朗身体好，多参加活动','学习小组互助，共同进步','同心协力之象，众人拾柴火焰高'],
+  ['同人于门无咎，走出去交友','同人于宗吝，格局宜放大','伏戎于莽，防小人暗算','乘其墉弗克攻吉','同人先号咷而后笑，先难后易','同人于郊无悔，广交天下友'],2],
+'7_5':[14,'大有','火天大有','元亨','火在天上，君子以遏恶扬善',
+  ['事业丰收之象，成果丰硕','感情收获满满，恋情甜蜜美好','大有收获，财源广进','身体健壮，精力旺盛','学有所成，名列前茅','丰收大吉之象，诸般顺遂富足'],
+  ['无交害匪咎，安分守己','大车以载，能力强可担重任','公用亨于天子，得贵人赏识','匪其彭无咎，低调行事','厥孚交如威如吉','自天佑之吉无不利'],1],
+'4_0':[15,'谦','地山谦','亨君子有终','地中有山，君子以裒多益寡',
+  ['谦逊待人事业顺，低调做事成绩显','温和谦让得真爱，贵在坦诚','财运稳健，不露富为吉','心平气和身体安，戒骄戒躁','谦虚好学定有成，尊师重道','谦卦大吉，谦受益满招损'],
+  ['谦谦君子，用涉大川吉','鸣谦贞吉，声名远播','劳谦君子有终吉','无不利撝谦，发挥谦德','不富以其邻利用侵伐','鸣谦利用行师征邑国'],2],
+'0_1':[16,'豫','雷地豫','利建侯行师','雷出地奋，先王以作乐崇德',
+  ['顺势而为大吉，领导者得众人响应','感情愉快甜蜜，适合表白和约会','投资顺利，把握趋势可获利','身心愉悦，适合运动娱乐','学习轻松愉快，灵感涌现','愉悦之象，顺势而动事半功倍'],
+  ['鸣豫凶，得意忘形有祸','介于石不终日贞吉','盱豫悔，迟则有悔','由豫大有得，众人支持','贞疾恒不死，虽有困但无大碍','冥豫成有渝无咎，及时醒悟'],3],
+'1_3':[17,'随','泽雷随','元亨利贞','泽中有雷，君子以向晦入宴息',
+  ['随机应变则吉，灵活变通成大事','随缘而遇，顺其自然感情美','财运随势而动，灵活理财为佳','随顺调养为好，不可逞强','因材施教自己，找到适合的方法','随顺之象，顺应时势随遇而安'],
+  ['官有渝贞吉，坚守正道','系小子失丈夫，选择需谨慎','系丈夫失小子，有所取舍','随有获贞凶，贪心有祸','孚于嘉吉，诚信吉祥','拘系之乃从维之，坚定追随'],3],
+'6_4':[18,'蛊','山风蛊','元亨利涉大川','山下有风，君子以振民育德',
+  ['有积弊待除，改革整顿反而转机','感情中旧问题需要面对和解决','财务需清理整顿，查漏补缺','旧疾复发需根治，彻底调理','学习方法需要调整革新','拨乱反正之象，除旧布新迎转机'],
+  ['干父之蛊有子考终吉','干母之蛊不可贞','干父之蛊小有悔无大咎','裕父之蛊往见吝','干父之蛊用誉','不事王侯高尚其事'],4],
+'3_0':[19,'临','地泽临','元亨利贞','泽上有地，君子以教思无穷',
+  ['好运将临，贵人提携事业攀升','感情有新发展，好事将近','财运渐入佳境，收入看涨','身体逐渐好转，气色上佳','学业渐入佳境，成绩稳步上升','好运降临之象，时来运转诸事顺'],
+  ['咸临贞吉，万事向好','咸临吉无不利','甘临无攸利忧之无咎','至临无咎，诚意相待','知临大君之宜吉','敦临吉无咎'],2],
+'0_6':[20,'观','风地观','盥而不荐有孚颙若','风行地上，先王以省方观民设教',
+  ['宜观望不宜行动，审时度势后再定','感情需冷静观察，勿被表象迷惑','财运观望为主，暂不宜大额投入','定期体检，防患于未然','多观察思考，学习他人经验','观望之象，静观其变谋而后动'],
+  ['童观小人无咎','窥观利女贞，低调观察','观我生进退，自省为要','观国之光利用宾于王','观我生君子无咎','观其生君子无咎，以身作则'],4],
+'1_5':[21,'噬嗑','火雷噬嗑','亨利用狱','雷电噬嗑，先王以明罚敕法',
+  ['障碍可除，果断行动打破僵局','感情有第三者或障碍需清除','财运有阻碍，排除后即通','牙齿口腔需注意，饮食宜清淡','攻克难题需要决心和毅力','铲除障碍之象，果断出手方可通达'],
+  ['屦校灭趾无咎，小惩大诫','噬肤灭鼻无咎','噬腊肉遇毒小吝无咎','噬干胏得金矢利艰贞吉','噬干肉得黄金贞厉无咎','何校灭耳凶，执迷不悟'],4],
+'5_4':[22,'贲','山火贲','亨小利有攸往','山下有火，君子以明庶政',
+  ['注重外在形象有助事业，以文饰武','爱美之心利感情，用心装扮','理财注重包装但忌华而不实','外表光鲜内在也要养护','学业上形式与内容并重','文饰之象，注重外在但更要充实内涵'],
+  ['贲其趾舍车而徒，朴实为上','贲其须，修饰细节','贲如濡如永贞吉','贲如皤如白马翰如非寇婚媾','贲于丘园束帛戋戋，回归质朴','白贲无咎，返璞归真大吉'],3],
+'0_4':[23,'剥','山地剥','不利有攸往','山附于地，上以厚下安宅',
+  ['事业受挫，以守为主等待转机','感情有变故，小心维护关系','财运不佳，守住本钱勿冒险','身体需要休养，暂避锋芒','学业暂遇瓶颈，回顾基础','剥落之象，守正待时不可妄动'],
+  ['剥床以足蔑贞凶','剥床以辨蔑贞凶','剥之无咎','剥床以肤凶，根基动摇','贯鱼以宫人宠无不利','硕果不食，阳气未尽有转机'],6],
+'1_0':[24,'复','地雷复','亨出入无疾','雷在地中，先王以至日闭关',
+  ['否极泰来，事业触底反弹','旧情复燃或新感情萌芽','财运回升，之前的投入开始回报','身体恢复期，渐入佳境','学业回到正轨，重拾信心','一阳来复之象，冬去春来万象更新'],
+  ['不远复无祗悔元吉','休复吉，近朱者赤','频复厉无咎，反复但无大碍','中行独复，坚持走自己的路','敦复无悔，踏实回归','迷复凶有灾眚，迷途不返'],3],
+'1_7':[25,'无妄','天雷无妄','元亨利贞','天下雷行，万物无妄',
+  ['顺其自然为吉，不可妄想妄为','感情真诚相待，做作反而适得其反','正财可得，偏财勿想','身心自然为好，别乱吃补品','学习实事求是，基础扎实最重要','真实无妄之象，诚实守正自然亨通'],
+  ['无妄往吉','不耕获利有攸往','无妄之灾，无端之祸需防范','可贞无咎','无妄之疾勿药有喜','无妄行有眚无攸利'],3],
+'7_4':[26,'大畜','山天大畜','利贞不家食吉','天在山中，君子以多识前言往行以畜其德',
+  ['大有积蓄，厚积薄发时机将至','感情积淀深厚，可以考虑进一步','财富积累丰厚，可做长线投资','身体底子好，养精蓄锐','知识储备充足，大考无忧','大有积蓄之象，蓄势待发前途光明'],
+  ['有厉利已，暂停前进','舆说辐，中道而止','良马逐利艰贞，进取有道','童牛之牿元吉','豶豕之牙吉','何天之衢亨，大道通畅'],2],
+'1_4':[27,'颐','山雷颐','贞吉观颐自求口实','山下有雷，君子以慎言语节饮食',
+  ['注意言行举止，祸从口出','感情中说话要注意分寸','理财需节制开支，量入为出','饮食养生为重，管住嘴迈开腿','学业上少说多做，埋头苦读','颐养之象，慎言节食注重修养'],
+  ['舍尔灵龟观我朵颐凶','颠颐拂经于丘颐征凶','拂颐贞凶，违背养生之道','颠颐吉虎视眈眈','拂经居贞吉不可涉大川','由颐厉吉利涉大川'],4],
+'6_3':[28,'大过','泽风大过','栋桡利有攸往','泽灭木，君子以独立不惧',
+  ['压力山大但须顶住，非常时期非常手段','感情负担重，双方都需要喘息空间','财务压力大，需要果断减负','身体透支需警惕，及时休整','学业压力大，注意心理调节','过犹不及之象，关键时刻需果断抉择'],
+  ['藉用白茅无咎，谨慎小心','枯杨生稊老夫得其女妻','栋桡凶，承受不住需减负','栋隆吉有它吝','枯杨生华老妇得士夫','过涉灭顶凶，冒险必败'],5],
+'2_2':[29,'坎','坎为水','习坎有孚维心亨','水洊至，君子以常德行习教事',
+  ['困难重重但有信念则可渡过','感情波折较多，互相信任是关键','财运险中求，谨慎方可化险为夷','身体需注意肾脏和泌尿系统','学业如逆水行舟，需加倍努力','重重险阻之象，以诚信和智慧化解困境'],
+  ['习坎入于坎窞凶','坎有险求小得','来之坎坎险且枕入于坎窞','樽酒簋贰用缶纳约自牖','坎不盈祗既平无咎','系用徽纆寘于丛棘三岁不得凶'],6],
+'5_5':[30,'离','离为火','利贞亨畜牝牛吉','明两作离，大人以继明照于四方',
+  ['光明前程，文采出众利于展示','感情热烈但需理智，防烈火烧身','财运明亮，适合文化创意投资','注意眼睛和心脏保养','学业光明，文科尤其出色','光明美丽之象，以柔顺为正可获亨通'],
+  ['履错然敬之无咎','黄离元吉，中道光明','日昃之离不鼓缶而歌则大耋之嗟凶','突如其来如焚如死如弃如','出涕沱若戚嗟若吉','王用出征有嘉折首无咎'],3],
+'4_3':[31,'咸','泽山咸','亨利贞取女吉','山上有泽，君子以虚受人',
+  ['广结善缘有利事业，感应灵敏','大吉！两情相悦有感应，良缘天定','财运靠人脉带动，社交得财','身体敏感期，注意过敏问题','心有灵犀，学习上触类旁通','感应之象，真诚相待必有感应回报'],
+  ['咸其拇，心动萌芽','咸其腓凶居吉','咸其股执其随往吝','贞吉悔亡，心正则吉','咸其脢无悔','咸其辅颊舌，言语感人'],2],
+'6_1':[32,'恒','雷风恒','亨无咎利贞','雷风恒，君子以立不易方',
+  ['持之以恒必有成就，贵在坚持','感情稳定长久，适合谈婚论嫁','财运稳定持续，长线投资为佳','身体状况稳定，保持好习惯','学业贵在坚持，日久自见功力','恒久之象，坚持不变方可成大器'],
+  ['浚恒贞凶，急于求成反有害','悔亡，保持中正','不恒其德或承之羞','田无禽，方向偏了无收获','恒其德贞妇人吉夫子凶','振恒凶，变动太频繁'],3],
+'4_7':[33,'遁','天山遁','亨小利贞','天下有山，君子以远小人',
+  ['以退为进方为上策，暂时隐退','感情宜保持距离，给彼此空间','财运宜收不宜放，减少支出','远离喧嚣静养身体为佳','暂停社交专心学业','隐退之象，知进退方为智者'],
+  ['遁尾厉勿用有攸往','执之用黄牛之革莫之胜说','系遁有疾厉畜臣妾吉','好遁君子吉小人否','嘉遁贞吉','肥遁无不利，潇洒退场'],4],
+'7_1':[34,'大壮','雷天大壮','利贞','雷在天上，君子以非礼弗履',
+  ['势头强劲大有可为但忌蛮干','感情主动热情但别太强势','财运旺盛可大胆出手但守规矩','身体强壮精力旺但防运动损伤','学习劲头足进步快','强盛之象，力量充沛但须守正不逾矩'],
+  ['壮于趾征凶有孚','贞吉，坚守正道则吉','小人用壮君子用罔，别逞强','贞吉悔亡藩决不羸','丧羊于易无悔','不能退不能遂，进退两难需冷静'],3],
+'0_5':[35,'晋','火地晋','康侯用锡马蕃庶昼日三接','明出地上，君子以自昭明德',
+  ['升迁有望，事业蒸蒸日上','感情明朗化，真心被看见','财运上升，光明正大获利','身体向好，阳气充足','成绩进步明显，前途光明','晋升之象，如日方升前途一片光明'],
+  ['晋如摧如贞吉罔孚裕无咎','晋如愁如贞吉受兹介福','众允悔亡，众人支持','晋如鼫鼠贞厉，贪心有险','悔亡失得勿恤往吉','晋其角维用伐邑厉吉无咎'],2],
+'5_0':[36,'明夷','地火明夷','利艰贞','明入地中，君子以莅众用晦而明',
+  ['才华暂时难以施展，韬光养晦','感情被误解，委屈求全暂时忍耐','财运暗淡，低调行事保存实力','注意眼疾和抑郁情绪','学业受压但实力尚在，蛰伏待机','光明受损之象，韬光养晦以待天时'],
+  ['明夷于飞垂其翼，低调前行','明夷夷于左股用拯马壮吉','明夷于南狩得其大首','入于左腹获明夷之心','箕子之明夷利贞','不明晦初登于天后入于地'],5],
+'5_6':[37,'家人','风火家人','利女贞','风自火出，君子以言有物行有恒',
+  ['事业以家庭为后盾，家和万事兴','感情甜蜜家庭和睦，宜谈婚论嫁','家庭理财为重，合家努力聚财','全家健康计划，互相关爱','家长支持学业，家庭氛围好','齐家之象，家和万事兴内外皆顺'],
+  ['闲有家悔亡，治家从严','无攸遂在中馈贞吉','家人嗃嗃悔厉吉，严格有益','富家大吉','王假有家勿恤吉','有孚威如终吉'],2],
+'3_5':[38,'睽','火泽睽','小事吉','上火下泽，君子以同而异',
+  ['意见分歧多，求同存异可化解','感情有误会，换位思考能释怀','合伙有分歧，独立理财更安全','情绪不稳影响健康，调整心态','学习思路不同不妨多角度尝试','相背之象，虽有分歧小事仍可顺遂'],
+  ['悔亡丧马勿逐自复','遇主于巷无咎','见舆曳其牛掣其人','睽孤遇元夫交孚厉无咎','悔亡厥宗噬肤往何咎','睽孤见豕负涂载鬼一车先张之弧后说之弧'],4],
+'4_2':[39,'蹇','水山蹇','利西南不利东北','山上有水，君子以反身修德',
+  ['前路艰难，宜退守反省','感情遇阻碍，退一步思考','财路不畅，减少开支过难关','腿脚关节注意保养，出行小心','学业遇困难，寻求帮助为宜','行路难之象，知难而退反身修德'],
+  ['往蹇来誉，先退后进','王臣蹇蹇匪躬之故','往蹇来反，退回正道','往蹇来连，需要援助','大蹇朋来，贵人相助','往蹇来硕吉利见大人'],5],
+'2_1':[40,'解','雷水解','利西南','雷雨作解，君子以赦过宥罪',
+  ['困难解除，拨云见日重获自由','感情误会冰释，和好如初','财务困境化解，资金渐宽裕','病情好转，身心舒畅','学业难题迎刃而解','解除困难之象，雨过天晴万物复苏'],
+  ['无咎，困境初解','田获三狐得黄矢贞吉','负且乘致寇至贞吝','解而拇朋至斯孚','君子维有解吉有孚于小人','公用射隼于高墉之上获之无不利'],3],
+'3_4':[41,'损','山泽损','有孚元吉','山下有泽，君子以惩忿窒欲',
+  ['有舍才有得，先付出后收获','感情需要付出和牺牲，真心换真情','先投入才有回报，舍小利谋长远','节制饮食欲望，克制方能养生','学业上下功夫才有收获','损己利人之象，先苦后甜有舍有得'],
+  ['已事遄往无咎酌损之','利贞征凶弗损益之','三人行则损一人','损其疾使遄有喜无咎','或益之十朋之龟弗克违元吉','弗损益之无咎贞吉'],4],
+'1_6':[42,'益','风雷益','利有攸往利涉大川','风雷益，君子以见善则迁有过则改',
+  ['大吉，事业获得外部助力腾飞','感情有贵人助缘，姻缘天注定','财运大增，有意外收获','身体好转，精气神充足','学业得良师指点突飞猛进','增益之象，天降福泽利于进取'],
+  ['利用为大作元吉','或益之十朋之龟弗克违','益之用凶事无咎有孚中行','中行告公从利用为依迁国','有孚惠心勿问元吉','莫益之或击之立心勿恒凶'],2],
+'7_3':[43,'夬','泽天夬','扬于王庭孚号有厉','泽上于天，君子以施禄及下',
+  ['果断决策除障碍，当断则断','感情需要做出决断，不可拖泥带水','财运好但需果断决策，勿犹豫','身体果断治疗，不可拖延','学业上果断取舍，聚焦重点','决断之象，果断行动铲除障碍'],
+  ['壮于前趾往不胜为咎','惕号莫夜有戎勿恤','壮于頄有凶独行遇雨','臀无肤其行次且牵羊悔亡','苋陆夬夬中行无咎','无号终有凶'],4],
+'6_7':[44,'姤','天风姤','女壮勿用取女','天下有风，后以施命诰四方',
+  ['偶遇机会需谨慎判断，勿轻信','邂逅之缘，但需看清对方真心','有意外财但来路需正，防受骗','注意妇科或泌尿问题','偶遇名师但需辨别真伪','不期而遇之象，机遇与陷阱并存需慎辨'],
+  ['系于金柅贞吉','包有鱼无咎不利宾','臀无肤其行次且','包无鱼起凶','以杞包瓜含章有陨自天','姤其角吝无咎'],4],
+'0_3':[45,'萃','泽地萃','亨王假有庙','泽上于地，君子以除戎器戒不虞',
+  ['聚集人才资源，团队壮大','感情有聚会缘，社交中觅得良人','聚财之象，投资聚集型项目有利','注意人多场合的卫生健康','集体学习研讨效果佳','聚集之象，广聚英才众志成城'],
+  ['有孚不终乃乱乃萃若号','引吉无咎孚乃利用禴','萃如嗟如无攸利往无咎小吝','大吉无咎','萃有位无咎匪孚元永贞悔亡','赍咨涕洟无咎'],3],
+'6_0':[46,'升','地风升','元亨用见大人','地中生木，君子以顺德积小以高大',
+  ['步步高升，事业上升期大好前景','感情稳步升温，渐入佳境','财运上升，收入递增','身体渐好，精神焕发','学业成绩稳步提升','上升之象，循序渐进步步高升'],
+  ['允升大吉','孚乃利用禴无咎','升虚邑，畅通无阻','王用亨于岐山吉','贞吉升阶','冥升利于不息之贞'],2],
+'2_3':[47,'困','泽水困','亨贞大人吉','泽无水困，君子以致命遂志',
+  ['暂时困境，坚守信念终能脱困','感情陷入僵局，需要时间化解','财运困顿期，节约度日','身体疲倦乏力，好好休息','学业遇到瓶颈，坚持不放弃','困顿之象，身处逆境但以志气突围'],
+  ['臀困于株木入于幽谷','困于酒食朱绂方来','困于石据于蒺藜','来徐徐困于金车吝有终','劓刖困于赤绂乃徐有说','困于葛藟于臲卼曰动悔有悔征吉'],5],
+'6_2':[48,'井','水风井','改邑不改井','木上有水，君子以劳民劝相',
+  ['根基稳固，默默奉献终被认可','感情根基牢固，细水长流','财运来自稳定的根基性资产','养生重在日常，水为生命之源','学业根底扎实方能长久','井水不竭之象，扎实根基源源不断'],
+  ['井泥不食旧井无禽','井谷射鲋瓮敝漏','井渫不食为我心恻','井甃无咎，修缮巩固','井洌寒泉食','井收勿幕有孚元吉'],3],
+'5_3':[49,'革','泽火革','己日乃孚元亨利贞','泽中有火，君子以治历明时',
+  ['变革创新之时，大胆改变迎新生','感情需要改变模式，破旧立新','财运因变革而生，转型投资可期','改变不良生活习惯，焕然一新','学习方法需变革，找到新路径','变革之象，除旧迎新顺应时势可大成'],
+  ['巩用黄牛之革，时机未到','己日乃革之征吉','革言三就有孚','悔亡有孚改命吉','大人虎变未占有孚','君子豹变小人革面征凶居贞吉'],3],
+'6_5':[50,'鼎','火风鼎','元吉亨','木上有火，君子以正位凝命',
+  ['大吉，事业鼎盛如日中天','感情稳固如鼎，三足鼎立','财运大旺，投资理财稳赚','身体康健，饮食养生得当','学业大成，名列鼎甲','鼎新之象，革故鼎新开创新局面'],
+  ['鼎颠趾利出否','鼎有实我仇有疾不我能既吉','鼎耳革其行塞雉膏不食','鼎折足覆公餗其形渥凶','鼎黄耳金铉利贞','鼎玉铉大吉无不利'],1],
+'1_1':[51,'震','震为雷','亨震来虩虩笑言哑哑','洊雷震，君子以恐惧修省',
+  ['变动之中有机遇，化危为机','感情有突变但不一定是坏事','财运波动大，注意风险管理','受惊吓或突发状况，注意心脏','学业上有突破性进展或考试临场发挥','震动之象，虽有惊恐但处之泰然终获吉'],
+  ['震来虩虩后笑言哑哑吉','震来厉亿丧贝跻于九陵','震苏苏震行无眚','震遂泥','震往来厉亿无丧有事','震索索视矍矍征凶'],4],
+'4_4':[52,'艮','艮为山','艮其背不获其身','兼山艮，君子以思不出其位',
+  ['宜静不宜动，安守本位稳扎稳打','感情宜沉淀思考，暂时不宜行动','财运宜守不宜攻，稳定为先','注意腰背关节保养，多休息','学业上需静下心来深入思考','止而不动之象，知止而后有定静而后能安'],
+  ['艮其趾无咎利永贞','艮其腓不拯其随其心不快','艮其限列其夤厉薰心','艮其身无咎','艮其辅言有序悔亡','敦艮吉'],4],
+'4_6':[53,'渐','风山渐','女归吉利贞','山上有木，君子以居贤德善俗',
+  ['循序渐进终有成，不可操之过急','感情稳步发展，适合谈婚论嫁','财运渐入佳境，耐心等待回报','身体慢慢恢复，养生贵在持久','学业稳步提升，日积月累','渐进之象，循序渐进水到渠成'],
+  ['鸿渐于干小子厉有言无咎','鸿渐于磐饮食衎衎吉','鸿渐于陆夫征不复妇孕不育凶','鸿渐于木或得其桷无咎','鸿渐于陵妇三岁不孕终莫之胜吉','鸿渐于陆其羽可用为仪吉'],2],
+'3_1':[54,'归妹','雷泽归妹','征凶无攸利','泽上有雷，君子以永终知敝',
+  ['仓促行事不利，三思而后行','感情冲动易犯错，先了解再决定','投资冲动不可取，冷静分析','情绪化影响健康，管理好情绪','学业上勿好高骛远，踏实为要','仓促之象，欲速则不达当缓行慎思'],
+  ['归妹以娣跛能履征吉','眇能视利幽人之贞','归妹以须反归以娣','归妹愆期迟归有时','帝乙归妹其君之袂不如其娣之袂良','女承筐无实士刲羊无血无攸利'],5],
+'5_1':[55,'丰','雷火丰','亨王假之勿忧宜日中','雷电皆至，君子以折狱致刑',
+  ['事业丰盛但须防盛极衰，居安思危','感情丰富热烈，享受但别忘理智','财运丰厚之时，见好就收','精力旺盛但别挥霍健康','学业丰收，但勿骄傲自满','丰盛之象，日中则昃盛时需思衰'],
+  ['遇其配主虽旬无咎往有尚','丰其蔀日中见斗往得疑疾','丰其沛日中见沫折其右肱无咎','丰其蔀日中见斗遇其夷主吉','来章有庆誉吉','丰其屋蔀其家窥其户阒其无人三岁不觌凶'],3],
+'4_5':[56,'旅','火山旅','小亨旅贞吉','山上有火，旅人以明慎用刑',
+  ['在外奔波操劳，异地有发展机会','异地恋或旅途中有缘分','出差或外地投资有小利','旅途注意安全和水土不服','异地求学有利，换环境有新启发','旅行之象，在外小心谨慎可获小成'],
+  ['旅琐琐斯其所取灾','旅即次怀其资得童仆贞','旅焚其次丧其童仆贞厉','旅于处得其资斧我心不快','射雉一矢亡终以誉命','鸟焚其巢旅人先笑后号啕'],4],
+'6_6':[57,'巽','巽为风','小亨利有攸往','随风巽，君子以申命行事',
+  ['顺势而为可成事，柔和渗透有奇效','感情以柔克刚，温柔体贴赢人心','财运靠灵活变通，顺势理财','注意风寒感冒，呼吸系统保养','学习触类旁通，举一反三','顺从柔和之象，以柔克刚顺势而为'],
+  ['进退利武人之贞','巽在床下用史巫纷若吉无咎','频巽吝','悔亡田获三品','贞吉悔亡无不利无初有终','巽在床下丧其资斧贞凶'],3],
+'3_3':[58,'兑','兑为泽','亨利贞','丽泽兑，君子以朋友讲习',
+  ['人际和谐事业顺，以悦服人','感情甜蜜愉悦，两情相悦','财运好，人和则财通','心情愉悦身体好，笑口常开','学习氛围好，讨论中进步','喜悦之象，和悦待人万事皆可顺遂'],
+  ['和兑吉','孚兑吉悔亡','来兑凶，不要迎合讨好','商兑未宁介疾有喜','孚于剥有厉','引兑'],2],
+'2_6':[59,'涣','风水涣','亨王假有庙','风行水上，先王以享于帝立庙',
+  ['困局涣散转机来，化整为零再出发','感情隔阂冰释，重归于好','资金回笼，财务困境化解','身心舒畅，压力释放','思维开阔，灵感涌现','涣散而通之象，打破僵局重获新生'],
+  ['用拯马壮吉','涣奔其机悔亡','涣其躬无悔','涣其群元吉涣有丘','涣汗其大号涣王居无咎','涣其血去逖出无咎'],3],
+'3_2':[60,'节','水泽节','亨苦节不可贞','泽上有水，君子以制数度议德行',
+  ['适度节制方能持久，不可过分','感情需要适当约束，过犹不及','理财量入为出，节约但别苛刻','饮食作息有节制才能健康','学习安排有度，劳逸结合','节制之象，适度节约中庸为道'],
+  ['不出户庭无咎','不出门庭凶，过分封闭','不节若则嗟若无咎','安节亨，自然适度','甘节吉往有尚','苦节贞凶悔亡'],4],
+'3_6':[61,'中孚','风泽中孚','豚鱼吉利涉大川','泽上有风，君子以议狱缓死',
+  ['诚信为本可成大事，信誉是资本','以真心换真情，诚信是感情基石','诚信经营财路广，口碑带来利润','心态平和身体安，信则灵','以诚实态度对待学业必有回报','诚信之象，至诚感通无往不利'],
+  ['虞吉有他不燕','鹤鸣在阴其子和之','得敌或鼓或罢或泣或歌','月几望马匹亡无咎','有孚挛如无咎','翰音登于天贞凶'],2],
+'4_1':[62,'小过','雷山小过','亨利贞可小事不可大事','山上有雷，君子以行过乎恭',
+  ['可做小事，大事暂缓，谦逊行事','感情上细节体贴打动人心','小额投资可行，大手笔暂缓','小恙无妨，注意调理','学业小有进步，循序渐进','小有过越之象，做小事可成大事宜缓'],
+  ['飞鸟以凶','过其祖遇其妣不及其君遇其臣','弗过防之从或戕之凶','无咎弗过遇之往厉必戒','密云不雨自我西郊公弋取彼在穴','弗遇过之飞鸟离之凶'],4],
+'5_2':[63,'既济','水火既济','亨小利贞','水在火上，君子以思患而预防',
+  ['事已成大半，善始善终最重要','感情圆满但需维护，勿掉以轻心','财务状况良好，注意守成','身体不错但别掉以轻心','学业有成，但需巩固成果','既成之象，成功在手但须防功亏一篑'],
+  ['曳其轮濡其尾无咎','妇丧其茀勿逐七日得','高宗伐鬼方三年克之','繻有衣袽终日戒','东邻杀牛不如西邻之禴祭','濡其首厉，盛极防衰'],3],
+'2_5':[64,'未济','火水未济','亨小狐汔济濡其尾','火在水上，君子以慎辨物居方',
+  ['事未成需继续努力，曙光在前','感情尚未圆满，还需要经营','财运未到位，再加把劲','身体未痊愈，继续调理','学业尚需努力，临门一脚','未成之象，虽未成功但希望在前坚持可达'],
+  ['濡其尾吝','曳其轮贞吉','未济征凶利涉大川','贞吉悔亡震用伐鬼方','贞吉无悔君子之光有孚吉','有孚于饮酒无咎濡其首有孚失是'],4]
+};
+
+// ================= CORE LOGIC =================
+function getTrigramIndex(l1,l2,l3){ return (l3<<2)|(l2<<1)|l1; }
+
+function calcHexagram(lines){
+  const vals = lines.map(l=>l.value);
+  const lower = getTrigramIndex(vals[0]&1, vals[1]&1, vals[2]&1);
+  const upper = getTrigramIndex(vals[3]&1, vals[4]&1, vals[5]&1);
+  const key = lower+'_'+upper;
+  const movingLines = [];
+  lines.forEach((l,i)=>{ if(l.moving) movingLines.push(i); });
+  let changedKey = null;
+  if(movingLines.length > 0){
+    const changed = vals.map((v,i)=> lines[i].moving ? (v&1?0:1) : (v&1));
+    const cL = getTrigramIndex(changed[0], changed[1], changed[2]);
+    const cU = getTrigramIndex(changed[3], changed[4], changed[5]);
+    changedKey = cL+'_'+cU;
+  }
+  return { key, changedKey, movingLines, lower, upper };
+}
+
+function tossCoin(){ return Math.random() < 0.5 ? 3 : 2; }
+function tossThreeCoins(){
+  const c = [tossCoin(), tossCoin(), tossCoin()];
+  const sum = c[0]+c[1]+c[2];
+  return { coins:c, sum, value:(sum===6||sum===8)?0:1, isYang:sum===7||sum===9, moving:sum===6||sum===9 };
+}
+
+// ================= UI LOGIC =================
+function goToStage(name){
+  document.querySelectorAll('.stage').forEach(s=>s.classList.remove('active'));
+  const el = document.getElementById('stage-'+name);
+  el.classList.add('active');
+  document.getElementById('app').scrollTop = 0;
+  sfxTransition();
+  if(name==='casting') initCasting();
+  if(name==='reveal'){ buildReveal(); sfxReveal(); }
+  if(name==='result') buildResult();
+  if(name==='history') buildHistoryList();
+}
+
+function selectCat(el){
+  document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.category = el.dataset.cat;
+  document.getElementById('questionArea').classList.add('show');
+  var btn = document.getElementById('btnConfirmCat');
+  btn.classList.remove('btn-disabled');
+  btn.classList.add('btn-enabled');
+}
+function confirmCat(){
+  if(!state.category) return;
+  state.question = (document.getElementById('questionInput').value||'').trim();
+  goToStage('casting');
+}
+
+function initCasting(){
+  state.round=0; state.lines=[]; state.casting=false;
+  document.getElementById('castRound').textContent = ROUND_NAMES[0];
+  document.getElementById('yaoProgress').innerHTML = '';
+  document.getElementById('castResult').classList.remove('show');
+  document.getElementById('castResult').textContent = '';
+  document.getElementById('btnCast').style.display = '';
+  document.getElementById('btnQuickCast').style.display = '';
+  const extra = document.querySelector('#stage-casting .btn-small.view-result-btn');
+  if(extra) extra.remove();
+  resetCoins();
+}
+
+function resetCoins(){
+  for(var i=0;i<3;i++){
+    var coin = document.getElementById('coin'+i);
+    coin.style.animation = 'none';
+    void coin.offsetHeight;
+  }
+  document.getElementById('castResult').classList.remove('show');
+}
+
+function castCoins(){
+  if(state.casting || state.round >= 6) return;
+  state.casting = true;
+  document.getElementById('btnQuickCast').style.display = 'none';
+  resetCoins();
+  var result = tossThreeCoins();
+  sfxCoinToss();
+  for(var i=0;i<3;i++){
+    var coin = document.getElementById('coin'+i);
+    var isFront = result.coins[i] === 3;
+    coin.style.setProperty('--fr', isFront ? '1800deg' : '1980deg');
+    coin.style.animation = 'coinToss 1.2s cubic-bezier(0.22,1,0.36,1) forwards';
+  }
+  setTimeout(function(){
+    sfxCoinLand();
+    state.lines.push(result);
+    state.round++;
+    var resultEl = document.getElementById('castResult');
+    var heads = result.coins.filter(function(c){return c===3;}).length;
+    var typeStr = '';
+    if(result.sum===6) typeStr = '老阴 ⚋  动爻·变阳';
+    else if(result.sum===7) typeStr = '少阳 ⚊';
+    else if(result.sum===8) typeStr = '少阴 ⚋';
+    else typeStr = '老阳 ⚊  动爻·变阴';
+    resultEl.textContent = heads+'正'+(3-heads)+'反 · '+typeStr;
+    resultEl.classList.add('show');
+    addYaoLine(result, state.round);
+    if(state.round < 6){
+      document.getElementById('castRound').textContent = ROUND_NAMES[state.round];
+      state.casting = false;
+    } else {
+      showCastComplete();
+    }
+  }, 1300);
+}
+
+function showCastComplete(){
+  document.getElementById('btnCast').style.display = 'none';
+  document.getElementById('btnQuickCast').style.display = 'none';
+  setTimeout(function(){
+    document.getElementById('castRound').textContent = '摇 卦 完 成';
+    var btn = document.createElement('button');
+    btn.className = 'btn btn-small view-result-btn';
+    btn.textContent = '查看卦象';
+    btn.onclick = function(){ goToStage('reveal'); };
+    document.querySelector('.cast-btns').appendChild(btn);
+    state.casting = false;
+  }, 500);
+}
+
+function quickCast(){
+  if(state.casting || state.round >= 6) return;
+  state.casting = true;
+  document.getElementById('btnCast').style.display = 'none';
+  document.getElementById('btnQuickCast').style.display = 'none';
+
+  for(var i=0;i<6;i++) state.lines.push(tossThreeCoins());
+
+  var step = 0;
+  function showNext(){
+    if(step >= 6){
+      state.round = 6;
+      showCastComplete();
+      return;
+    }
+    resetCoins();
+    var result = state.lines[step];
+    sfxCoinToss();
+    for(var i=0;i<3;i++){
+      var coin = document.getElementById('coin'+i);
+      var isFront = result.coins[i] === 3;
+      coin.style.setProperty('--fr', isFront ? '1800deg' : '1980deg');
+      coin.style.animation = 'coinToss 0.65s cubic-bezier(0.22,1,0.36,1) forwards';
+    }
+    setTimeout(function(){
+      sfxCoinLand();
+      state.round = step + 1;
+      document.getElementById('castRound').textContent = ROUND_NAMES[Math.min(step, 5)];
+      var resultEl = document.getElementById('castResult');
+      var heads = result.coins.filter(function(c){return c===3;}).length;
+      var typeStr = '';
+      if(result.sum===6) typeStr = '老阴 ⚋  动爻·变阳';
+      else if(result.sum===7) typeStr = '少阳 ⚊';
+      else if(result.sum===8) typeStr = '少阴 ⚋';
+      else typeStr = '老阳 ⚊  动爻·变阴';
+      resultEl.textContent = heads+'正'+(3-heads)+'反 · '+typeStr;
+      resultEl.classList.add('show');
+      addYaoLine(result, step + 1);
+      step++;
+      setTimeout(showNext, 350);
+    }, 700);
+  }
+  showNext();
+}
+
+function addYaoLine(result, round){
+  const container = document.getElementById('yaoProgress');
+  const div = document.createElement('div');
+  div.className = 'yao-line';
+  const numSpan = document.createElement('span');
+  numSpan.className = 'yao-num';
+  numSpan.textContent = ['初','二','三','四','五','上'][round-1];
+  div.appendChild(numSpan);
+  if(result.isYang){
+    const bar = document.createElement('div');
+    bar.className = 'yang' + (result.moving?' moving':'');
+    div.appendChild(bar);
+  } else {
+    const yin = document.createElement('div');
+    yin.className = 'yin' + (result.moving?' moving':'');
+    yin.innerHTML = '<span></span><span></span>';
+    div.appendChild(yin);
+  }
+  const dot = document.createElement('span');
+  dot.className = result.moving ? 'moving-dot' : 'stable-dot';
+  div.appendChild(dot);
+  container.appendChild(div);
+}
+
+// ================= REVEAL =================
+function buildReveal(){
+  const hex = calcHexagram(state.lines);
+  const data = H[hex.key];
+  if(!data) return;
+  const hasChanged = hex.changedKey && H[hex.changedKey];
+  const changedData = hasChanged ? H[hex.changedKey] : null;
+  let html = `<div class="cat-title" style="margin-bottom:4px">卦 象</div>
+    <div class="cat-sub">${CAT_NAMES[state.category]}占</div><div class="divider"></div>`;
+  html += `<div class="gua-display">`;
+  html += buildGuaBox('本卦', data, hex.key, state.lines, false);
+  if(hasChanged){
+    html += `<div class="arrow">➜</div>`;
+    const cLines = state.lines.map(l=>({...l,
+      value: l.moving?(l.value&1?0:1):l.value,
+      isYang: l.moving?!l.isYang:l.isYang, moving:false}));
+    html += buildGuaBox('变卦', changedData, hex.changedKey, cLines, true);
+  }
+  html += `</div>`;
+  html += `<div class="gua-xiang">象曰：${data[4]}</div>`;
+  document.getElementById('revealContent').innerHTML = html;
+}
+
+function buildGuaBox(label, data, key, lines, isChanged){
+  const parts = key.split('_');
+  const lower = parseInt(parts[0]), upper = parseInt(parts[1]);
+  let html = `<div class="gua-box"><div class="gua-label">${label}</div>
+    <div class="gua-name">${data[1]}</div>
+    <div class="gua-fullname">${data[2]}</div><div class="gua-lines">`;
+  for(let i=0;i<6;i++){
+    const isYang = lines[i].isYang || (lines[i].value&1)===1;
+    const m = !isChanged && lines[i].moving;
+    if(isYang) html += `<div class="yang${m?' moving':''}"></div>`;
+    else html += `<div class="yin${m?' moving':''}"><span></span><span></span></div>`;
+  }
+  html += `</div><div class="tri-label">上${TRI[upper].nat}${TRI[upper].name} · 下${TRI[lower].nat}${TRI[lower].name}</div></div>`;
+  return html;
+}
+
+// ================= RESULT =================
+const FMAP = {1:'大吉',2:'吉',3:'小吉',4:'平',5:'小凶',6:'凶'};
+const FCLS = {1:'ji',2:'ji',3:'ji',4:'ping',5:'xiong',6:'xiong'};
+const YAO_POS = ['初爻','二爻','三爻','四爻','五爻','上爻'];
+const TRI_DESC = {
+  '乾':'乾为天，代表刚健、进取、创造之力。纯阳之卦，象征天道运行不息。',
+  '坤':'坤为地，代表柔顺、包容、承载之德。纯阴之卦，象征大地厚德载物。',
+  '震':'震为雷，代表震动、奋发、行动之象。一阳生于二阴之下，象征破土而出。',
+  '巽':'巽为风，代表渗透、顺从、谦逊之意。一阴伏于二阳之下，象征柔和深入。',
+  '坎':'坎为水，代表险难、智慧、流通之义。一阳陷于二阴之中，象征险中有信。',
+  '离':'离为火，代表光明、文采、附丽之象。一阴居于二阳之中，象征外明内柔。',
+  '艮':'艮为山，代表止息、沉稳、静观之义。一阳止于二阴之上，象征知止不殆。',
+  '兑':'兑为泽，代表喜悦、交流、和悦之象。一阴见于二阳之上，象征柔外刚中。'
+};
+const ELEM_REL = {
+  '金金':'比和，同类相助，力量纯粹。',
+  '木木':'比和，同气相求，生机盎然。',
+  '水水':'比和，同流合汇，智慧通达。',
+  '火火':'比和，同明相照，文采飞扬。',
+  '土土':'比和，厚重相叠，根基深固。',
+  '金木':'金克木，上克下主施压管束；下克上主冲突反抗。',
+  '木金':'金克木，受制约束之象，宜柔化刚。',
+  '木土':'木克土，破土而出之象，有突破之力。',
+  '土木':'木克土，受克而动之象，被动中有生机。',
+  '土水':'土克水，堤防约束之象，可以制险。',
+  '水土':'土克水，受阻不通之象，须耐心疏导。',
+  '水火':'水克火，既济之象，可相辅也可相害。',
+  '火水':'水克火，未济之象，尚需努力。',
+  '火金':'火克金，锻炼成器之象，经磨难而成才。',
+  '金火':'火克金，受炼之象，须经考验方成。',
+  '金水':'金生水，生发之象，源源不绝。',
+  '水金':'金生水，受生之象，有贵人相助。',
+  '水木':'水生木，滋养之象，生机蓬勃。',
+  '木水':'水生木，受滋之象，得到培育。',
+  '木火':'木生火，发光之象，才华显露。',
+  '火木':'木生火，受助之象，有依托之力。',
+  '火土':'火生土，积累之象，成果丰硕。',
+  '土火':'火生土，受生之象，根基渐厚。',
+  '土金':'土生金，产出之象，厚积薄发。',
+  '金土':'土生金，受养之象，实力增长。'
+};
+
+function switchResultTab(tab){
+  document.querySelectorAll('.result-tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.result-pane').forEach(function(p){p.classList.remove('active');});
+  if(tab==='brief'){
+    document.querySelectorAll('.result-tab')[0].classList.add('active');
+    document.getElementById('resultBrief').classList.add('active');
+  } else {
+    document.querySelectorAll('.result-tab')[1].classList.add('active');
+    var pane = document.getElementById('resultDetail');
+    pane.classList.add('active');
+    if(!pane.dataset.built){ pane.dataset.built='1'; buildDetailedResult(); }
+  }
+}
+
+function esc(s){ var d=document.createElement('div');d.textContent=s;return d.innerHTML; }
+function qStr(){ return state.question ? esc(state.question) : ''; }
+
+function buildResult(){
+  var hex = calcHexagram(state.lines);
+  var data = H[hex.key];
+  if(!data) return;
+  var ci = CAT_IDX[state.category];
+  var hasChanged = hex.changedKey && H[hex.changedKey];
+  var changedData = hasChanged ? H[hex.changedKey] : null;
+  var fortune = data[7];
+  var q = qStr();
+
+  var hdr = '<div class="result-header">'+data[2]+'</div>'
+    +'<div class="result-sub">'+CAT_NAMES[state.category]+'占 · 解卦</div>';
+  if(q) hdr += '<div class="user-question-display">"'+q+'"</div>';
+  hdr += '<div class="divider" style="margin-bottom:12px"></div>';
+  document.getElementById('resultHeader').innerHTML = hdr;
+
+  var blocks = [];
+  var intro = '<p><strong>第'+data[0]+'卦 · '+data[2]+'</strong></p>';
+  intro += '<p>'+data[3]+'</p>';
+  intro += '<p style="color:var(--ink2);font-size:0.85em">象曰：'+data[4]+'</p>';
+  blocks.push({title:'你的卦象', content:intro});
+
+  if(hex.movingLines.length > 0){
+    var yh = '';
+    hex.movingLines.forEach(function(i){
+      yh += '<p><strong>'+YAO_POS[i]+'</strong>（'+(state.lines[i].isYang?'阳→阴':'阴→阳')+'）：'+data[6][i]+'</p>';
+    });
+    if(hasChanged) yh += '<p style="margin-top:12px">变卦 → <strong>'+changedData[2]+'</strong>：'+changedData[3]+'</p>';
+    blocks.push({title:'变化的信号', content:yh});
+  }
+
+  var qraw = state.question || '';
+  var catContent = '<p>'+genBriefReading(state.category, fortune, qraw, data[5][ci])+'</p>';
+  if(hasChanged) catContent += '<p style="margin-top:10px;color:var(--ink2)">变卦补充：'+changedData[5][ci]+'</p>';
+  blocks.push({title:'关于你问的事', content:catContent});
+
+  var oh = '<div style="text-align:center;margin:12px 0"><span class="fortune-badge fortune-'+FCLS[fortune]+'">'+FMAP[fortune]+'</span></div>';
+  oh += '<p>'+genBriefSummary(fortune, hex.movingLines.length, changedData, qraw)+'</p>';
+  blocks.push({title:'我的建议', content:oh});
+
+  var html = '';
+  blocks.forEach(function(b,i){
+    html += '<div class="result-block" data-delay="'+i+'">'
+      +'<div class="result-title">'+b.title+'</div><div class="result-content">'+b.content+'</div></div>';
+  });
+  document.getElementById('resultBrief').innerHTML = html;
+  document.querySelectorAll('#resultBrief .result-block').forEach(function(el,i){
+    setTimeout(function(){ el.classList.add('show'); }, 400+i*600);
+  });
+
+  document.querySelectorAll('.result-tab')[0].classList.add('active');
+  document.querySelectorAll('.result-tab')[1].classList.remove('active');
+  document.getElementById('resultBrief').classList.add('active');
+  var dp = document.getElementById('resultDetail');
+  dp.classList.remove('active'); dp.innerHTML = ''; dp.dataset.built = '';
+
+  if(!state.saved){ state.saved = true; saveToHistory(); }
+}
+
+function genBriefReading(cat, fortune, questionRaw, rawReading){
+  var qDisp = questionRaw ? esc(questionRaw) : '';
+  var opener = qDisp ? '你说的"'+qDisp+'"这件事呢，' : '';
+  var tier = fortune<=2 ? 't2' : fortune===3 ? 't3' : fortune===4 ? 't4' : fortune===5 ? 't5' : 't6';
+  var tmpl = pickSmartVariant(TEXT_POOLS.briefRead[tier], questionRaw||'');
+  return opener + tmpl.replace(/\{CORE\}/g, rawReading);
+}
+
+function genBriefSummary(fortune, movingCount, changedData, questionRaw){
+  var tier = fortune<=2 ? 't2' : fortune===3 ? 't3' : fortune===4 ? 't4' : fortune===5 ? 't5' : 't6';
+  var s = pickSmartVariant(TEXT_POOLS.briefSum[tier], questionRaw||'');
+  if(movingCount>0){
+    s += ' 对了，你的卦里有动爻，说明事情还在变化中';
+    if(changedData){var cf=changedData[7];
+      if(cf<fortune) s += '——好消息是变化的方向是向好的，后面会比现在更顺。';
+      else if(cf>fortune) s += '——提醒你趁现在还不错的时候多做准备，后面可能会有些波动。';
+      else s += '，但整体趋势比较稳定，不用太操心。';
+    }
+  } else { s += ' 而且卦象没有动爻，说明局面比较稳定，不会突然出什么岔子，按计划来就行。'; }
+  return s;
+}
+
+function buildDetailedResult(){
+  var hex = calcHexagram(state.lines);
+  var data = H[hex.key];
+  if(!data) return;
+  var ci = CAT_IDX[state.category];
+  var hasChanged = hex.changedKey && H[hex.changedKey];
+  var changedData = hasChanged ? H[hex.changedKey] : null;
+  var fortune = data[7];
+  var upper = TRI[hex.upper], lower = TRI[hex.lower];
+  var q = qStr();
+  var html = '';
+
+  html += '<div class="detail-section"><div class="detail-section-title">一、先看看你的卦长什么样</div>';
+  html += '<p>你摇出来的是周易第<strong>'+data[0]+'</strong>卦——<strong>'+data[2]+'</strong>。</p>';
+  html += '<p>上面是<strong>'+upper.name+'</strong>（'+upper.nat+'），下面是<strong>'+lower.name+'</strong>（'+lower.nat+'）。简单理解就是：'+upper.nat+'在上、'+lower.nat+'在下，';
+  if(upper.name===lower.name) html += '上下同卦，力量纯粹而集中。';
+  else html += '两种力量在互相作用。';
+  html += '</p>';
+  html += '<div class="detail-trigram-row">';
+  html += '<div class="detail-tri-box"><div class="tri-name">'+upper.name+'</div><div class="tri-desc">上卦 · '+upper.nat+' · '+upper.elem+'<br>'+(TRI_DESC[upper.name]||'')+'</div></div>';
+  html += '<div class="detail-tri-box"><div class="tri-name">'+lower.name+'</div><div class="tri-desc">下卦 · '+lower.nat+' · '+lower.elem+'<br>'+(TRI_DESC[lower.name]||'')+'</div></div>';
+  html += '</div>';
+  var relKey = upper.elem + lower.elem;
+  var relDesc = ELEM_REL[relKey] || '';
+  if(relDesc){
+    html += '<span class="sub-label">五行怎么看</span>';
+    html += '<p>上卦属<span class="elem-rel">'+upper.elem+'</span>，下卦属<span class="elem-rel">'+lower.elem+'</span>。'+relDesc+' 这个关系会影响整体卦象的吉凶力度。</p>';
+  }
+  html += '</div>';
+
+  html += '<div class="detail-section"><div class="detail-section-title">二、古人怎么说这一卦</div>';
+  html += '<p><strong>卦辞：</strong>'+data[3]+'</p>';
+  var trTier = fortune<=2 ? 't2' : fortune===3 ? 't3' : fortune===4 ? 't4' : fortune===5 ? 't5' : 't6';
+  html += '<p>翻译过来就是——';
+  html += pickSmartVariant(TEXT_POOLS.fortuneTranslate[trTier], state.question||'');
+  html += '</p>';
+  html += '<p><strong>象辞：</strong>'+data[4]+'</p>';
+  html += '<p>象辞就是古人用自然现象打的比方——'+upper.nat+'在上、'+lower.nat+'在下是什么感觉？大自然会怎么处理这种关系？我们就怎么做。说白了就是：顺势而为，别跟天斗。</p>';
+  html += '</div>';
+
+  html += '<div class="detail-section"><div class="detail-section-title">三、六爻一个一个看</div>';
+  html += '<p>六爻从下往上代表一件事从头到尾的六个阶段——初爻是开始，上爻是结局。你的每一爻是这样的：</p>';
+  for(var i=0;i<6;i++){
+    var line = state.lines[i];
+    var isYang = line.isYang || (line.value&1)===1;
+    var typeLabel = isYang ? '阳' : '阴';
+    var typeClass = isYang ? 'yang' : 'yin';
+    if(line.moving){
+      typeLabel = isYang ? '老阳 ⚡' : '老阴 ⚡';
+      typeClass = 'moving';
+    }
+    html += '<div class="yao-detail-row">';
+    html += '<div class="yao-pos">'+YAO_POS[i]+'</div>';
+    html += '<div class="yao-type '+typeClass+'">'+typeLabel+'</div>';
+    html += '<div class="yao-text">'+data[6][i];
+    if(line.moving){
+      html += '<br><span style="color:var(--gold);font-size:0.9em">→ 这是动爻！'+(isYang?'阳到极点就要转阴，就像白天到了尽头就是黑夜。提醒你在高点的时候留个后手。':'阴到极点就要转阳，就像黎明前最黑暗。眼前的困难正在酝酿转机。')+'</span>';
+    }
+    html += '</div></div>';
+  }
+  html += '</div>';
+
+  html += '<div class="detail-section"><div class="detail-section-title">四、聊聊你问的'+CAT_NAMES[state.category]+'</div>';
+  if(q) html += '<p style="color:var(--ink2);font-style:italic;margin-bottom:12px">你问的是："'+q+'"</p>';
+  html += '<p><strong>卦象原文怎么说：</strong>'+data[5][ci]+'</p>';
+  html += '<p><strong>我来帮你翻译翻译：</strong></p>';
+  html += '<p>'+genCatAdvice(state.category, fortune, hex.movingLines.length, state.question)+'</p>';
+  if(hasChanged){
+    html += '<span class="sub-label">变化趋势</span>';
+    html += '<p>变卦是<strong>'+changedData[2]+'</strong>，对应的说法是：'+changedData[5][ci]+'</p>';
+    var cf = changedData[7];
+    html += '<p>变卦运势是<span class="fortune-badge fortune-'+FCLS[cf]+'" style="padding:2px 10px;font-size:0.85em">'+FMAP[cf]+'</span>，';
+    if(cf<fortune) html += '比本卦更好——好消息！说明你现在经历的不太顺的部分只是暂时的，后面的走势很乐观。坚持住就对了。</p>';
+    else if(cf>fortune) html += '比本卦略弱一点——不是坏事，只是在提醒你：趁现在还不错的时候，提前做好准备，别等到变化来了才手忙脚乱。</p>';
+    else html += '跟本卦差不多——说明这件事的大格局不会有剧烈变化，稳住节奏就好。</p>';
+  }
+  html += '</div>';
+
+  if(hex.movingLines.length > 0){
+    html += '<div class="detail-section"><div class="detail-section-title">五、动爻说明什么</div>';
+    html += '<p>你的卦里有<strong>'+hex.movingLines.length+'</strong>个动爻。';
+    if(hex.movingLines.length===1) html += '只有一个动爻，信号非常明确——整卦的关键就在这一爻上，仔细看看它说了啥。';
+    else if(hex.movingLines.length===2) html += '两个动爻，主要看位置高的那个，位置低的是辅助。两个放一起看，能看出事情的主要矛盾在哪。';
+    else if(hex.movingLines.length===3) html += '三个动爻，变化比较大。这时候本卦和变卦要一起看——本卦是现在，变卦是趋势。';
+    else if(hex.movingLines.length<=5) html += '好多动爻在动！说明你问的这件事变数很大，变卦反而比本卦更重要。重点关注变卦给你的指引。';
+    else html += '六爻全动——这是"物极必反"的象征。整个局面要翻一番，变卦才是你真正要关注的结果。';
+    html += '</p>';
+    hex.movingLines.forEach(function(idx){
+      var line = state.lines[idx];
+      html += '<p><strong>'+YAO_POS[idx]+'</strong>（'+(line.isYang?'老阳变阴':'老阴变阳')+'）：</p>';
+      html += '<p style="padding-left:16px">'+data[6][idx]+'</p>';
+    });
+    if(hasChanged){
+      html += '<span class="sub-label">变卦全貌</span>';
+      html += '<p>第'+changedData[0]+'卦 · <strong>'+changedData[2]+'</strong>：'+changedData[3]+'</p>';
+      html += '<p style="color:var(--ink2)">象曰：'+changedData[4]+'</p>';
+    }
+    html += '</div>';
+  }
+
+  var secNum = hex.movingLines.length > 0 ? '六' : '五';
+  html += '<div class="detail-section"><div class="detail-section-title">'+secNum+'、总结一下</div>';
+  html += '<div style="text-align:center;margin:16px 0"><span class="fortune-badge fortune-'+FCLS[fortune]+'">'+FMAP[fortune]+'</span>';
+  if(hasChanged) html += ' <span style="color:var(--ink2);margin:0 8px">→</span> <span class="fortune-badge fortune-'+FCLS[changedData[7]]+'">'+FMAP[changedData[7]]+'</span>';
+  html += '</div>';
+  if(q) html += '<p>回到你最初的问题——"'+q+'"</p>';
+  html += '<p>'+genDetailedSummary(fortune, hex.movingLines.length, changedData, state.category, state.question)+'</p>';
+  html += '<span class="sub-label">最后的建议</span>';
+  html += '<p>'+genActionAdvice(state.category, fortune, hex.movingLines.length, hasChanged, state.question)+'</p>';
+  html += '</div>';
+
+  document.getElementById('resultDetail').innerHTML = html;
+  document.querySelectorAll('#resultDetail .detail-section').forEach(function(el,i){
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(15px)';
+    el.style.transition = 'all 0.6s cubic-bezier(0.16,1,0.3,1)';
+    setTimeout(function(){ el.style.opacity='1'; el.style.transform='translateY(0)'; }, 150+i*250);
+  });
+}
+
+function genCatAdvice(cat, fortune, movingCount, questionRaw){
+  var tier = fortune<=2 ? 't2' : fortune===3 ? 't3' : fortune===4 ? 't4' : fortune===5 ? 't5' : 't6';
+  var pool = TEXT_POOLS.cat[cat] && TEXT_POOLS.cat[cat][tier];
+  if(!pool) return '';
+  var qRef = questionRaw ? '关于"'+esc(questionRaw)+'"这件事，' : '';
+  var r = qRef + pickSmartVariant(pool, questionRaw||'');
+  if(movingCount>0) r += '<br><br>另外，你的卦里有动爻，说明这件事还在发展变化中——现在的状态不是最终结果，保持灵活，根据实际情况随时调整策略。';
+  return r;
+}
+
+function genDetailedSummary(fortune, movingCount, changedData, cat, questionRaw){
+  var tier = fortune<=2 ? 't2' : fortune===3 ? 't3' : fortune===4 ? 't4' : fortune===5 ? 't5' : 't6';
+  return pickSmartVariant(TEXT_POOLS.detailSum[tier], questionRaw||'');
+}
+
+function genActionAdvice(cat, fortune, movingCount, hasChanged, questionRaw){
+  var tier = fortune<=2 ? 't2' : fortune===3 ? 't3' : fortune===4 ? 't4' : fortune===5 ? 't5' : 't6';
+  var adv = pickSmartVariant(TEXT_POOLS.action[tier], questionRaw||'');
+  if(hasChanged) adv += '<br><br>🔄 事情还在变化中，别把今天的判断当成"铁板钉钉"。保持灵活，根据新情况随时调整。';
+  if(movingCount===0) adv += '<br><br>📌 你的卦象非常稳定（没有动爻），说明短期内不会有大的变数。按你现在的计划走就行，不需要做大调整。';
+  if(questionRaw && questionRaw.trim()) adv += '<br><br>💬 最后回到你的问题——别想太多，该做的做，该放的放。不管卦象怎么说，最终做决定的是你自己。卦只是给你一个参考角度，路还是你走的。加油 💪';
+  return adv;
+}
+
+
+// ================= HISTORY =================
+const HISTORY_KEY = 'liuyao_history';
+const CAT_ICONS = {career:'🏛',love:'🎴',wealth:'🪙',health:'🏺',study:'📜',general:'☯'};
+
+function loadHistory(){
+  try{ return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }catch(e){ return []; }
+}
+function saveHistory(list){
+  try{ localStorage.setItem(HISTORY_KEY, JSON.stringify(list)); }catch(e){}
+}
+
+function saveToHistory(){
+  const hex = calcHexagram(state.lines);
+  const data = H[hex.key];
+  if(!data) return;
+  const hasChanged = hex.changedKey && H[hex.changedKey];
+  const changedData = hasChanged ? H[hex.changedKey] : null;
+  const fortuneMap = {1:'大吉',2:'吉',3:'小吉',4:'平',5:'小凶',6:'凶'};
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  const record = {
+    id: now.getTime(),
+    date: now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate())+' '+pad(now.getHours())+':'+pad(now.getMinutes()),
+    category: state.category,
+    catName: CAT_NAMES[state.category],
+    question: state.question || '',
+    hexKey: hex.key,
+    hexNum: data[0],
+    hexName: data[1],
+    hexFullName: data[2],
+    guaCi: data[3],
+    xiangCi: data[4],
+    fortune: data[7],
+    fortuneText: fortuneMap[data[7]],
+    changedKey: hex.changedKey,
+    changedName: changedData ? changedData[2] : null,
+    changedFortune: changedData ? changedData[7] : null,
+    lines: state.lines.map(l=>({value:l.value,isYang:l.isYang,moving:l.moving})),
+    movingLines: hex.movingLines
+  };
+  const list = loadHistory();
+  list.unshift(record);
+  if(list.length > 50) list.length = 50;
+  saveHistory(list);
+}
+
+function buildHistoryList(){
+  const list = loadHistory();
+  const container = document.getElementById('historyContainer');
+  if(list.length === 0){
+    container.innerHTML = '<div class="history-empty">暂无摇爻记录<br>诚心一占，留下痕迹</div>';
+    document.getElementById('btnClearHistory').style.display = 'none';
+    return;
+  }
+  document.getElementById('btnClearHistory').style.display = '';
+  const fortuneClass = {1:'ji',2:'ji',3:'ji',4:'ping',5:'xiong',6:'xiong'};
+  const fortuneMap = {1:'大吉',2:'吉',3:'小吉',4:'平',5:'小凶',6:'凶'};
+  let html = '<div class="history-list">';
+  list.forEach(function(r){
+    const fc = fortuneClass[r.fortune] || 'ping';
+    var qPreview = r.question ? '<div class="hc-meta" style="color:var(--ink);opacity:0.5;margin-top:2px">"'+esc(r.question).substring(0,30)+(r.question.length>30?'…':'')+'"</div>' : '';
+    html += '<div class="history-card" onclick="viewHistoryDetail('+r.id+')">'
+      +'<div class="hc-icon">'+(CAT_ICONS[r.category]||'☯')+'</div>'
+      +'<div class="hc-body">'
+      +'<div class="hc-name">'+r.hexFullName+'</div>'
+      +'<div class="hc-meta">'+r.date+' · '+r.catName+(r.changedName?' → '+r.changedName:'')+'</div>'
+      +qPreview
+      +'</div>'
+      +'<div class="hc-fortune fortune-'+fc+'">'+(fortuneMap[r.fortune]||'平')+'</div>'
+      +'<button class="hc-delete" onclick="event.stopPropagation();deleteHistoryItem('+r.id+')" title="删除">✕</button>'
+      +'</div>';
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function viewHistoryDetail(id){
+  const list = loadHistory();
+  const r = list.find(function(item){ return item.id === id; });
+  if(!r) return;
+  const data = H[r.hexKey];
+  if(!data) return;
+  const ci = CAT_IDX[r.category];
+  const hasChanged = r.changedKey && H[r.changedKey];
+  const changedData = hasChanged ? H[r.changedKey] : null;
+  const fortuneMap = {1:'大吉',2:'吉',3:'小吉',4:'平',5:'小凶',6:'凶'};
+  const fortuneClass = {1:'ji',2:'ji',3:'ji',4:'ping',5:'xiong',6:'xiong'};
+  const fortune = data[7];
+
+  var blocks = [];
+  blocks.push({title:'卦名与卦辞',
+    content:'<p><strong>第'+data[0]+'卦 · '+data[2]+'</strong></p><p>'+data[3]+'</p><p style="color:var(--ink2);font-size:0.85em">象曰：'+data[4]+'</p>'});
+  if(r.movingLines && r.movingLines.length > 0){
+    var yh = '<p>动爻解读：</p>';
+    var yp = ['初爻','二爻','三爻','四爻','五爻','上爻'];
+    r.movingLines.forEach(function(i){
+      var isYang = r.lines[i] && r.lines[i].isYang;
+      yh += '<p><strong>'+yp[i]+'</strong>（'+(isYang?'老阳→变阴':'老阴→变阳')+'）：'+data[6][i]+'</p>';
+    });
+    if(hasChanged) yh += '<p style="margin-top:12px"><strong>变卦：第'+changedData[0]+'卦 · '+changedData[2]+'</strong></p><p>'+changedData[3]+'</p>';
+    blocks.push({title:'动爻与变卦', content:yh});
+  }
+  blocks.push({title:r.catName+'运势',
+    content:'<p>'+data[5][ci]+'</p>'+(hasChanged?'<p style="margin-top:10px;color:var(--ink2)">变卦提示：'+changedData[5][ci]+'</p>':'')});
+  var oh = '<div style="text-align:center;margin:12px 0"><span class="fortune-badge fortune-'+fortuneClass[fortune]+'">'+fortuneMap[fortune]+'</span></div><p>';
+  if(fortune<=2) oh+='此卦大吉，所问之事顺遂亨通。';
+  else if(fortune===3) oh+='此卦小吉，所问之事大体顺利。';
+  else if(fortune===4) oh+='此卦平稳，所问之事不好不坏。';
+  else if(fortune===5) oh+='此卦小凶，所问之事略有阻碍。';
+  else oh+='此卦不利，所问之事多有困难。';
+  oh+='</p>';
+  blocks.push({title:'综合断语', content:oh});
+
+  var html = '<div class="result-header">'+data[2]+'</div>'
+    +'<div class="result-sub">'+r.date+' · '+r.catName+'占</div>';
+  if(r.question) html += '<div class="user-question-display">"'+esc(r.question)+'"</div>';
+  html += '<div class="divider" style="margin-bottom:36px"></div>';
+  blocks.forEach(function(b,i){
+    html += '<div class="result-block" data-delay="'+i+'">'
+      +'<div class="result-title">'+b.title+'</div><div class="result-content">'+b.content+'</div></div>';
+  });
+  document.getElementById('historyDetailContent').innerHTML = html;
+  goToStage('historyDetail');
+  setTimeout(function(){
+    document.querySelectorAll('#historyDetailContent .result-block').forEach(function(el,i){
+      setTimeout(function(){ el.classList.add('show'); }, 200 + i*400);
+    });
+  }, 100);
+}
+
+function deleteHistoryItem(id){
+  var list = loadHistory().filter(function(item){ return item.id !== id; });
+  saveHistory(list);
+  buildHistoryList();
+}
+
+function clearHistory(){
+  if(!confirm('确定清空所有摇爻记录？')) return;
+  saveHistory([]);
+  buildHistoryList();
+}
+
+// ================= ABANDON =================
+function showAbandonModal(){
+  document.getElementById('abandonModal').style.display = '';
+}
+function closeAbandonModal(){
+  document.getElementById('abandonModal').style.display = 'none';
+}
+function confirmAbandon(){
+  closeAbandonModal();
+  sfxTransition();
+  restart();
+}
+
+// ================= AUDIO SYSTEM =================
+var audioCtx = null;
+var soundOn = true;
+var bgmTimer = null;
+var bgmDrone = null;
+var bgmGain = null;
+
+function initAudio(){
+  if(audioCtx) return;
+  try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ return; }
+}
+
+function sfxClick(){
+  if(!soundOn || !audioCtx) return;
+  var t = audioCtx.currentTime;
+  var osc = audioCtx.createOscillator();
+  var g = audioCtx.createGain();
+  osc.connect(g); g.connect(audioCtx.destination);
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(1100, t);
+  osc.frequency.exponentialRampToValueAtTime(700, t+0.07);
+  g.gain.setValueAtTime(0.10, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t+0.07);
+  osc.start(t); osc.stop(t+0.07);
+}
+
+function sfxCoinToss(){
+  if(!soundOn || !audioCtx) return;
+  var t = audioCtx.currentTime;
+  var freqs = [2637, 3520, 4698];
+  for(var i=0;i<freqs.length;i++){
+    var osc = audioCtx.createOscillator();
+    var g = audioCtx.createGain();
+    osc.connect(g); g.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.value = freqs[i];
+    var d = i*0.025;
+    g.gain.setValueAtTime(0.06, t+d);
+    g.gain.exponentialRampToValueAtTime(0.001, t+d+0.35);
+    osc.start(t+d); osc.stop(t+d+0.4);
+  }
+}
+
+function sfxCoinLand(){
+  if(!soundOn || !audioCtx) return;
+  var t = audioCtx.currentTime;
+  var osc = audioCtx.createOscillator();
+  var osc2 = audioCtx.createOscillator();
+  var g = audioCtx.createGain();
+  osc.connect(g); osc2.connect(g); g.connect(audioCtx.destination);
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(4200, t);
+  osc.frequency.exponentialRampToValueAtTime(1800, t+0.10);
+  osc2.type = 'sine';
+  osc2.frequency.value = 3000;
+  g.gain.setValueAtTime(0.09, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t+0.15);
+  osc.start(t); osc2.start(t);
+  osc.stop(t+0.15); osc2.stop(t+0.15);
+}
+
+function sfxTransition(){
+  if(!soundOn || !audioCtx) return;
+  var t = audioCtx.currentTime;
+  var osc = audioCtx.createOscillator();
+  var g = audioCtx.createGain();
+  osc.connect(g); g.connect(audioCtx.destination);
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(400, t);
+  osc.frequency.exponentialRampToValueAtTime(600, t+0.15);
+  g.gain.setValueAtTime(0.06, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t+0.25);
+  osc.start(t); osc.stop(t+0.25);
+}
+
+function sfxReveal(){
+  if(!soundOn || !audioCtx) return;
+  var t = audioCtx.currentTime;
+  var notes = [523.25, 659.25, 783.99, 1046.50];
+  for(var i=0;i<notes.length;i++){
+    var osc = audioCtx.createOscillator();
+    var g = audioCtx.createGain();
+    osc.connect(g); g.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.value = notes[i];
+    var d = i*0.12;
+    g.gain.setValueAtTime(0, t+d);
+    g.gain.linearRampToValueAtTime(0.07, t+d+0.04);
+    g.gain.exponentialRampToValueAtTime(0.001, t+d+0.8);
+    osc.start(t+d); osc.stop(t+d+0.85);
+  }
+}
+
+// Generative ambient BGM — pentatonic bell tones + low drone
+function startBGM(){
+  if(!soundOn || !audioCtx || bgmTimer) return;
+  bgmGain = audioCtx.createGain();
+  bgmGain.gain.value = 0.045;
+  bgmGain.connect(audioCtx.destination);
+
+  bgmDrone = audioCtx.createOscillator();
+  var dg = audioCtx.createGain();
+  bgmDrone.connect(dg); dg.connect(bgmGain);
+  bgmDrone.type = 'sine';
+  bgmDrone.frequency.value = 130.81;
+  dg.gain.value = 0.35;
+  bgmDrone.start();
+
+  var scale = [261.63,293.66,329.63,392.00,440.00,523.25,587.33,659.25];
+  var lastIdx = -1;
+
+  function playNote(){
+    if(!soundOn || !bgmGain) return;
+    var idx;
+    do{ idx = Math.floor(Math.random()*scale.length); }while(idx===lastIdx);
+    lastIdx = idx;
+    var freq = scale[idx];
+    var t = audioCtx.currentTime;
+    var osc = audioCtx.createOscillator();
+    var g = audioCtx.createGain();
+    osc.connect(g); g.connect(bgmGain);
+    osc.type = Math.random()>0.5 ? 'sine' : 'triangle';
+    osc.frequency.value = freq;
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.25, t+0.06);
+    g.gain.exponentialRampToValueAtTime(0.001, t+2.8);
+    osc.start(t); osc.stop(t+3);
+    bgmTimer = setTimeout(playNote, 1600+Math.random()*2400);
+  }
+  playNote();
+}
+
+function stopBGM(){
+  if(bgmTimer){ clearTimeout(bgmTimer); bgmTimer=null; }
+  if(bgmDrone){ try{bgmDrone.stop();}catch(e){} bgmDrone=null; }
+  if(bgmGain){ try{bgmGain.disconnect();}catch(e){} bgmGain=null; }
+}
+
+function toggleSound(){
+  soundOn = !soundOn;
+  var btn = document.getElementById('soundToggle');
+  btn.textContent = soundOn ? '🔊' : '🔇';
+  btn.classList.toggle('muted', !soundOn);
+  if(soundOn){
+    initAudio();
+    startBGM();
+  } else {
+    stopBGM();
+  }
+}
+
+// Auto-init audio on first interaction
+document.addEventListener('click', function _initOnce(){
+  initAudio();
+  if(soundOn) startBGM();
+  document.removeEventListener('click', _initOnce, true);
+}, true);
+
+// Hook click sounds to all buttons
+document.addEventListener('click', function(e){
+  if(e.target.closest('button,.btn,.cat-card')) sfxClick();
+}, true);
+
+function restart(){
+  state = {category:'',question:'',round:0,lines:[],casting:false};
+  document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('questionInput').value = '';
+  document.getElementById('questionArea').classList.remove('show');
+  var btn = document.getElementById('btnConfirmCat');
+  btn.classList.remove('btn-enabled');
+  btn.classList.add('btn-disabled');
+  goToStage('welcome');
+}
+</script>
+</body>
+</html>

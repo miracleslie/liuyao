@@ -1,0 +1,9 @@
+# 旧的外部 JS 文件（已内联到 index.html）
+liuyao-pools.js
+liuyao-cat-pools.js
+
+# macOS
+.DS_Store
+
+# 其他
+yaoyao/
