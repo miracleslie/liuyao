@@ -469,6 +469,64 @@ body{
   box-shadow:0 0 20px rgba(196,60,60,0.15);text-shadow:0 0 10px rgba(196,60,60,0.3)}
 .fortune-ping{border-color:var(--ink2);color:var(--ink2);background:rgba(154,144,128,0.08)}
 
+/* ====================== INCENSE SCENE ====================== */
+.incense-entry{text-align:center;margin:24px 0 8px;padding:20px 0;border-top:1px solid rgba(212,168,71,0.12);display:none}
+.incense-entry.show{display:block}
+.btn-incense{
+  display:inline-block;padding:14px 40px;border:1px solid var(--gold);color:var(--gold);
+  background:rgba(212,168,71,0.06);font-family:inherit;font-size:clamp(16px,2.8vw,20px);
+  letter-spacing:0.3em;cursor:pointer;animation:breathGlow 2s ease-in-out infinite;
+}
+@keyframes breathGlow{0%,100%{box-shadow:0 0 12px rgba(212,168,71,0.15)}50%{box-shadow:0 0 28px rgba(212,168,71,0.4),0 0 60px rgba(212,168,71,0.1)}}
+.incense-entry .inc-deity-hint{font-size:clamp(13px,2vw,16px);color:var(--ink2);margin-bottom:16px;letter-spacing:0.15em;line-height:1.8}
+
+#stage-incense{position:relative;z-index:10}
+.incense-scene{position:relative;width:100%;max-width:480px;min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.incense-altar{position:relative;width:100%;padding:40px 20px 30px;display:flex;flex-direction:column;align-items:center}
+.inc-step-title{font-size:clamp(20px,4vw,28px);color:var(--gold);letter-spacing:0.4em;text-align:center;margin-bottom:24px;text-shadow:0 0 20px rgba(212,168,71,0.3)}
+.inc-hint{font-size:clamp(12px,2vw,15px);color:var(--ink2);letter-spacing:0.15em;text-align:center;margin-top:20px;animation:incFadeUp .8s ease}
+@keyframes incFadeUp{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:translateY(0)}}
+
+.inc-sticks-row{display:flex;gap:clamp(30px,6vw,50px);align-items:flex-end;justify-content:center;height:200px}
+.inc-stick{
+  position:relative;width:6px;height:140px;
+  background:linear-gradient(180deg,#8B4513,#A0522D 50%,#6B3410);
+  border-radius:2px;cursor:pointer;transition:all .5s ease;
+}
+.inc-stick::before{content:'';position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:transparent;transition:all .5s ease}
+.inc-stick.lit::before{background:radial-gradient(circle,#FF6B00,#FF4500,transparent);box-shadow:0 0 12px #FF6B00,0 0 24px rgba(255,107,0,.5);animation:incFlame .3s ease-in-out infinite alternate}
+.inc-stick.lit::after{content:'';position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:2px;height:20px;background:linear-gradient(180deg,rgba(200,200,200,.6),transparent);animation:incSmokeWisp 1.5s ease-in-out infinite}
+@keyframes incFlame{0%{transform:translateX(-50%) scale(1);opacity:.9}100%{transform:translateX(-50%) scale(1.2);opacity:1}}
+@keyframes incSmokeWisp{0%{opacity:.6;transform:translateX(-50%) translateY(0) scaleX(1)}100%{opacity:0;transform:translateX(-50%) translateY(-20px) scaleX(2)}}
+
+.inc-burner{position:relative;width:120px;margin:0 auto;cursor:pointer;transition:transform .3s}
+.inc-burner:hover{transform:scale(1.05)}
+.burner-body{width:100%;height:60px;background:linear-gradient(135deg,#B8860B,#CD853F,#B8860B);border-radius:8px 8px 16px 16px;box-shadow:0 4px 20px rgba(0,0,0,.4),inset 0 2px 4px rgba(255,255,255,.2);position:relative}
+.burner-rim{position:relative;width:calc(100% + 16px);margin-left:-8px;height:12px;background:linear-gradient(180deg,#DAA520,#B8860B);border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.3);margin-bottom:0}
+.burner-legs{display:flex;justify-content:space-between;padding:0 16px;margin-top:2px}
+.burner-leg{width:12px;height:14px;background:linear-gradient(180deg,#B8860B,#8B6508);border-radius:0 0 4px 4px}
+.burner-sticks{position:absolute;top:-60px;left:50%;transform:translateX(-50%);display:flex;gap:8px}
+.burner-stick-item{width:4px;height:60px;background:linear-gradient(180deg,#8B4513,#A0522D);border-radius:1px;opacity:0;transform:translateY(20px);transition:all .8s ease}
+.burner-stick-item.planted{opacity:1;transform:translateY(0)}
+.burner-stick-item::before{content:'';position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#FF6B00,#FF4500,transparent);box-shadow:0 0 8px #FF6B00;animation:incFlame .3s ease-in-out infinite alternate}
+
+#smokeCanvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2}
+
+.wish-area{width:100%;max-width:380px;text-align:center;animation:incFadeUp .8s ease}
+.wish-textarea{width:100%;height:100px;padding:16px;background:rgba(212,168,71,.05);border:1px solid rgba(212,168,71,.25);border-radius:8px;color:var(--ink);font-family:inherit;font-size:clamp(14px,2.2vw,17px);letter-spacing:.1em;line-height:1.8;resize:none}
+.wish-textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 20px rgba(212,168,71,.15)}
+.wish-textarea::placeholder{color:var(--ink2);opacity:.6}
+.wish-error{color:var(--red2);font-size:12px;margin-top:6px;display:none}
+.btn-pray{margin-top:20px;padding:14px 48px;border:1px solid var(--gold);color:var(--gold);background:rgba(212,168,71,.08);font-family:inherit;font-size:clamp(16px,2.8vw,20px);letter-spacing:.4em;cursor:pointer;transition:all .3s}
+.btn-pray:hover{background:rgba(212,168,71,.15)}
+
+.incense-result{width:100%;max-width:480px;animation:incFadeUp 1s ease}
+.remedy-block{margin:16px 0;padding:20px 24px;border-left:3px solid var(--gold);background:linear-gradient(135deg,rgba(212,168,71,.06),rgba(212,168,71,.02));border-radius:0 12px 12px 0}
+.remedy-title{font-size:clamp(15px,2.2vw,18px);color:var(--gold);letter-spacing:.25em;margin-bottom:10px;font-weight:bold}
+.remedy-content{font-size:clamp(14px,2vw,17px);color:var(--ink);line-height:2}
+.wish-echo{text-align:center;margin:20px 0;font-size:clamp(14px,2vw,17px);color:var(--gold);font-style:italic;letter-spacing:.1em}
+.inc-step{display:none}.inc-step.active{display:flex;flex-direction:column;align-items:center}
+
 .restart-area{text-align:center;margin-top:28px;padding-top:24px;
   border-top:1px solid rgba(212,168,71,0.1)}
 
@@ -746,10 +804,60 @@ body{
       <div id="resultBrief" class="result-pane active"></div>
       <div id="resultDetail" class="result-pane"></div>
     </div>
+    <div id="incenseEntry" class="incense-entry">
+      <div class="inc-deity-hint" id="incenseDeityHint"></div>
+      <button class="btn-incense" onclick="goToStage('incense')">上 香 改 运</button>
+    </div>
     <div class="restart-area">
       <div class="btn-row">
         <button class="btn btn-small" onclick="restart()">重新摇爻</button>
         <button class="btn btn-small" style="border-color:var(--ink2);color:var(--ink2)" onclick="goToStage('history')">历史记录</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage: Incense Blessing -->
+  <div id="stage-incense" class="stage">
+    <div class="incense-scene">
+      <canvas id="smokeCanvas"></canvas>
+      <div class="inc-step active" id="incStep1">
+        <div class="inc-step-title">点 燃 心 香</div>
+        <div class="inc-sticks-row">
+          <div class="inc-stick" onclick="lightStick(0)"></div>
+          <div class="inc-stick" onclick="lightStick(1)"></div>
+          <div class="inc-stick" onclick="lightStick(2)"></div>
+        </div>
+        <div class="inc-hint">轻触香烛，依次点燃三炷香</div>
+      </div>
+      <div class="inc-step" id="incStep2">
+        <div class="inc-step-title">虔 心 上 香</div>
+        <div class="inc-burner" onclick="plantIncense()">
+          <div class="burner-rim"></div>
+          <div class="burner-body">
+            <div class="burner-sticks">
+              <div class="burner-stick-item"></div>
+              <div class="burner-stick-item"></div>
+              <div class="burner-stick-item"></div>
+            </div>
+          </div>
+          <div class="burner-legs"><div class="burner-leg"></div><div class="burner-leg"></div><div class="burner-leg"></div></div>
+        </div>
+        <div class="inc-hint">轻触香炉，虔诚插香</div>
+      </div>
+      <div class="inc-step" id="incStep3">
+        <div class="inc-step-title">许 下 心 愿</div>
+        <div class="wish-area">
+          <textarea class="wish-textarea" id="wishInput" placeholder="写下你的心愿…" maxlength="100"></textarea>
+          <div class="wish-error" id="wishError">请写下你的心愿</div>
+          <button class="btn-pray" onclick="submitWish()">祈 福</button>
+        </div>
+      </div>
+      <div class="inc-step" id="incStepResult">
+        <div class="incense-result" id="incenseResultContent"></div>
+        <div class="btn-row" style="margin-top:28px">
+          <button class="btn btn-small" onclick="restart()">重新摇爻</button>
+          <button class="btn btn-small" style="border-color:var(--ink2);color:var(--ink2)" onclick="goToStage('result')">返回卦象</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1583,6 +1691,7 @@ function goToStage(name){
   if(name==='reveal'){ buildReveal(); sfxReveal(); }
   if(name==='result') buildResult();
   if(name==='history') buildHistoryList();
+  if(name==='incense') initIncense();
 }
 
 function selectCat(el){
@@ -1944,6 +2053,16 @@ function buildResult(){
   dp.classList.remove('active'); dp.innerHTML = ''; dp.dataset.built = '';
 
   if(!state.saved){ state.saved = true; saveToHistory(); }
+
+  var incEntry = document.getElementById('incenseEntry');
+  if(fortune >= 4){
+    var hintPool = INCENSE_HINTS[fortune];
+    var hint = hintPool ? (hintPool[state.category]||'') : '';
+    document.getElementById('incenseDeityHint').textContent = (deity.name ? deity.name+'：' : '') + hint;
+    incEntry.classList.add('show');
+  } else {
+    incEntry.classList.remove('show');
+  }
 }
 
 function genBriefReading(cat, fortune, questionRaw, rawReading){
@@ -2440,8 +2559,187 @@ document.addEventListener('click', function(e){
   if(e.target.closest('button,.btn,.cat-card')) sfxClick();
 }, true);
 
+// ================= INCENSE SYSTEM =================
+var REMEDY_POOL = {
+  career:{
+    remedy:[
+      '近期事业上宜守不宜攻，静待时机方为上策。可在办公桌东南方放置一盆绿植，有助理清思路。',
+      '工作中遇到的阻碍只是暂时的，贵人将在不经意间出现。每日清晨面东默念心愿三遍，可助事顺。',
+      '目前不宜做重大决策，宜多听少说。随身佩戴一枚铜钱可挡煞气，增添职场底气。',
+      '领导赏识虽迟但到，近期莫在人前争功。以退为进，暗中积蓄实力，月底或有转机。',
+      '同事间的关系需用心经营，一次真诚的帮助胜过千言万语。今日起多行善事，职场贵人自现。'
+    ],
+    lucky:['吉方：东南','吉色：青色、绿色','吉时：卯时（5-7点）'],
+    closing:['守得云开见月明，事业转机就在眼前。','凡事三思而后行，稳中求进终有成。','莫急莫躁，天道酬勤，好运自来。']
+  },
+  love:{
+    remedy:[
+      '感情中切忌操之过急，给彼此留出空间方能柳暗花明。可在枕边放一条红绳，以结良缘之心。',
+      '当下不宜争吵，以柔克刚方为正道。傍晚散步时默念对方名字，心诚则感应自来。',
+      '姻缘之事急不得，一切自有缘法。在卧室西南方挂一对同心结，助催旺桃花。',
+      '有些话放在心里比说出来更有力量。近期多关注对方细微需求，一杯热茶胜过百句甜言。',
+      '单身者莫急，缘分就在日常之中。多参加三五好友的聚会，那个对的人或许已在路上。'
+    ],
+    lucky:['吉方：西南','吉色：粉色、红色','吉时：酉时（17-19点）'],
+    closing:['缘来缘去皆有定数，用心等待便好。','爱情需要耐心浇灌，春暖自会花开。','月老的红线已在编织，静候佳音即可。']
+  },
+  wealth:{
+    remedy:[
+      '近期不宜大额投资或借贷，守财比生财更重要。可在钱包中放一枚五帝钱，助稳财运。',
+      '财运低迷时当节流开源，少应酬多积蓄。在家中正北方摆一杯清水，水主财，可催旺。',
+      '破财之相只是暂时的考验，保持勤俭则无忧。随身携带黄水晶饰品可助聚财守财。',
+      '不义之财不可取，正道经营方为长久。近期有人借钱宜婉拒，守住本钱便是赢。',
+      '旧账该收的收，该了的了。清理过去的财务纠葛，新的财路自然会打开。'
+    ],
+    lucky:['吉方：正北','吉色：金色、黄色','吉时：辰时（7-9点）'],
+    closing:['财去财来皆有时，守得住便赢得来。','厚积方能薄发，眼下的积累是未来的富足。','财神爷自有安排，且安心等待好运降临。']
+  },
+  health:{
+    remedy:[
+      '近期需格外注意休息，莫要透支身体。每日清晨饮一杯温水，面南做三次深呼吸，可养正气。',
+      '身体不适时切勿硬撑，早睡早起是最好的良药。在床头放一个葫芦挂件，葫芦纳福驱病气。',
+      '当下宜静养调息，不宜过度劳累。散步时多走绿荫之处，草木之气可补元神。',
+      '饮食上宜清淡温补，少食生冷辛辣。一碗热粥、一盏清茶，便是最好的养生方。',
+      '心情是最好的药引。放下焦虑与烦恼，听一曲舒缓的古琴，让身心归于平和。'
+    ],
+    lucky:['吉方：正南','吉色：绿色、白色','吉时：午时（11-13点）'],
+    closing:['身体是一切之本，善待自己便是最大的福气。','休养生息之后，精气神自然充沛如初。','仙翁赐福，安康常伴左右。']
+  },
+  study:{
+    remedy:[
+      '学业上暂时遇到瓶颈，切莫焦虑。改变一下学习环境，在书桌上放一支毛笔可开文运。',
+      '读书不在于多而在于精，近期适合温故知新。佩戴一块青玉或在书房东方挂一幅字画助文昌。',
+      '学海无涯需一步一步来，急于求成反而事倍功半。每日入睡前默读三遍心经，可安神定志。',
+      '逢考心慌时深呼吸三次，默念"文曲星照我"。自信是最好的笔墨，从容方能发挥真实水平。',
+      '近期学业的困难是磨砺，熬过去便是质的飞跃。找一位学长或前辈请教，一句点拨胜过苦读十日。'
+    ],
+    lucky:['吉方：正东','吉色：青色、蓝色','吉时：巳时（9-11点）'],
+    closing:['才思如泉涌的日子即将到来，请保持信心。','文昌星虽暂被云遮，不日即将大放光明。','笔下生花只在一念之间，勤勉者终有所成。']
+  },
+  general:{
+    remedy:[
+      '近期运势起伏是自然规律，不必过于担忧。保持平常心，可在家中明堂处摆一盏长明灯，照亮前路。',
+      '凡事预则立，不预则废。最近做事前多想三步，顺势而为方可逢凶化吉。随身佩戴平安扣。',
+      '天地运行自有规律，低谷过后必是坦途。在身边放置一枚太极图案的饰品，助调和阴阳。',
+      '近期宜多亲近自然，到山水之间走走。天地灵气可洗涤晦气，回来后自觉神清气爽。',
+      '行善积德是最好的改运之法。帮助一个需要帮助的人，种下善因，好运不请自来。'
+    ],
+    lucky:['吉方：中宫','吉色：黄色、紫色','吉时：未时（13-15点）'],
+    closing:['否极泰来是不变的天道，请耐心等待。','八卦调和之后，万事皆可顺遂。','伏羲推演天机，你的好运已在路上。']
+  }
+};
+var INCENSE_HINTS = {
+  4:{career:'此卦平平，诚心上香可添几分好运',love:'姻缘之事虽不明朗，焚香祈福或可柳暗花明',wealth:'财运平淡无奇，不妨上一炷香求个转机',health:'身体无大碍但也无余裕，上香祈福保平安',study:'学业平平，上香求个文运，或有惊喜',general:'运势不上不下，焚香改运求个好兆头'},
+  5:{career:'此卦不太顺利，莫慌，随我上香化解',love:'感情有些波折，但诚心祈福可逢凶化吉',wealth:'财运有小阻碍，速来上香，财神自会眷顾',health:'身体略有不适之兆，上香祈福可保安康',study:'学业遇到小坎坷，焚香请文昌帝君助力',general:'运势小有波折，但上香改运可扭转乾坤'},
+  6:{career:'此卦凶险，需诚心焚香禳灾，方保事业无虞',love:'感情有大波折，速来上香祈福，月老自会化解',wealth:'财运受阻严重，诚心上香可得财神护佑',health:'身体之兆令人忧，焚香祈福刻不容缓',study:'学业受挫之象，速焚香请文昌星君庇佑',general:'此卦不利，须虔诚上香方可转危为安'}
+};
+
+var incState = {lit:0, planted:false, smokeRaf:null};
+var smokeParts = [], smokeCanvas, smokeCtx, smokeIntensity = 0;
+
+function initIncense(){
+  incState = {lit:0, planted:false, smokeRaf:null};
+  smokeParts = []; smokeIntensity = 0;
+  document.querySelectorAll('#stage-incense .inc-step').forEach(function(s){s.classList.remove('active')});
+  document.getElementById('incStep1').classList.add('active');
+  document.querySelectorAll('.inc-stick').forEach(function(s){s.classList.remove('lit')});
+  document.querySelectorAll('.burner-stick-item').forEach(function(s){s.classList.remove('planted')});
+  document.getElementById('wishInput').value = '';
+  document.getElementById('wishError').style.display = 'none';
+  smokeCanvas = document.getElementById('smokeCanvas');
+  if(smokeCanvas){
+    var par = smokeCanvas.parentElement;
+    smokeCanvas.width = par.offsetWidth || 480;
+    smokeCanvas.height = par.offsetHeight || 600;
+    smokeCtx = smokeCanvas.getContext('2d');
+  }
+  if(incState.smokeRaf) cancelAnimationFrame(incState.smokeRaf);
+  drawSmoke();
+}
+function lightStick(idx){
+  var sticks = document.querySelectorAll('.inc-stick');
+  if(sticks[idx].classList.contains('lit')) return;
+  sticks[idx].classList.add('lit');
+  sfxClick();
+  incState.lit++;
+  if(incState.lit >= 3) setTimeout(function(){ goIncStep(2); }, 800);
+}
+function goIncStep(n){
+  document.querySelectorAll('#stage-incense .inc-step').forEach(function(s){s.classList.remove('active')});
+  var id = n===2?'incStep2':n===3?'incStep3':'incStepResult';
+  document.getElementById(id).classList.add('active');
+}
+function plantIncense(){
+  if(incState.planted) return;
+  incState.planted = true;
+  sfxClick();
+  var sticks = document.querySelectorAll('.burner-stick-item');
+  sticks.forEach(function(s,i){ setTimeout(function(){ s.classList.add('planted'); }, i*300); });
+  smokeIntensity = 0.8;
+  setTimeout(function(){ goIncStep(3); }, 1800);
+}
+function submitWish(){
+  var w = document.getElementById('wishInput').value.trim();
+  if(!w){ document.getElementById('wishError').style.display = 'block'; return; }
+  document.getElementById('wishError').style.display = 'none';
+  sfxTransition();
+  buildIncenseResult(w);
+  goIncStep(4);
+}
+function buildIncenseResult(wish){
+  var hex = calcHexagram(state.lines);
+  var data = H[hex.key];
+  var fortune = data ? data[7] : 4;
+  var cat = state.category;
+  var deity = DEITY[cat]||{};
+  var pool = REMEDY_POOL[cat];
+  if(!pool) return;
+  var remedy = pool.remedy[Math.floor(Math.random()*pool.remedy.length)];
+  var lucky = pool.lucky.join(' · ');
+  var closing = pool.closing[Math.floor(Math.random()*pool.closing.length)];
+  var h = '';
+  if(deity.name){
+    h += '<div class="deity-speech"><div class="deity-speech-head">'
+      +'<div class="deity-speech-icon dc-avatar" style="background-image:url('+DEITY_IMG[cat]+');background-size:cover;background-position:center"></div>'
+      +'<div><div class="deity-speech-name">'+deity.name+'</div>'
+      +'<div class="deity-speech-tag">为你化解指引</div></div></div>'
+      +'<p>你的诚心我已感应到，这是我为你指的明路——</p></div>';
+  }
+  h += '<div class="wish-echo">「'+esc(wish)+'」</div>';
+  h += '<div class="remedy-block"><div class="remedy-title">化 解 之 道</div><div class="remedy-content">'+remedy+'</div></div>';
+  h += '<div class="remedy-block"><div class="remedy-title">吉 祥 指 引</div><div class="remedy-content">'+lucky+'</div></div>';
+  if(deity.name){
+    h += '<div class="deity-speech" style="margin-top:20px"><div class="deity-speech-head">'
+      +'<div class="deity-speech-icon dc-avatar" style="background-image:url('+DEITY_IMG[cat]+');background-size:cover;background-position:center"></div>'
+      +'<div><div class="deity-speech-name">'+deity.name+'</div>'
+      +'<div class="deity-speech-tag">寄语</div></div></div>'
+      +'<p>'+closing+'</p></div>';
+  }
+  document.getElementById('incenseResultContent').innerHTML = h;
+  smokeIntensity = 0.15;
+}
+function drawSmoke(){
+  if(!smokeCtx){incState.smokeRaf=requestAnimationFrame(drawSmoke);return;}
+  smokeCtx.clearRect(0,0,smokeCanvas.width,smokeCanvas.height);
+  if(smokeIntensity > 0 && Math.random() < smokeIntensity*0.3){
+    var cx = smokeCanvas.width/2;
+    smokeParts.push({x:cx+(Math.random()-.5)*40,y:smokeCanvas.height*0.5,vx:(Math.random()-.5)*.5,vy:-.5-Math.random()*1.5,r:3+Math.random()*8,life:1,decay:.003+Math.random()*.005});
+  }
+  for(var i=smokeParts.length-1;i>=0;i--){
+    var p=smokeParts[i];
+    p.x+=p.vx+(Math.random()-.5)*.3;p.y+=p.vy;p.r+=.1;p.life-=p.decay;
+    if(p.life<=0){smokeParts.splice(i,1);continue;}
+    smokeCtx.beginPath();smokeCtx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    smokeCtx.fillStyle='rgba(200,190,170,'+(p.life*.15*smokeIntensity)+')';
+    smokeCtx.fill();
+  }
+  incState.smokeRaf=requestAnimationFrame(drawSmoke);
+}
+
 function restart(){
   state = {category:'',question:'',round:0,lines:[],casting:false};
+  if(incState.smokeRaf){cancelAnimationFrame(incState.smokeRaf);incState.smokeRaf=null;}
+  smokeIntensity=0;smokeParts=[];
   document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('selected'));
   document.getElementById('questionInput').value = '';
   document.getElementById('questionArea').classList.remove('show');
