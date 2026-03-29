@@ -850,12 +850,12 @@ body{
     <div class="cat-sub">选定类别，写下心中所问</div>
     <div class="divider"></div>
     <div class="cat-grid" id="catGrid">
+      <div class="cat-card selected" data-cat="general" onclick="selectCat(this)"><div class="icon" data-cat="general"></div><div class="label">综合</div><div class="deity-name">伏羲</div></div>
       <div class="cat-card" data-cat="career" onclick="selectCat(this)"><div class="icon" data-cat="career"></div><div class="label">事业</div><div class="deity-name">关圣帝君</div></div>
       <div class="cat-card" data-cat="love" onclick="selectCat(this)"><div class="icon" data-cat="love"></div><div class="label">感情</div><div class="deity-name">月老</div></div>
       <div class="cat-card" data-cat="wealth" onclick="selectCat(this)"><div class="icon" data-cat="wealth"></div><div class="label">财运</div><div class="deity-name">赵公明</div></div>
       <div class="cat-card" data-cat="health" onclick="selectCat(this)"><div class="icon" data-cat="health"></div><div class="label">健康</div><div class="deity-name">南极仙翁</div></div>
       <div class="cat-card" data-cat="study" onclick="selectCat(this)"><div class="icon" data-cat="study"></div><div class="label">学业</div><div class="deity-name">文昌帝君</div></div>
-      <div class="cat-card" data-cat="general" onclick="selectCat(this)"><div class="icon" data-cat="general"></div><div class="label">综合</div><div class="deity-name">伏羲</div></div>
     </div>
     <div class="question-area" id="questionArea">
       <div class="question-label">把你想问的事情写下来</div>
@@ -1781,6 +1781,7 @@ function goToStage(name){
   el.classList.add('active');
   document.getElementById('app').scrollTop = 0;
   sfxTransition();
+  if(name==='category') initCategory();
   if(name==='casting') initCasting();
   if(name==='reveal'){ buildReveal(); sfxReveal(); }
   if(name==='result') buildResult();
@@ -1788,6 +1789,16 @@ function goToStage(name){
   if(name==='incense') initIncense();
 }
 
+function initCategory(){
+  state.category = 'general';
+  document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('selected'));
+  var def = document.querySelector('.cat-card[data-cat="general"]');
+  if(def) def.classList.add('selected');
+  document.getElementById('questionArea').classList.add('show');
+  var btn = document.getElementById('btnConfirmCat');
+  btn.classList.remove('btn-disabled');
+  btn.classList.add('btn-enabled');
+}
 function selectCat(el){
   document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');
