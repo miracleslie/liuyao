@@ -62,6 +62,7 @@ body{
 .stage{
   display:none;flex-direction:column;align-items:center;justify-content:center;
   padding:40px 32px 60px;min-height:100vh;position:relative;
+  max-width:100%;overflow-x:hidden;
 }
 .stage.active{display:flex;animation:stageIn 1s cubic-bezier(0.16,1,0.3,1) both}
 @keyframes stageIn{
@@ -711,11 +712,104 @@ body{
 
 /* ====================== RESPONSIVE ====================== */
 @media(max-width:480px){
-  .stage{padding:24px 20px 40px}
-  .tokens-area{gap:20px}
+  .stage{padding:20px 16px 36px;overflow-x:hidden}
+  .title{font-size:clamp(22px,5.5vw,30px)}
+  .subtitle{font-size:clamp(11px,2.5vw,14px);letter-spacing:0.3em}
+  .desc{font-size:clamp(13px,3vw,15px);padding:0 4px}
+  .welcome-cta{padding:16px 36px!important;letter-spacing:0.3em!important;font-size:clamp(16px,4vw,20px)!important}
+  .btn{padding:14px 32px;letter-spacing:0.25em;font-size:clamp(15px,3.5vw,18px);margin-top:28px}
+  .btn:hover{letter-spacing:0.3em}
+  .result-content,.remedy-content,.deity-speech p{word-break:break-all;word-break:break-word}
+  .btn-small{padding:12px 24px;letter-spacing:0.2em;font-size:clamp(14px,3vw,16px)}
+  .btn-incense{padding:12px 28px;letter-spacing:0.2em;font-size:clamp(15px,3.5vw,18px)}
+  .btn-pray{padding:12px 32px;letter-spacing:0.25em;font-size:clamp(15px,3.5vw,18px)}
+  .btn-row{gap:10px;margin-top:28px}
+  .btn-ghost{padding:12px 24px;letter-spacing:0.2em;font-size:clamp(14px,3vw,16px)}
+  .restart-area{margin-top:20px;padding-top:16px}
+  .deity-strip{gap:clamp(4px,1vw,8px);overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;justify-content:center}
+  .deity-chip{min-width:50px;padding:6px 4px}
+  .dc-avatar{width:clamp(32px,8vw,40px);height:clamp(32px,8vw,40px)}
+  .dc-name{font-size:clamp(10px,2.2vw,12px)}
+  .cat-title{font-size:clamp(20px,5vw,26px)}
+  .cat-sub{font-size:clamp(11px,2.5vw,14px)}
+  .cat-grid{gap:10px;max-width:100%}
+  .cat-card{padding:14px 6px}
+  .cat-card .icon{width:clamp(44px,10vw,52px);height:clamp(44px,10vw,52px)}
+  .cat-card .label{font-size:clamp(13px,3vw,15px)}
+  .cat-card .deity-name{font-size:clamp(10px,2.2vw,12px)}
+  .question-area{max-width:100%}
+  .question-area textarea{font-size:14px}
+  .cast-title{font-size:clamp(18px,4.5vw,24px)}
+  .cast-round{font-size:clamp(12px,2.5vw,14px)}
+  .tokens-area{gap:20px;height:130px}
+  .token img{height:90px}
+  .cast-result{font-size:clamp(12px,2.8vw,15px)}
   .gua-display{gap:28px}
-  .cat-grid{gap:10px}
-  .result-block{padding:18px 20px}
+  .gua-box .gua-name{font-size:clamp(30px,7vw,48px)}
+  .gua-box .gua-fullname{font-size:clamp(12px,2.5vw,16px)}
+  .arrow{font-size:clamp(22px,5vw,36px);margin-top:30px}
+  .gua-xiang{font-size:clamp(14px,3vw,18px);padding:0 4px;max-width:100%}
+  .result-section{max-width:100%}
+  .result-header{font-size:clamp(26px,6vw,40px)}
+  .result-sub{font-size:clamp(12px,2.5vw,16px)}
+  .result-tabs{width:100%}
+  .result-tab{padding:8px 20px;font-size:clamp(14px,3vw,16px);letter-spacing:0.15em}
+  .result-block{padding:16px 14px}
+  .result-title{font-size:clamp(16px,3.5vw,20px);letter-spacing:0.2em}
+  .result-content{font-size:clamp(14px,3vw,17px)}
+  .deity-speech{padding:16px 16px 16px 20px}
+  .deity-badge{font-size:clamp(12px,2.5vw,15px)}
+  .fortune-badge{padding:6px 20px;font-size:clamp(14px,3vw,18px)}
+  .incense-entry .inc-deity-hint{font-size:clamp(12px,2.8vw,15px);padding:0 8px}
+  .incense-scene{min-height:60vh;max-width:100%}
+  .inc-step-title{font-size:clamp(18px,4.5vw,24px);letter-spacing:0.25em}
+  .inc-sticks-row{gap:clamp(24px,5vw,40px);height:170px}
+  .inc-stick{height:120px}
+  .inc-burner{width:100px}
+  .burner-body{height:50px}
+  .wish-area{max-width:100%;padding:0 8px}
+  .wish-textarea{font-size:14px}
+  .incense-result{max-width:100%}
+  .remedy-block{padding:16px 14px}
+  .remedy-title{font-size:clamp(14px,3vw,16px)}
+  .remedy-content{font-size:clamp(13px,2.8vw,16px)}
+  .wish-echo{font-size:clamp(13px,2.8vw,16px)}
+  .modal-box{padding:28px 20px;max-width:300px}
+  .modal-text{font-size:clamp(14px,3vw,17px)}
+  .modal-btns{gap:10px}
+  .history-card{padding:14px 16px}
+  .detail-section{padding:16px 14px}
+  .detail-trigram-row{gap:12px}
+  .detail-tri-box{padding:12px 14px}
+  .yao-detail-row{gap:10px}
+}
+@media(max-width:375px){
+  .stage{padding:16px 12px 32px}
+  .welcome-cta{padding:14px 28px!important;letter-spacing:0.2em!important;font-size:15px!important}
+  .btn{padding:12px 24px;letter-spacing:0.2em}
+  .btn-small{padding:10px 18px;letter-spacing:0.15em;font-size:13px}
+  .btn-incense{padding:10px 22px;letter-spacing:0.15em;font-size:14px}
+  .btn-pray{padding:10px 24px;letter-spacing:0.2em;font-size:14px}
+  .btn-ghost{padding:10px 18px;letter-spacing:0.15em;font-size:13px}
+  .deity-strip{gap:2px}
+  .deity-chip{min-width:46px;padding:5px 2px}
+  .dc-avatar{width:30px;height:30px}
+  .dc-name{font-size:10px}
+  .cat-grid{gap:8px}
+  .cat-card{padding:12px 4px}
+  .cat-card .icon{width:40px;height:40px}
+  .cat-card .label{font-size:12px}
+  .result-tab{padding:8px 14px;font-size:13px;letter-spacing:0.1em}
+  .result-block{padding:14px 12px}
+  .deity-speech{padding:14px 12px 14px 16px}
+  .remedy-block{padding:14px 12px}
+  .modal-box{padding:24px 16px;max-width:280px}
+  .inc-sticks-row{gap:20px;height:150px}
+  .inc-stick{height:100px}
+  .inc-burner{width:86px}
+  .tokens-area{gap:16px;height:110px}
+  .token img{height:70px}
+  .gua-display{gap:20px}
 }
 </style>
 </head>
