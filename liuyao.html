@@ -828,12 +828,12 @@ body{
     <div class="subtitle">解 惑 · 问 运 · 趋 吉 避 凶</div>
     <div class="divider"></div>
     <div class="deity-strip">
+      <div class="deity-chip"><div class="dc-avatar" data-cat="general"></div><span class="dc-name">看综合</span></div>
       <div class="deity-chip"><div class="dc-avatar" data-cat="career"></div><span class="dc-name">断事业</span></div>
       <div class="deity-chip"><div class="dc-avatar" data-cat="love"></div><span class="dc-name">牵姻缘</span></div>
       <div class="deity-chip"><div class="dc-avatar" data-cat="wealth"></div><span class="dc-name">旺财运</span></div>
       <div class="deity-chip"><div class="dc-avatar" data-cat="health"></div><span class="dc-name">保安康</span></div>
       <div class="deity-chip"><div class="dc-avatar" data-cat="study"></div><span class="dc-name">佑学业</span></div>
-      <div class="deity-chip"><div class="dc-avatar" data-cat="general"></div><span class="dc-name">看综合</span></div>
     </div>
     <div class="desc">
       工作不顺？感情纠结？财运不佳？<br>
@@ -841,7 +841,7 @@ body{
       <span style="color:var(--gold);letter-spacing:0.2em">答案马上揭晓</span>
     </div>
     <button class="btn welcome-cta" onclick="goToStage('category')">算 一 卦</button>
-    <button class="btn btn-small" style="margin-top:12px;border-color:var(--ink2);color:var(--ink2)" onclick="goToStage('history')">历史记录</button>
+    <button class="btn btn-small" id="btnWelcomeHistory" style="margin-top:12px;border-color:var(--ink2);color:var(--ink2);display:none" onclick="goToStage('history')">历史记录</button>
   </div>
 
   <!-- Stage 2: Category -->
@@ -878,7 +878,7 @@ body{
       <button class="btn btn-small" id="btnCast" onclick="castCoins()">摇 卦</button>
       <button class="btn btn-small btn-ghost" id="btnQuickCast" onclick="quickCast()">一键摇卦</button>
     </div>
-    <button class="btn btn-small btn-ghost" id="btnAbandon" style="margin-top:20px;border-color:var(--ink2);color:var(--ink2);font-size:14px" onclick="showAbandonModal()">放弃摇爻</button>
+    <button class="btn btn-small btn-ghost" id="btnAbandon" style="margin-top:20px;border-color:var(--ink2);color:var(--ink2);font-size:14px;display:none" onclick="showAbandonModal()">放弃摇爻</button>
   </div>
 
   <!-- Stage 4: Reveal -->
@@ -905,7 +905,7 @@ body{
     <div class="restart-area" id="resultRestartArea">
       <div class="btn-row">
         <button class="btn btn-small" onclick="restart()">重新摇爻</button>
-        <button class="btn btn-small" style="border-color:var(--ink2);color:var(--ink2)" onclick="goToStage('history')">历史记录</button>
+        <button class="btn btn-small btn-history-cond" style="border-color:var(--ink2);color:var(--ink2)" onclick="goToStage('history')">历史记录</button>
       </div>
     </div>
   </div>
@@ -1781,12 +1781,19 @@ function goToStage(name){
   el.classList.add('active');
   document.getElementById('app').scrollTop = 0;
   sfxTransition();
+  if(name==='welcome') updateHistoryBtns();
   if(name==='category') initCategory();
   if(name==='casting') initCasting();
   if(name==='reveal'){ buildReveal(); sfxReveal(); }
   if(name==='result') buildResult();
   if(name==='history') buildHistoryList();
   if(name==='incense') initIncense();
+}
+function updateHistoryBtns(){
+  var has = loadHistory().length > 0;
+  var wb = document.getElementById('btnWelcomeHistory');
+  if(wb) wb.style.display = has ? '' : 'none';
+  document.querySelectorAll('.btn-history-cond').forEach(function(b){ b.style.display = has ? '' : 'none'; });
 }
 
 function initCategory(){
@@ -1825,6 +1832,7 @@ function initCasting(){
   document.getElementById('castResult').textContent = '';
   document.getElementById('btnCast').style.display = '';
   document.getElementById('btnQuickCast').style.display = '';
+  document.getElementById('btnAbandon').style.display = 'none';
   const extra = document.querySelector('#stage-casting .btn-small.view-result-btn');
   if(extra) extra.remove();
 }
@@ -1886,6 +1894,7 @@ function castCoins(){
     resultEl.textContent = heads+'阳'+(3-heads)+'阴 · '+typeStr;
     resultEl.classList.add('show');
     addYaoLine(result, state.round);
+    document.getElementById('btnAbandon').style.display = state.round < 6 ? '' : 'none';
     if(state.round < 6){
       document.getElementById('castRound').textContent = ROUND_NAMES[state.round];
       state.casting = false;
@@ -2171,6 +2180,7 @@ function buildResult(){
     incEntry.classList.remove('show');
     restartArea.style.display = '';
   }
+  updateHistoryBtns();
 }
 
 function genBriefReading(cat, fortune, questionRaw, rawReading){
@@ -2870,6 +2880,7 @@ function initDeityAvatars(){
   document.querySelectorAll('.cat-card .icon[data-cat]').forEach(function(el){ setAvatarBg(el, el.getAttribute('data-cat')); });
 }
 initDeityAvatars();
+updateHistoryBtns();
 </script>
 </body>
 </html>
