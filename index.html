@@ -902,7 +902,7 @@ body{
       <div class="inc-deity-hint" id="incenseDeityHint"></div>
       <button class="btn-incense" onclick="goToStage('incense')">上 香 改 运</button>
     </div>
-    <div class="restart-area">
+    <div class="restart-area" id="resultRestartArea">
       <div class="btn-row">
         <button class="btn btn-small" onclick="restart()">重新摇爻</button>
         <button class="btn btn-small" style="border-color:var(--ink2);color:var(--ink2)" onclick="goToStage('history')">历史记录</button>
@@ -2160,13 +2160,16 @@ function buildResult(){
   if(!state.saved){ state.saved = true; saveToHistory(); }
 
   var incEntry = document.getElementById('incenseEntry');
-  if(fortune >= 4){
+  var restartArea = document.getElementById('resultRestartArea');
+  if(fortune >= 4 && !state.incenseDone){
     var hintPool = INCENSE_HINTS[fortune];
     var hint = hintPool ? (hintPool[state.category]||'') : '';
     document.getElementById('incenseDeityHint').textContent = (deity.name ? deity.name+'：' : '') + hint;
     incEntry.classList.add('show');
+    restartArea.style.display = 'none';
   } else {
     incEntry.classList.remove('show');
+    restartArea.style.display = '';
   }
 }
 
@@ -2788,6 +2791,7 @@ function submitWish(){
   if(!w){ document.getElementById('wishError').style.display = 'block'; return; }
   document.getElementById('wishError').style.display = 'none';
   sfxTransition();
+  state.incenseDone = true;
   buildIncenseResult(w);
   goIncStep(4);
 }
