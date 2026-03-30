@@ -270,10 +270,11 @@ body{
   height:150px;margin-bottom:4px;
 }
 .token{
-  position:relative;display:flex;align-items:center;justify-content:center;
+  position:relative;display:flex;align-items:flex-start;justify-content:center;
   transition:filter 0.5s,opacity 0.5s,transform 0.5s;
+  height:100px;overflow:hidden;
 }
-.token img{display:block;height:120px;width:auto;filter:drop-shadow(0 3px 12px rgba(0,0,0,0.45));object-fit:contain;}
+.token img{display:block;height:120px;width:auto;filter:drop-shadow(0 3px 12px rgba(0,0,0,0.45));object-fit:contain;object-position:top;}
 .token.yang-result{
   filter:drop-shadow(0 0 22px rgba(212,168,71,0.9)) brightness(1.2);
   transform:scale(1.12) translateY(-5px)!important;
@@ -469,6 +470,79 @@ body{
 .fortune-xiong{border-color:var(--red);color:var(--red2);background:rgba(196,60,60,0.08);
   box-shadow:0 0 20px rgba(196,60,60,0.15);text-shadow:0 0 10px rgba(196,60,60,0.3)}
 .fortune-ping{border-color:var(--ink2);color:var(--ink2);background:rgba(154,144,128,0.08)}
+
+/* ====================== LAMP BLESSING SCENE ====================== */
+.lamp-entry{text-align:center;margin:24px 0 8px;padding:20px 0;border-top:1px solid rgba(212,168,71,0.12);display:none}
+.lamp-entry.show{display:block}
+.lamp-entry .lamp-deity-hint{font-size:clamp(13px,2vw,16px);color:var(--ink2);margin-bottom:16px;letter-spacing:0.15em;line-height:1.8}
+.btn-lamp{
+  display:inline-block;padding:14px 40px;border:1px solid var(--gold);color:var(--gold);
+  background:rgba(212,168,71,0.06);font-family:inherit;font-size:clamp(16px,2.8vw,20px);
+  letter-spacing:0.3em;cursor:pointer;animation:lampBreath 2.5s ease-in-out infinite;
+}
+@keyframes lampBreath{0%,100%{box-shadow:0 0 12px rgba(255,180,50,0.15)}50%{box-shadow:0 0 32px rgba(255,180,50,0.45),0 0 60px rgba(255,160,30,0.12)}}
+
+#stage-lamp{position:relative;z-index:10}
+.lamp-scene{position:relative;width:100%;max-width:480px;min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.lamp-step{display:none}.lamp-step.active{display:flex;flex-direction:column;align-items:center}
+.lamp-step-title{font-size:clamp(20px,4vw,28px);color:var(--gold);letter-spacing:0.4em;text-align:center;margin-bottom:24px;text-shadow:0 0 20px rgba(255,180,50,0.3)}
+.lamp-hint{font-size:clamp(12px,2vw,15px);color:var(--ink2);letter-spacing:0.15em;text-align:center;margin-top:20px;animation:incFadeUp .8s ease}
+
+.lamp-select{display:flex;gap:clamp(24px,5vw,40px);justify-content:center;margin:20px 0}
+.lamp-option{
+  display:flex;flex-direction:column;align-items:center;cursor:pointer;
+  padding:16px 20px;border:1px solid rgba(212,168,71,0.12);border-radius:12px;
+  transition:all 0.4s ease;background:rgba(212,168,71,0.02);min-width:100px;
+}
+.lamp-option:hover{border-color:rgba(212,168,71,0.3);background:rgba(212,168,71,0.06)}
+.lamp-option.selected{border-color:var(--gold);background:rgba(212,168,71,0.1);box-shadow:0 0 24px rgba(255,180,50,0.15)}
+.lamp-option .lamp-icon{font-size:42px;margin-bottom:8px}
+.lamp-option .lamp-name{font-size:clamp(13px,2vw,16px);color:var(--ink);letter-spacing:0.15em}
+
+.lamp-display{position:relative;width:140px;height:200px;margin:20px auto;display:flex;align-items:center;justify-content:center}
+.lotus-lamp{position:relative;width:120px;display:flex;flex-direction:column;align-items:center}
+.lotus-base{width:80px;height:35px;background:radial-gradient(ellipse at center,#E8A050,#C07830,#A06020);border-radius:50%;box-shadow:0 4px 16px rgba(0,0,0,0.4),inset 0 -2px 4px rgba(0,0,0,0.3)}
+.lotus-petals{position:relative;width:100px;height:50px;margin-bottom:-10px}
+.lotus-petal{position:absolute;width:28px;height:40px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;opacity:0.9}
+.lotus-petal:nth-child(1){background:linear-gradient(135deg,#FFB6C1,#FF8BA0);left:8px;top:6px;transform:rotate(-30deg)}
+.lotus-petal:nth-child(2){background:linear-gradient(135deg,#FFC0CB,#FF92A8);left:22px;top:0;transform:rotate(-10deg)}
+.lotus-petal:nth-child(3){background:linear-gradient(135deg,#FFD1DC,#FFA0B4);left:38px;top:-2px;transform:rotate(0deg)}
+.lotus-petal:nth-child(4){background:linear-gradient(135deg,#FFC0CB,#FF92A8);left:52px;top:0;transform:rotate(10deg)}
+.lotus-petal:nth-child(5){background:linear-gradient(135deg,#FFB6C1,#FF8BA0);left:64px;top:6px;transform:rotate(30deg)}
+.lamp-flame-wrap{position:absolute;top:-50px;left:50%;transform:translateX(-50%);width:40px;height:60px;display:flex;align-items:flex-end;justify-content:center}
+.lamp-flame{
+  width:16px;height:40px;background:radial-gradient(ellipse at bottom,#FFF8E0,#FFD54F 30%,#FF9800 65%,transparent);
+  border-radius:50% 50% 50% 50%/60% 60% 40% 40%;opacity:0;
+  transition:opacity 0.8s;filter:blur(1px);
+}
+.lamp-flame.lit{opacity:1;animation:lampFlicker 0.8s ease-in-out infinite alternate}
+@keyframes lampFlicker{
+  0%{transform:scaleX(1) scaleY(1);filter:blur(1px)}
+  25%{transform:scaleX(0.92) scaleY(1.06);filter:blur(1.2px)}
+  50%{transform:scaleX(1.05) scaleY(0.96);filter:blur(0.8px)}
+  75%{transform:scaleX(0.96) scaleY(1.03);filter:blur(1.1px)}
+  100%{transform:scaleX(1.02) scaleY(0.98);filter:blur(1px)}
+}
+.lamp-glow{
+  position:absolute;top:-70px;left:50%;transform:translateX(-50%);
+  width:0;height:0;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,200,80,0.3),rgba(255,160,40,0.1),transparent);
+  transition:all 1.5s ease;pointer-events:none;
+}
+.lamp-glow.on{width:260px;height:260px;top:-140px;margin-left:0}
+
+.lamp-wish-area{width:100%;max-width:380px;text-align:center;animation:incFadeUp .8s ease}
+.lamp-wish-textarea{width:100%;height:100px;padding:16px;background:rgba(255,180,50,.05);border:1px solid rgba(255,180,50,.25);border-radius:8px;color:var(--ink);font-family:inherit;font-size:clamp(14px,2.2vw,17px);letter-spacing:.1em;line-height:1.8;resize:none}
+.lamp-wish-textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 20px rgba(255,180,50,.2)}
+.lamp-wish-textarea::placeholder{color:var(--ink2);opacity:.6}
+.lamp-wish-error{color:var(--red2);font-size:12px;margin-top:6px;display:none}
+.btn-light{margin-top:20px;padding:14px 48px;border:1px solid var(--gold);color:var(--gold);background:rgba(255,180,50,.08);font-family:inherit;font-size:clamp(16px,2.8vw,20px);letter-spacing:.4em;cursor:pointer;transition:all .3s}
+.btn-light:hover{background:rgba(255,180,50,.18)}
+
+.lamp-result{width:100%;max-width:480px;animation:incFadeUp 1s ease}
+.blessing-block{margin:16px 0;padding:20px 24px;border-left:3px solid var(--gold);background:linear-gradient(135deg,rgba(255,180,50,.06),rgba(255,180,50,.02));border-radius:0 12px 12px 0}
+.blessing-title{font-size:clamp(15px,2.2vw,18px);color:var(--gold);letter-spacing:.25em;margin-bottom:10px;font-weight:bold}
+.blessing-content{font-size:clamp(14px,2vw,17px);color:var(--ink);line-height:2}
 
 /* ====================== INCENSE SCENE ====================== */
 .incense-entry{text-align:center;margin:24px 0 8px;padding:20px 0;border-top:1px solid rgba(212,168,71,0.12);display:none}
@@ -742,6 +816,7 @@ body{
   .cast-title{font-size:clamp(18px,4.5vw,24px)}
   .cast-round{font-size:clamp(12px,2.5vw,14px)}
   .tokens-area{gap:20px;height:130px}
+  .token{height:75px}
   .token img{height:90px}
   .cast-result{font-size:clamp(12px,2.8vw,15px)}
   .gua-display{gap:28px}
@@ -761,6 +836,21 @@ body{
   .deity-badge{font-size:clamp(12px,2.5vw,15px)}
   .fortune-badge{padding:6px 20px;font-size:clamp(14px,3vw,18px)}
   .incense-entry .inc-deity-hint{font-size:clamp(12px,2.8vw,15px);padding:0 8px}
+  .lamp-entry .lamp-deity-hint{font-size:clamp(12px,2.8vw,15px);padding:0 8px}
+  .btn-lamp{padding:12px 28px;letter-spacing:0.2em;font-size:clamp(15px,3.5vw,18px)}
+  .lamp-scene{min-height:60vh;max-width:100%}
+  .lamp-step-title{font-size:clamp(18px,4.5vw,24px);letter-spacing:0.25em}
+  .lamp-select{gap:clamp(12px,3vw,24px)}
+  .lamp-option{padding:12px 14px;min-width:80px}
+  .lamp-option .lamp-icon{font-size:32px}
+  .lamp-option .lamp-name{font-size:clamp(11px,2.5vw,14px)}
+  .lamp-wish-area{max-width:100%;padding:0 8px}
+  .lamp-wish-textarea{font-size:14px}
+  .lamp-result{max-width:100%}
+  .blessing-block{padding:16px 14px}
+  .blessing-title{font-size:clamp(14px,3vw,16px)}
+  .lamp-display{width:120px;height:160px}
+  .btn-light{padding:12px 32px;letter-spacing:0.25em;font-size:clamp(15px,3.5vw,18px)}
   .incense-scene{min-height:60vh;max-width:100%}
   .inc-step-title{font-size:clamp(18px,4.5vw,24px);letter-spacing:0.25em}
   .inc-sticks-row{gap:clamp(24px,5vw,40px);height:170px}
@@ -808,6 +898,7 @@ body{
   .inc-stick{height:100px}
   .inc-burner{width:86px}
   .tokens-area{gap:16px;height:110px}
+  .token{height:58px}
   .token img{height:70px}
   .gua-display{gap:20px}
 }
@@ -898,6 +989,10 @@ body{
       <div id="resultBrief" class="result-pane active"></div>
       <div id="resultDetail" class="result-pane"></div>
     </div>
+    <div id="lampEntry" class="lamp-entry">
+      <div class="lamp-deity-hint" id="lampDeityHint"></div>
+      <button class="btn-lamp" onclick="goToStage('lamp')">点 灯 祈 福</button>
+    </div>
     <div id="incenseEntry" class="incense-entry">
       <div class="inc-deity-hint" id="incenseDeityHint"></div>
       <button class="btn-incense" onclick="goToStage('incense')">上 香 改 运</button>
@@ -906,6 +1001,59 @@ body{
       <div class="btn-row">
         <button class="btn btn-small" onclick="restart()">重新摇爻</button>
         <button class="btn btn-small btn-history-cond" style="border-color:var(--ink2);color:var(--ink2)" onclick="goToStage('history')">历史记录</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage: Lamp Blessing -->
+  <div id="stage-lamp" class="stage">
+    <div class="lamp-scene">
+      <canvas id="lampGlowCanvas"></canvas>
+      <div class="lamp-step active" id="lampStep1">
+        <div class="lamp-step-title">选 一 盏 灯</div>
+        <div class="lamp-select">
+          <div class="lamp-option selected" onclick="selectLamp(this,'lotus')" data-lamp="lotus">
+            <div class="lamp-icon">🪷</div><div class="lamp-name">莲花灯</div>
+          </div>
+          <div class="lamp-option" onclick="selectLamp(this,'sky')" data-lamp="sky">
+            <div class="lamp-icon">🏮</div><div class="lamp-name">天灯</div>
+          </div>
+          <div class="lamp-option" onclick="selectLamp(this,'candle')" data-lamp="candle">
+            <div class="lamp-icon">🕯️</div><div class="lamp-name">长明灯</div>
+          </div>
+        </div>
+        <div class="lamp-hint">选一盏你喜欢的灯，为好运加持</div>
+        <button class="btn-light" onclick="goLampStep(2)" style="margin-top:24px">选 好 了</button>
+      </div>
+      <div class="lamp-step" id="lampStep2">
+        <div class="lamp-step-title">写 下 心 愿</div>
+        <div class="lamp-wish-area">
+          <textarea class="lamp-wish-textarea" id="lampWishInput" placeholder="趁运势正好，写下你的心愿…" maxlength="100"></textarea>
+          <div class="lamp-wish-error" id="lampWishError">写下你的心愿，让好运带着它实现</div>
+          <button class="btn-light" onclick="submitLampWish()">点 灯 许 愿</button>
+        </div>
+      </div>
+      <div class="lamp-step" id="lampStep3">
+        <div class="lamp-step-title" id="lampLightTitle">灯 已 点 亮</div>
+        <div class="lamp-display">
+          <div class="lamp-glow" id="lampGlow"></div>
+          <div class="lotus-lamp" id="lampVisual">
+            <div class="lamp-flame-wrap"><div class="lamp-flame" id="lampFlame"></div></div>
+            <div class="lotus-petals">
+              <div class="lotus-petal"></div><div class="lotus-petal"></div><div class="lotus-petal"></div>
+              <div class="lotus-petal"></div><div class="lotus-petal"></div>
+            </div>
+            <div class="lotus-base"></div>
+          </div>
+        </div>
+        <div class="lamp-hint" id="lampLightHint" style="margin-top:0">灯火为你照亮前路…</div>
+      </div>
+      <div class="lamp-step" id="lampStepResult">
+        <div class="lamp-result" id="lampResultContent"></div>
+        <div class="btn-row" style="margin-top:28px">
+          <button class="btn btn-small" onclick="restart()">重新摇爻</button>
+          <button class="btn btn-small" style="border-color:var(--ink2);color:var(--ink2)" onclick="goToStage('result')">返回卦象</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1788,6 +1936,7 @@ function goToStage(name){
   if(name==='result') buildResult();
   if(name==='history') buildHistoryList();
   if(name==='incense') initIncense();
+  if(name==='lamp') initLamp();
 }
 function updateHistoryBtns(){
   var has = loadHistory().length > 0;
@@ -1847,7 +1996,7 @@ function buildTokens(){
     html += '<div class="token" id="token'+i+'"><img src="'+src+'" alt=""></div>';
   }
   area.innerHTML = html;
-  document.getElementById('objLabel').textContent = d ? d.obj.label : '';
+  document.getElementById('objLabel').textContent = '';
 }
 
 function resetTokens(){
@@ -2170,15 +2319,22 @@ function buildResult(){
   if(!state.saved){ state.saved = true; saveToHistory(); }
 
   var incEntry = document.getElementById('incenseEntry');
+  var lampEntry = document.getElementById('lampEntry');
   var restartArea = document.getElementById('resultRestartArea');
+  incEntry.classList.remove('show');
+  lampEntry.classList.remove('show');
+  restartArea.style.display = 'none';
   if(fortune >= 4 && !state.incenseDone){
     var hintPool = INCENSE_HINTS[fortune];
     var hint = hintPool ? (hintPool[state.category]||'') : '';
     document.getElementById('incenseDeityHint').textContent = (deity.name ? deity.name+'：' : '') + hint;
     incEntry.classList.add('show');
-    restartArea.style.display = 'none';
+  } else if(fortune <= 3 && !state.lampDone){
+    var lampPool = LAMP_HINTS[fortune];
+    var lampHint = lampPool ? (lampPool[state.category]||'') : '';
+    document.getElementById('lampDeityHint').textContent = (deity.name ? deity.name+'：' : '') + lampHint;
+    lampEntry.classList.add('show');
   } else {
-    incEntry.classList.remove('show');
     restartArea.style.display = '';
   }
   updateHistoryBtns();
@@ -2854,6 +3010,154 @@ function drawSmoke(){
     smokeCtx.fill();
   }
   incState.smokeRaf=requestAnimationFrame(drawSmoke);
+}
+
+/* ====================== LAMP BLESSING ====================== */
+var BLESSING_POOL = {
+  career:{
+    bless:[
+      '事业运势正旺，你之前的努力正在开花结果。趁这股好势头，大胆去争取你想要的——升职、转型、新项目都是好时机。',
+      '你的才华正在被看见，别藏着掖着。最近如果有展示自己的机会，一定要抓住，贵人就在你身边。',
+      '事业上一切都在往好的方向走，保持现在的节奏就对了。记住：不骄不躁，稳稳地走，最后赢的一定是你。',
+      '最近工作上会有意想不到的好消息，可能是一个新的合作机会，也可能是领导的认可。保持开放心态，好事正在靠近。',
+      '你的职场直觉最近特别准，相信自己的判断。该出手时就出手，犹豫才是最大的风险。'
+    ],
+    lucky:['近期适合：主动汇报工作成果、约领导或前辈喝杯咖啡','穿搭建议：穿深色正装或有质感的衣服，气场全开','小确幸：给自己买个心仪已久的工作好物，犒劳辛苦的自己'],
+    closing:['前路一片光明，大胆往前走吧！','好运会持续陪伴你，继续加油！','你值得所有美好的事情发生。']
+  },
+  love:{
+    bless:[
+      '感情运势很好呀！不管是单身还是有伴，最近都特别容易遇到心动的瞬间。打开心扉，让爱自然地流动。',
+      '你身上有一种特别吸引人的光芒，最近桃花运旺盛。如果有心仪的人，不妨主动一点，对方大概率也在关注你。',
+      '和伴侣的关系最近会更加甜蜜，适合一起做一些有仪式感的事——一顿烛光晚餐、一次周末小旅行，感情会更上一层楼。',
+      '你的温柔和真诚是最大的魅力。最近感情上的好运是你应得的，尽情享受这份幸福吧，你值得被好好爱。',
+      '缘分正在向你走来，可能就藏在一次不经意的聊天、一个偶然的相遇里。保持微笑，好事自然来。'
+    ],
+    lucky:['近期适合：约心仪的人出去、和伴侣策划一次小惊喜','穿搭建议：穿一件让自己很有自信的衣服，你最好看的时候就是最自信的时候','小确幸：给在乎的人发一条暖心的消息，小小的举动也能让关系升温'],
+    closing:['幸福正在向你靠近，你只需要张开双臂。','你值得最好的爱情，它已经在路上了。','爱你的人也在默默爱着你，别忘了回头看看。']
+  },
+  wealth:{
+    bless:[
+      '财运来了挡都挡不住！最近不管是正财还是偏财，都有不错的表现。如果有靠谱的投资机会或者加薪的念头，可以大胆行动。',
+      '你最近的财运相当不错，之前花出去的钱会以意想不到的方式回来。记得存一部分好运钱，细水长流更持久。',
+      '财运亨通的时候，最重要的是保持清醒。赚到的钱好好规划，该享受的享受，该储蓄的储蓄，把好运变成长久的富足。',
+      '你对钱的感觉最近特别好，直觉告诉你该买的就买、该投的就投。相信自己的判断，但也别忘了"留一手"的智慧。',
+      '好消息：最近可能会收到一笔意料之外的进账——奖金、退款、红包、礼物都有可能。开开心心地收下吧，这是你应得的。'
+    ],
+    lucky:['近期适合：做一份简单的理财计划、犒劳自己一件心仪的东西','穿搭建议：金色或暖色系的配饰能持续提升财运','小确幸：请朋友吃顿饭，分享好运气，福气会越分越多'],
+    closing:['财运正旺，好好把握这波好运！','富足不只是钱包，更是心态。你两个都有了。','钱会继续来找你的，因为你值得丰盛的生活。']
+  },
+  health:{
+    bless:[
+      '身体状态很不错！最近精力充沛，适合做一些之前想做但没精力做的事——运动、旅行、学新技能，趁状态好多给自己充充电。',
+      '你的健康运势很好，这是你平时注意保养的回报。继续保持好习惯，身体会越来越给力的。',
+      '最近睡眠和胃口都不错吧？这说明你的身心状态处于一个很棒的平衡点。珍惜这种感觉，多做让自己舒服的事。',
+      '你的身体正处于好状态，适合开始一个新的健康习惯——晨跑、瑜伽、早睡，坚持下去你会发现自己越来越年轻有活力。',
+      '身体好就是最大的福气！趁现在状态好，好好享受生活吧。和朋友出去走走、吃顿好的、晒晒太阳，你值得开心每一天。'
+    ],
+    lucky:['近期适合：开始一项新运动、约朋友去户外走走','穿搭建议：穿舒服的运动风衣服出门，享受阳光和微风','小确幸：给自己做一顿营养丰富的美食，好好犒劳身体'],
+    closing:['身体棒棒的，什么都不用担心！','健康是你最大的财富，你保护得很好。','继续善待自己，好状态会一直陪着你。']
+  },
+  study:{
+    bless:[
+      '学业运势大好！最近脑子特别清醒，学什么都事半功倍。趁这个状态，冲一冲那些之前觉得难的科目，你会发现其实没那么难。',
+      '你最近的学习效率超高，理解力和记忆力都在线。如果有考试或者重要的学习任务，就在这段时间集中攻克，结果一定不会让你失望。',
+      '你的努力正在被看见。不管是老师、同学还是家人，都能感受到你的进步。继续保持这种学习热情，前方一定有属于你的好成绩。',
+      '最近的学习状态特别好，适合挑战一些更高难度的内容。别给自己设限，你的潜力比你以为的大得多。',
+      '你知道吗？聪明的人不是天生的，而是像你这样一点一滴积累出来的。现在的好运势就是你过去努力的回报。'
+    ],
+    lucky:['近期适合：定一个新的学习小目标、整理知识体系做个脑图','穿搭建议：穿让自己心情愉悦的衣服去学习，好心情 = 好效率','小确幸：完成一个学习目标后，奖励自己一个小礼物'],
+    closing:['你比自己想的更优秀，成绩会证明一切！','好运加持 + 你的努力 = 无敌组合！','学业之路越走越宽，未来可期！']
+  },
+  general:{
+    bless:[
+      '综合运势很好！最近做什么都比较顺，生活中也会有不少小确幸出现。好好享受这段美好的时光吧。',
+      '你的运气最近真的不错，可能自己还没意识到——但仔细想想，是不是最近遇到的好事比烦心事多？这就是好运的信号。',
+      '一切都在向好的方向发展，你需要做的就是保持好心态，继续做自己。运气会眷顾那些积极生活的人，而你正是这样的人。',
+      '你最近整个人的状态都很好，周围的人也能感受到你的正能量。这种好磁场会吸引更多好事来到你身边。',
+      '好运正在全方位包围你。不管是工作、感情、还是日常生活，最近都会有让你惊喜的事情发生。张开双臂迎接吧！'
+    ],
+    lucky:['近期适合：做一件一直想做的事、约重要的人见个面','穿搭建议：穿让自己开心的衣服，把好心情传递给身边的人','小确幸：去一个没去过的地方走走，新鲜感会让好运加倍'],
+    closing:['好运常伴，你值得一切美好的事。','继续做那个发光的自己，好事会接连不断。','享受当下的美好吧，这是你应得的。']
+  }
+};
+var LAMP_HINTS = {
+  1:{career:'事业大吉！来点一盏灯，把好运锁住',love:'感情大吉！点盏灯许个心愿吧',wealth:'财运大旺！快来点灯，让好运持续',health:'身体倍儿棒！点盏灯为健康祝福',study:'学业大吉！点灯许个好愿望',general:'运势大吉！来点一盏灯，让好运长长久久'},
+  2:{career:'事业运不错！点盏灯加持一下',love:'感情顺遂！点盏灯让幸福延续',wealth:'财运不错哦！点灯让钱包越来越鼓',health:'健康运很好！点盏灯保持好状态',study:'学业顺利！点灯助力更上一层楼',general:'运势不错！点盏灯让好运继续'},
+  3:{career:'小有好运！点盏灯让事业更上一层',love:'感情小吉！点灯让甜蜜升温',wealth:'财运小吉！点盏灯催旺好运',health:'健康小吉！点灯保佑身体棒棒',study:'学业小有收获！点灯让好运加码',general:'运势小吉！点盏灯把好运放大'}
+};
+
+var lampState = {type:'lotus', glowRaf:null};
+
+function initLamp(){
+  lampState = {type:'lotus', glowRaf:null};
+  document.querySelectorAll('#stage-lamp .lamp-step').forEach(function(s){s.classList.remove('active')});
+  document.getElementById('lampStep1').classList.add('active');
+  document.querySelectorAll('.lamp-option').forEach(function(o){o.classList.remove('selected')});
+  document.querySelector('.lamp-option[data-lamp="lotus"]').classList.add('selected');
+  document.getElementById('lampWishInput').value = '';
+  document.getElementById('lampWishError').style.display = 'none';
+  document.getElementById('lampFlame').classList.remove('lit');
+  document.getElementById('lampGlow').classList.remove('on');
+}
+function selectLamp(el, type){
+  document.querySelectorAll('.lamp-option').forEach(function(o){o.classList.remove('selected')});
+  el.classList.add('selected');
+  lampState.type = type;
+  sfxClick();
+}
+function goLampStep(n){
+  document.querySelectorAll('#stage-lamp .lamp-step').forEach(function(s){s.classList.remove('active')});
+  var id = n===2?'lampStep2':n===3?'lampStep3':'lampStepResult';
+  document.getElementById(id).classList.add('active');
+}
+function submitLampWish(){
+  var w = document.getElementById('lampWishInput').value.trim();
+  if(!w){ document.getElementById('lampWishError').style.display = 'block'; return; }
+  document.getElementById('lampWishError').style.display = 'none';
+  sfxTransition();
+  goLampStep(3);
+  var lampNames = {lotus:'莲花灯',sky:'天灯',candle:'长明灯'};
+  document.getElementById('lampLightTitle').textContent = lampNames[lampState.type]+' 已 点 亮';
+  setTimeout(function(){
+    document.getElementById('lampFlame').classList.add('lit');
+  }, 400);
+  setTimeout(function(){
+    document.getElementById('lampGlow').classList.add('on');
+  }, 1000);
+  setTimeout(function(){
+    state.lampDone = true;
+    buildLampResult(w);
+    goLampStep(4);
+  }, 3000);
+}
+function buildLampResult(wish){
+  var cat = state.category;
+  var deity = DEITY[cat]||{};
+  var pool = BLESSING_POOL[cat];
+  if(!pool) return;
+  var bless = pool.bless[Math.floor(Math.random()*pool.bless.length)];
+  var lucky = pool.lucky.join(' · ');
+  var closing = pool.closing[Math.floor(Math.random()*pool.closing.length)];
+  var h = '';
+  if(deity.name){
+    h += '<div class="deity-speech"><div class="deity-speech-head">'
+      +'<div class="deity-speech-icon dc-avatar" style="background-image:url('+DEITY_IMG[cat]+');background-size:cover;background-position:center"></div>'
+      +'<div><div class="deity-speech-name">'+deity.name+'</div>'
+      +'<div class="deity-speech-tag">为你送上祝福</div></div></div>'
+      +'<p>灯火已亮，好运加持！听我跟你说——</p></div>';
+  }
+  h += '<div class="wish-echo">「'+esc(wish)+'」</div>';
+  h += '<div class="blessing-block"><div class="blessing-title">好 运 解 读</div><div class="blessing-content">'+bless+'</div></div>';
+  h += '<div class="blessing-block"><div class="blessing-title">锦 上 添 花</div><div class="blessing-content">'+lucky+'</div></div>';
+  if(deity.name){
+    h += '<div class="deity-speech" style="margin-top:20px"><div class="deity-speech-head">'
+      +'<div class="deity-speech-icon dc-avatar" style="background-image:url('+DEITY_IMG[cat]+');background-size:cover;background-position:center"></div>'
+      +'<div><div class="deity-speech-name">'+deity.name+'</div>'
+      +'<div class="deity-speech-tag">寄语</div></div></div>'
+      +'<p>'+closing+'</p></div>';
+  }
+  document.getElementById('lampResultContent').innerHTML = h;
 }
 
 function restart(){
