@@ -176,7 +176,7 @@ body{
   transform:translateY(-2px);letter-spacing:0.5em;
 }
 .btn:active{transform:scale(0.97)}
-.btn-small{padding:14px 40px;font-size:clamp(16px,2.5vw,18px);letter-spacing:0.3em}
+.btn-small{padding:14px 40px;font-size:clamp(16px,2.5vw,18px);letter-spacing:0.3em;white-space:nowrap}
 .btn-disabled{opacity:0.15;pointer-events:none;cursor:default}
 .btn-enabled{opacity:1;pointer-events:auto;cursor:pointer}
 
@@ -2138,8 +2138,8 @@ function goToStage(name){
   if(name==='reveal'){ buildReveal(); sfxReveal(); }
   if(name==='result') buildResult();
   if(name==='history') buildHistoryList();
-  if(name==='incense') initIncense();
-  if(name==='lamp') initLamp();
+  if(name==='incense'){ if(state.incenseDone){ goToStage('result'); return; } initIncense(); }
+  if(name==='lamp'){ if(state.lampDone){ goToStage('result'); return; } initLamp(); }
   if(name==='affinity') buildAffinityPage();
 }
 function updateHistoryBtns(){
