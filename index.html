@@ -333,7 +333,7 @@ body{
 .cast-result{
   min-height:36px;font-size:clamp(16px,2.5vw,20px);color:var(--red2);
   letter-spacing:0.2em;margin-bottom:20px;
-  opacity:0;transition:opacity 0.6s;text-shadow:0 0 20px rgba(232,80,80,0.3);
+  opacity:0;transition:opacity 0.3s;text-shadow:0 0 20px rgba(232,80,80,0.3);
 }
 .cast-result.show{opacity:1}
 .cast-btns{display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap}
@@ -878,7 +878,7 @@ body{
       <button class="btn btn-small" id="btnCast" onclick="castCoins()">摇 卦</button>
       <button class="btn btn-small btn-ghost" id="btnQuickCast" onclick="quickCast()">一键摇卦</button>
     </div>
-    <button class="btn btn-small btn-ghost" id="btnAbandon" style="margin-top:20px;border-color:var(--ink2);color:var(--ink2);font-size:14px;display:none" onclick="showAbandonModal()">放弃摇爻</button>
+    <button class="btn btn-small btn-ghost" id="btnAbandon" style="display:none;margin-top:12px;padding:8px 24px;font-size:13px;letter-spacing:0.15em;border-color:var(--ink2);color:var(--ink2);opacity:0.6" onclick="showAbandonModal()">放弃摇爻</button>
   </div>
 
   <!-- Stage 4: Reveal -->
@@ -1873,8 +1873,8 @@ function castCoins(){
   sfxCoinToss();
   for(var i=0;i<3;i++){
     var t = document.getElementById('token'+i);
-    t.style.animationDelay = (i*100)+'ms';
-    t.style.animation = animName+' 1.2s cubic-bezier(0.22,1,0.36,1) forwards';
+    t.style.animationDelay = (i*40)+'ms';
+    t.style.animation = animName+' 0.6s cubic-bezier(0.22,1,0.36,1) forwards';
   }
   setTimeout(function(){
     sfxCoinLand();
@@ -1894,19 +1894,20 @@ function castCoins(){
     resultEl.textContent = heads+'阳'+(3-heads)+'阴 · '+typeStr;
     resultEl.classList.add('show');
     addYaoLine(result, state.round);
-    document.getElementById('btnAbandon').style.display = state.round < 6 ? '' : 'none';
+    document.getElementById('btnAbandon').style.display = state.round < 6 ? 'inline-block' : 'none';
     if(state.round < 6){
       document.getElementById('castRound').textContent = ROUND_NAMES[state.round];
       state.casting = false;
     } else {
       showCastComplete();
     }
-  }, 1500);
+  }, 700);
 }
 
 function showCastComplete(){
   document.getElementById('btnCast').style.display = 'none';
   document.getElementById('btnQuickCast').style.display = 'none';
+  document.getElementById('btnAbandon').style.display = 'none';
   setTimeout(function(){
     document.getElementById('castRound').textContent = '摇 卦 完 成';
     var btn = document.createElement('button');
@@ -1915,7 +1916,7 @@ function showCastComplete(){
     btn.onclick = function(){ goToStage('reveal'); };
     document.querySelector('.cast-btns').appendChild(btn);
     state.casting = false;
-  }, 500);
+  }, 300);
 }
 
 function quickCast(){
@@ -1940,8 +1941,8 @@ function quickCast(){
     sfxCoinToss();
     for(var i=0;i<3;i++){
       var t = document.getElementById('token'+i);
-      t.style.animationDelay = (i*60)+'ms';
-      t.style.animation = animName+' 0.6s cubic-bezier(0.22,1,0.36,1) forwards';
+      t.style.animationDelay = (i*30)+'ms';
+      t.style.animation = animName+' 0.45s cubic-bezier(0.22,1,0.36,1) forwards';
     }
     setTimeout(function(){
       sfxCoinLand();
@@ -1962,8 +1963,8 @@ function quickCast(){
       resultEl.classList.add('show');
       addYaoLine(result, step + 1);
       step++;
-      setTimeout(showNext, 350);
-    }, 700);
+      setTimeout(showNext, 200);
+    }, 500);
   }
   showNext();
 }
