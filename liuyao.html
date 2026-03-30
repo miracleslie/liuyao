@@ -268,14 +268,14 @@ body{
 /* ---- Token container ---- */
 .tokens-area{
   display:flex;gap:clamp(22px,5vw,40px);align-items:center;justify-content:center;
-  height:150px;margin-bottom:4px;
+  height:120px;margin-bottom:4px;
 }
 .token{
-  position:relative;display:flex;align-items:center;justify-content:center;
+  position:relative;display:flex;align-items:flex-start;justify-content:center;
   transition:filter 0.5s,opacity 0.5s,transform 0.5s;
-  height:110px;overflow:hidden;
+  height:95px;overflow:hidden;
 }
-.token img{display:block;height:120px;width:auto;filter:drop-shadow(0 3px 12px rgba(0,0,0,0.45));object-fit:contain;}
+.token img{display:block;height:130px;width:auto;filter:drop-shadow(0 3px 12px rgba(0,0,0,0.45));object-fit:contain;}
 .token.yang-result{
   filter:drop-shadow(0 0 22px rgba(212,168,71,0.9)) brightness(1.2);
   transform:scale(1.12) translateY(-5px)!important;
@@ -285,8 +285,7 @@ body{
   transform:scale(0.8) translateY(6px)!important;
 }
 .obj-label{
-  text-align:center;font-size:clamp(11px,1.6vw,14px);color:var(--ink2);
-  letter-spacing:0.2em;margin-bottom:14px;opacity:0.55;
+  display:none;
 }
 @keyframes castCareer{
   0%{transform:translateX(60px) rotate(25deg);opacity:0}
@@ -816,9 +815,9 @@ body{
   .question-area textarea{font-size:14px}
   .cast-title{font-size:clamp(18px,4.5vw,24px)}
   .cast-round{font-size:clamp(12px,2.5vw,14px)}
-  .tokens-area{gap:20px;height:130px}
-  .token{height:84px}
-  .token img{height:90px}
+  .tokens-area{gap:20px;height:100px}
+  .token{height:72px}
+  .token img{height:100px}
   .cast-result{font-size:clamp(12px,2.8vw,15px)}
   .gua-display{gap:28px}
   .gua-box .gua-name{font-size:clamp(30px,7vw,48px)}
@@ -899,9 +898,9 @@ body{
   .inc-sticks-row{gap:20px;height:150px}
   .inc-stick{height:100px}
   .inc-burner{width:86px}
-  .tokens-area{gap:16px;height:110px}
-  .token{height:66px}
-  .token img{height:70px}
+  .tokens-area{gap:16px;height:85px}
+  .token{height:58px}
+  .token img{height:82px}
   .gua-display{gap:20px}
   .lamp-select{gap:clamp(8px,2vw,16px)}
   .lamp-option{padding:10px 10px;min-width:70px}
