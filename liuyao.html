@@ -163,6 +163,7 @@ body{
   letter-spacing:0.4em;border:1px solid var(--gold2);
   cursor:pointer;font-family:inherit;overflow:hidden;
   transition:all 0.4s cubic-bezier(0.16,1,0.3,1);
+  box-sizing:border-box;max-width:92%;
 }
 .btn::before{
   content:'';position:absolute;inset:0;
@@ -876,6 +877,7 @@ body{
 @media(max-width:375px){
   .stage{padding:16px 12px 32px}
   .welcome-cta{padding:14px 28px!important;letter-spacing:0.2em!important;font-size:15px!important}
+  .btn-affinity-entry{padding:14px 28px;letter-spacing:0.2em;font-size:15px}
   .btn{padding:12px 24px;letter-spacing:0.2em}
   .btn-small{padding:10px 18px;letter-spacing:0.15em;font-size:13px}
   .btn-incense{padding:10px 22px;letter-spacing:0.15em;font-size:14px}
@@ -901,6 +903,170 @@ body{
   .token{height:66px}
   .token img{height:70px}
   .gua-display{gap:20px}
+  .lamp-select{gap:clamp(8px,2vw,16px)}
+  .lamp-option{padding:10px 10px;min-width:70px}
+  .lamp-option .lamp-icon{font-size:28px}
+  .lamp-option .lamp-name{font-size:10px}
+  .lamp-display{width:100px;height:140px}
+  .blessing-block{padding:14px 10px}
+}
+
+/* ====================== DEITY AFFINITY SYSTEM ====================== */
+.btn-affinity-entry{
+  margin-top:18px;display:inline-block;box-sizing:border-box;max-width:90%;
+  padding:20px 64px;font-size:clamp(20px,3.5vw,26px);letter-spacing:0.5em;
+  background:linear-gradient(135deg,rgba(212,168,71,0.08),rgba(212,168,71,0.18));
+  border:1.5px solid var(--gold);color:var(--gold);border-radius:8px;
+  font-family:inherit;cursor:pointer;transition:all 0.3s;
+}
+.btn-affinity-entry:hover{background:rgba(212,168,71,0.22);box-shadow:0 0 16px rgba(212,168,71,0.2)}
+
+.aff-border-1 .dc-avatar{box-shadow:none}
+.aff-border-2 .dc-avatar{box-shadow:0 0 0 2px rgba(180,170,150,0.6)}
+.aff-border-3 .dc-avatar{box-shadow:0 0 0 2.5px #b87333}
+.aff-border-4 .dc-avatar{box-shadow:0 0 0 2.5px var(--gold)}
+.aff-border-5 .dc-avatar{box-shadow:0 0 0 2.5px var(--gold);animation:affGlow 2s ease-in-out infinite}
+@keyframes affGlow{0%,100%{box-shadow:0 0 0 2.5px var(--gold),0 0 8px rgba(212,168,71,0.3)}50%{box-shadow:0 0 0 2.5px var(--gold),0 0 16px rgba(212,168,71,0.6)}}
+
+.aff-lv-badge{
+  display:block;font-size:0.6em;color:var(--gold);opacity:0.7;margin-top:2px;letter-spacing:0.05em;
+}
+
+.affinity-page{
+  padding:30px 20px;max-width:680px;margin:0 auto;
+}
+.aff-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;
+}
+.aff-title{
+  text-align:center;font-size:1.5em;letter-spacing:0.4em;color:var(--ink);margin-bottom:4px;
+}
+.aff-subtitle{
+  text-align:center;font-size:0.85em;color:var(--gold);opacity:0.5;margin-bottom:24px;letter-spacing:0.15em;
+}
+.aff-card{
+  background:linear-gradient(145deg,rgba(40,36,28,0.85),rgba(30,27,22,0.75));
+  border:1px solid rgba(212,168,71,0.15);border-radius:12px;
+  padding:16px;display:flex;align-items:center;gap:14px;
+  transition:transform 0.2s,box-shadow 0.3s;cursor:default;
+  box-shadow:0 2px 12px rgba(0,0,0,0.3),inset 0 1px 0 rgba(212,168,71,0.06);
+}
+.aff-card:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,0.4),inset 0 1px 0 rgba(212,168,71,0.12)}
+.aff-avatar{
+  width:56px;height:56px;border-radius:50%;background-size:cover;background-position:center;
+  flex-shrink:0;border:2px solid transparent;
+}
+.aff-avatar.alv1{border-color:rgba(150,140,120,0.3)}
+.aff-avatar.alv2{border-color:rgba(180,170,150,0.7)}
+.aff-avatar.alv3{border-color:#b87333}
+.aff-avatar.alv4{border-color:var(--gold)}
+.aff-avatar.alv5{border-color:var(--gold);animation:affGlow 2s ease-in-out infinite}
+.aff-info{flex:1;min-width:0}
+.aff-name{font-size:1.05em;color:var(--ink);font-weight:bold;margin-bottom:3px}
+.aff-name span{font-weight:normal;font-size:0.78em;color:var(--gold);margin-left:6px}
+.aff-stats{font-size:0.8em;color:var(--ink2);margin-bottom:6px}
+.aff-bar-wrap{
+  height:8px;background:rgba(212,168,71,0.1);border-radius:4px;overflow:hidden;
+}
+.aff-bar{
+  height:100%;border-radius:4px;transition:width 0.6s ease;
+  background:linear-gradient(90deg,rgba(212,168,71,0.5),var(--gold));
+}
+.aff-greeting{
+  font-size:0.82em;color:var(--gold);opacity:0.55;margin-top:6px;font-style:italic;
+}
+.aff-back{
+  display:block;margin:20px auto 0;padding:12px 36px;font-size:0.95em;
+  border:1px solid var(--ink2);color:var(--ink2);background:transparent;
+  border-radius:6px;cursor:pointer;font-family:inherit;letter-spacing:0.15em;
+}
+.aff-decay-hint{
+  font-size:0.72em;color:var(--red);opacity:0.7;margin-top:3px;
+}
+
+@media(max-width:600px){
+  .aff-grid{grid-template-columns:1fr}
+  .affinity-page{padding:20px 14px;max-width:420px}
+}
+@media(max-width:480px){
+  .affinity-page{padding:20px 12px}
+  .aff-title{font-size:1.25em;letter-spacing:0.3em}
+  .aff-card{padding:12px;gap:10px}
+  .aff-avatar{width:48px;height:48px}
+  .aff-name{font-size:0.9em}
+  .btn-affinity-entry{padding:16px 36px;letter-spacing:0.3em;font-size:clamp(16px,4vw,20px)}
+}
+@media(max-width:375px){
+  .aff-avatar{width:42px;height:42px}
+  .aff-card{padding:10px;gap:8px}
+  .aff-name{font-size:0.85em}
+  .aff-stats{font-size:0.72em}
+}
+
+/* ====================== AFFINITY LEVEL-UP CEREMONY ====================== */
+.aff-ceremony{
+  position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  background:rgba(20,18,14,0);opacity:0;pointer-events:none;
+  transition:opacity 0.6s,background 0.6s;
+}
+.aff-ceremony.show{opacity:1;pointer-events:auto;background:rgba(20,18,14,0.85)}
+.aff-ceremony-avatar{
+  width:96px;height:96px;border-radius:50%;background-size:cover;background-position:center;
+  border:3px solid var(--gold);margin-bottom:20px;
+  transform:scale(0.3);opacity:0;transition:transform 0.7s cubic-bezier(.17,.67,.28,1.2),opacity 0.5s;
+}
+.aff-ceremony.show .aff-ceremony-avatar{transform:scale(1);opacity:1}
+.aff-ceremony-ring{
+  position:absolute;width:140px;height:140px;border-radius:50%;
+  border:2px solid rgba(212,168,71,0.3);
+  animation:ceremonyRing 1.5s ease-out forwards;opacity:0;
+}
+@keyframes ceremonyRing{0%{transform:scale(0.5);opacity:0}30%{opacity:0.8}100%{transform:scale(2.2);opacity:0}}
+.aff-ceremony-text{
+  text-align:center;opacity:0;transform:translateY(20px);
+  transition:opacity 0.6s 0.4s,transform 0.6s 0.4s;
+}
+.aff-ceremony.show .aff-ceremony-text{opacity:1;transform:translateY(0)}
+.aff-ceremony-line1{font-size:1.15em;color:var(--gold);letter-spacing:0.2em;margin-bottom:8px}
+.aff-ceremony-line2{font-size:0.85em;color:rgba(245,237,220,0.7);letter-spacing:0.1em}
+.aff-ceremony-guide{
+  margin-top:24px;opacity:0;transform:translateY(15px);
+  transition:opacity 0.5s 0.8s,transform 0.5s 0.8s;
+  text-align:center;
+}
+.aff-ceremony.show .aff-ceremony-guide{opacity:1;transform:translateY(0)}
+.aff-ceremony-guide p{font-size:0.82em;color:rgba(245,237,220,0.6);margin-bottom:14px;line-height:1.6}
+.aff-ceremony-guide .btn-guide{
+  padding:10px 28px;font-size:0.88em;letter-spacing:0.15em;
+  border:1px solid var(--gold);color:var(--gold);background:transparent;
+  border-radius:6px;cursor:pointer;font-family:inherit;margin:0 6px;
+  transition:background 0.3s;
+}
+.aff-ceremony-guide .btn-guide:hover{background:rgba(212,168,71,0.15)}
+.aff-ceremony-guide .btn-guide-ghost{border-color:rgba(245,237,220,0.3);color:rgba(245,237,220,0.5)}
+
+@media(max-width:480px){
+  .aff-ceremony-avatar{width:80px;height:80px}
+  .aff-ceremony-ring{width:120px;height:120px}
+  .aff-ceremony-line1{font-size:1em}
+  .aff-ceremony-guide p{font-size:0.75em;padding:0 12px}
+  .aff-ceremony-guide .btn-guide{padding:9px 22px;font-size:0.82em}
+  .aff-greeting{font-size:0.75em}
+  .aff-back{padding:10px 28px;font-size:0.88em}
+}
+@media(max-width:375px){
+  .aff-ceremony-avatar{width:68px;height:68px}
+  .aff-ceremony-ring{width:100px;height:100px}
+  .aff-ceremony-line1{font-size:0.9em;letter-spacing:0.15em}
+  .aff-ceremony-line2{font-size:0.78em}
+  .aff-ceremony-guide p{font-size:0.7em;padding:0 8px}
+  .aff-ceremony-guide .btn-guide{padding:8px 18px;font-size:0.78em}
+  .aff-title{font-size:1.1em;letter-spacing:0.25em}
+  .aff-subtitle{font-size:0.75em}
+  .aff-greeting{font-size:0.7em}
+  .aff-back{padding:9px 24px;font-size:0.82em}
+  .btn-affinity-entry{padding:14px 28px;letter-spacing:0.2em;font-size:15px}
 }
 </style>
 </head>
@@ -928,10 +1094,11 @@ body{
     </div>
     <div class="desc">
       工作不顺？感情纠结？财运不佳？<br>
-      选一个方向，摇一卦<br><br>
+      选一个方向，摇一爻<br><br>
       <span style="color:var(--gold);letter-spacing:0.2em">答案马上揭晓</span>
     </div>
-    <button class="btn welcome-cta" onclick="goToStage('category')">算 一 卦</button>
+    <button class="btn welcome-cta" onclick="goToStage('category')">摇 一 爻</button>
+    <button class="btn-affinity-entry" id="btnAffinityEntry" style="display:none" onclick="goToStage('affinity')">仙 缘 录</button>
     <button class="btn btn-small" id="btnWelcomeHistory" style="margin-top:12px;border-color:var(--ink2);color:var(--ink2);display:none" onclick="goToStage('history')">历史记录</button>
   </div>
 
@@ -1127,6 +1294,17 @@ body{
     </div>
   </div>
 
+  <!-- Stage: Affinity -->
+  <div id="stage-affinity" class="stage">
+    <div class="affinity-page">
+      <div class="aff-title">仙 缘 录</div>
+      <div class="aff-subtitle">你与诸仙的缘分</div>
+      <div class="divider" style="margin-bottom:20px"></div>
+      <div id="affinityList"></div>
+      <button class="aff-back" onclick="goToStage(_affReturnStage||'welcome')">返 回</button>
+    </div>
+  </div>
+
   <!-- Abandon Modal -->
   <div class="modal-overlay" id="abandonModal" style="display:none">
     <div class="modal-box">
@@ -1141,6 +1319,17 @@ body{
 
 <!-- Sound Toggle -->
 <button class="sound-toggle" id="soundToggle" onclick="toggleSound()" title="音效开关">🔊</button>
+
+<!-- Affinity Level-Up Ceremony -->
+<div class="aff-ceremony" id="affCeremony">
+  <div class="aff-ceremony-ring" id="affRing"></div>
+  <div class="aff-ceremony-avatar" id="affCeremonyAvatar"></div>
+  <div class="aff-ceremony-text">
+    <div class="aff-ceremony-line1" id="affCeremonyLine1"></div>
+    <div class="aff-ceremony-line2" id="affCeremonyLine2"></div>
+  </div>
+  <div class="aff-ceremony-guide" id="affCeremonyGuide" style="display:none"></div>
+</div>
 
 <script>
 // ================= TEXT POOLS (inline) =================
@@ -1932,13 +2121,18 @@ function tossThreeCoins(){
 }
 
 // ================= UI LOGIC =================
+var _affReturnStage='welcome';
 function goToStage(name){
+  if(name==='affinity'){
+    var cur=document.querySelector('.stage.active');
+    if(cur&&cur.id) _affReturnStage=cur.id.replace('stage-','');
+  }
   document.querySelectorAll('.stage').forEach(s=>s.classList.remove('active'));
   const el = document.getElementById('stage-'+name);
   el.classList.add('active');
   document.getElementById('app').scrollTop = 0;
   sfxTransition();
-  if(name==='welcome') updateHistoryBtns();
+  if(name==='welcome'){ updateHistoryBtns(); updateWelcomeAffinityBorders(); }
   if(name==='category') initCategory();
   if(name==='casting') initCasting();
   if(name==='reveal'){ buildReveal(); sfxReveal(); }
@@ -1946,6 +2140,7 @@ function goToStage(name){
   if(name==='history') buildHistoryList();
   if(name==='incense') initIncense();
   if(name==='lamp') initLamp();
+  if(name==='affinity') buildAffinityPage();
 }
 function updateHistoryBtns(){
   var has = loadHistory().length > 0;
@@ -2325,7 +2520,7 @@ function buildResult(){
   var dp = document.getElementById('resultDetail');
   dp.classList.remove('active'); dp.innerHTML = ''; dp.dataset.built = '';
 
-  if(!state.saved){ state.saved = true; saveToHistory(); }
+  if(!state.saved){ state.saved = true; saveToHistory(); state.affinityResult = addAffinityCast(state.category); handleAffinityResult(state.affinityResult); }
 
   var incEntry = document.getElementById('incenseEntry');
   var lampEntry = document.getElementById('lampEntry');
@@ -2357,17 +2552,254 @@ function genBriefReading(cat, fortune, questionRaw, rawReading){
   return opener + tmpl.replace(/\{CORE\}/g, rawReading);
 }
 
+var VOICE_POOLS={
+career:{
+1:{
+t2:[{text:'此卦甚佳。近期事业运势极好，天时地利皆在，宜把握时机，积极进取。',keywords:['升职','机会','项目']},{text:'此卦示事业大顺。当前格局对你十分有利，宜果断行事，可放手施为。',keywords:['工作','发展','前途']}],
+t3:[{text:'此卦尚可。事业运势稳中有升，虽非大好之势，但前景可期，持之以恒可见回报。',keywords:['稳定','前景','坚持']},{text:'此卦示小有所成。事业方面正在向好的方向发展，不急不躁，静待花开。',keywords:['努力','方向']}],
+t4:[{text:'此卦平平。事业运势无大起大落，宜守不宜攻，静待时机。',keywords:['等待','时机','稳定']},{text:'此卦示事业暂处平稳期。不急不躁，做好手头之事，时机到了自然会有转机。',keywords:['耐心','沉淀']}],
+t5:[{text:'此卦稍有不利。事业方面或有小阻碍，需谨慎行事，避免冒进。',keywords:['困难','阻碍','不顺']},{text:'此卦示事业有波折。近期宜低调行事，做好准备，等待更好的时机。',keywords:['低调','准备']}],
+t6:[{text:'此卦不利。事业方面恐有较大阻碍，当以退为进，韬光养晦，蓄势待发。',keywords:['危机','挫折']},{text:'此卦示事业运势低迷。此时不宜强求，退一步海阔天空。',keywords:['困境','退让']}]
+},
+2:{
+t2:[{text:'你的事业运势很好啊。最近有好机会要来了，别犹豫，该争取就大胆争取。',keywords:['升职','机会','争取']},{text:'不错不错，事业这块儿运势挺旺的。抓住现在的势头，好好发挥就行。',keywords:['项目','发展']}],
+t3:[{text:'事业运势还行，稳中有升。虽然不是大红大紫那种，但路走对了，继续保持。',keywords:['稳定','方向']},{text:'嗯，你的事业在慢慢变好。别着急，好事不怕来得晚，你的付出是有回报的。',keywords:['坚持','回报']}],
+t4:[{text:'事业上暂时没什么大动静，别急。有时候平稳也是一种好运，稳住就行。',keywords:['等待','平稳']},{text:'目前事业运比较平，不好不坏。别焦虑，该做的做好，时机会来的。',keywords:['耐心','准备']}],
+t5:[{text:'事业上可能会遇到一些小麻烦，提前有个准备就好，不用太紧张。',keywords:['困难','麻烦']},{text:'最近事业上可能有点不顺，但也不是大问题。谨慎一点，别冲动决策就行。',keywords:['谨慎','阻碍']}],
+t6:[{text:'事业上最近不太顺，得做好心理准备。但别慌，低谷是暂时的，稳住心态最重要。',keywords:['低谷','困境']},{text:'说实话，事业运势不太好。这段时间别做大的决定，先稳住，等风头过了再说。',keywords:['危机','等待']}]
+},
+3:{
+t2:[{text:'跟你直说——最近事业运非常好！有什么想法就放手干，这种顺风期可不是天天有。',keywords:['升职','机会']},{text:'你这事业运我看了都羡慕。机会就在眼前，别犹豫了，冲就完事了！',keywords:['项目','争取']}],
+t3:[{text:'事业还不错嘛，在往上走呢。虽然不是一飞冲天那种，但稳扎稳打比什么都强。',keywords:['发展','稳定']},{text:'你最近事业上有进步啊，看得出来在努力。继续保持这个节奏，别松劲。',keywords:['努力','坚持']}],
+t4:[{text:'事业暂时没啥大动静，但别慌。有时候蛰伏也是一种策略，你心里有数就行。',keywords:['等待','沉淀']},{text:'现在事业比较平，不上不下的。也正常，谁能天天开挂？做好手头的，等着就行。',keywords:['平稳','耐心']}],
+t5:[{text:'最近事业可能有点不太顺，先别急着做大动作。有些坎是要经历的，过去了就好。',keywords:['困难','波折']},{text:'说实话，最近事业运有点差。但你底子不差，挺一挺就过去了，别自己吓自己。',keywords:['低谷','坚持']}],
+t6:[{text:'事业上现在确实有点难，我不骗你。但越是这种时候越要稳，别乱了阵脚。',keywords:['危机','困境']},{text:'不瞒你说，这段时间事业上要吃点苦头。但你撑过这一关，后面会好的。先保存实力。',keywords:['挫折','蓄势']}]
+},
+4:{
+t2:[{text:'兄弟！你这卦我看了都高兴。之前吃的苦没白费，现在风完全在你这边，大胆冲！',keywords:['升职','机会']},{text:'好家伙，事业运这么旺。有什么想干的别犹豫了，就现在！错过这波你得后悔。',keywords:['项目','争取']}],
+t3:[{text:'还行嘛，事业在往上走。方向是对的，保持你的节奏就行，别被别人带偏。',keywords:['发展','方向']},{text:'事业不错呀，稳步上升比一夜暴富靠谱多了。继续干！',keywords:['稳定','坚持']}],
+t4:[{text:'事业暂时没啥水花，但我跟你说，这不是坏事。有些人走得慢但走得远，你就是这种。',keywords:['平稳','等待']},{text:'现在事业平平的嘛，我知道你急，但急也没用。该来的会来，你就把眼前的做好。',keywords:['耐心','沉淀']}],
+t5:[{text:'最近事业有点不顺是吧？我也看出来了。别自己扛着，该求助就求助，没什么丢人的。',keywords:['困难','低谷']},{text:'事业上遇到坎了，别慌。你又不是第一次遇到困难了，以前不也都过来了？',keywords:['波折','坚持']}],
+t6:[{text:'不瞒你，事业运现在确实差。但我了解你，不是轻易认输的人。先扛住，我等你翻盘。',keywords:['危机','困境']},{text:'事业上吃大亏了是吧？越是这时候越不能乱。稳住，然后想好下一步怎么走。',keywords:['挫折','冷静']}]
+},
+5:{
+t2:[{text:'看到你事业终于起势了，比我自己高兴。这一路走来不容易，你值得这个结果。继续走，路是对的。',keywords:['升职','成功']},{text:'你的努力终于到了开花结果的时候。放心大胆地去干吧，遇到难处别扛着，来找我就行。',keywords:['机会','争取']}],
+t3:[{text:'事业在稳步变好，我一直看着呢。你不是那种需要一飞冲天的人，稳扎稳打更适合你，放心。',keywords:['发展','稳定']},{text:'比上次好多了。你可能自己感觉不明显，但我看得到进步。继续这样，别给自己太大压力。',keywords:['进步','坚持']}],
+t4:[{text:'事业暂时平了点，但我了解你，不是没能力，是时候没到。你稳得住的，我不担心。',keywords:['等待','沉淀']},{text:'现在是蓄力的时候。我知道你想快一点，但有些东西急不来。机会来的时候你一定接得住。',keywords:['准备','耐心']}],
+t5:[{text:'最近事业有点难是吧？我知道。别一个人硬撑，适当停下来缓缓不丢人。你已经很努力了。',keywords:['困难','低谷']},{text:'事业上遇到波折了，别把自己逼太紧。低谷的时候照顾好自己比什么都重要。会好的，我保证。',keywords:['波折','休息']}],
+t6:[{text:'事业上的苦你不用跟我装没事，我都知道。这不是终点，是弯路。咬牙走过去，前面有光。',keywords:['危机','困境']},{text:'现在确实是最难的时候，但你还有我。别放弃，你曾经跨过的坎比这大多了。一步一步来。',keywords:['挫折','坚持']}]
+}
+},
+wealth:{
+1:{
+t2:[{text:'此卦大吉。财运极佳，近期有进财之象，宜积极把握，可适当扩大投入。',keywords:['赚钱','收入','投资']},{text:'此卦示财运亨通。当前格局利于求财，天时在你这边。',keywords:['生意','进账']}],
+t3:[{text:'此卦示财运尚可。进财之路虽非大开，但稳中有进，不必忧虑。',keywords:['收入','理财']},{text:'此卦表明财运正在好转，虽非暴富之相，但小有收获可期。',keywords:['攒钱','节省']}],
+t4:[{text:'此卦财运平平。近期不宜大额投资，守住现有财务为上策。',keywords:['理财','存款']},{text:'此卦示财运无大起落。宜量入为出，稳守为佳。',keywords:['节省','储蓄']}],
+t5:[{text:'此卦示财运有小阻。近期需谨慎用度，避免不必要的大额支出。',keywords:['亏损','花钱']},{text:'此卦表明近期财运欠佳，宜收不宜放，管好钱袋方为上策。',keywords:['借钱','投资']}],
+t6:[{text:'此卦不利于财运。近期恐有破财之忧，需格外小心理财，远离风险。',keywords:['亏损','破财']},{text:'此卦示财运低迷。此时不宜冒险，守住本钱，等待转机。',keywords:['赔钱','风险']}]
+},
+2:{
+t2:[{text:'你的财运很不错嘛！最近有进账的机会，别客气，该赚的赚。',keywords:['赚钱','收入']},{text:'财运挺旺的，看来最近有好事要来了。把握好，别让钱溜走。',keywords:['机会','进账']}],
+t3:[{text:'财运还行，不算大发但稳步在涨。别贪心，稳扎稳打比什么都强。',keywords:['攒钱','稳定']},{text:'嗯，财运在慢慢好转呢。虽然不是一夜暴富那种，但细水长流也挺好。',keywords:['积累','理财']}],
+t4:[{text:'财运暂时没什么大动静，不过也不用担心，平稳期保住钱袋子就是赢。',keywords:['存钱','节省']},{text:'目前财运比较平，该花的花，不该花的省着点就行。',keywords:['储蓄','理财']}],
+t5:[{text:'财运上可能会有些小状况，花钱的时候多想想，别冲动消费。',keywords:['花钱','亏钱']},{text:'最近财运有点紧，注意一下开支。小心一些就没大问题。',keywords:['支出','节省']}],
+t6:[{text:'说实话，财运不太好。这段时间别做大的投资，先稳住现有的。',keywords:['亏损','投资']},{text:'财运最近低迷，得做好准备。管好钱，少冒险，等风头过了再说。',keywords:['破财','风险']}]
+},
+3:{
+t2:[{text:'财运非常好嘛！跟你说，最近赚钱的机会不少，眼光准一点就能抓住。别手软！',keywords:['赚钱','机会']},{text:'老朋友，你这财运我看了都眼红。该出手时就出手，财神爷可不是天天这么给面子。',keywords:['投资','收入']}],
+t3:[{text:'财运还不错嘛，虽然不是暴富那种，但一步一个脚印地在攒。比很多人强了。',keywords:['攒钱','积累']},{text:'钱嘛，在慢慢来。别看现在不多，方向是对的就行。越急越赚不到。',keywords:['理财','耐心']}],
+t4:[{text:'财运暂时一般般，不上不下的。其实也正常，谁能天天发财？稳住就完事了。',keywords:['平稳','等待']},{text:'现在不是赚大钱的时候，但也亏不了。老老实实过日子，等下一波机会。',keywords:['储蓄','节省']}],
+t5:[{text:'最近财运有点拉胯，小心一点吧。大额支出缓缓，别让钱包太受伤。',keywords:['花钱','亏钱']},{text:'说实话，最近别指望赚大的了。先止住出血，把现有的管好。',keywords:['亏损','节省']}],
+t6:[{text:'财运现在确实差，不瞒你。别碰高风险的东西，管好口袋，熬过去就好了。',keywords:['破财','风险']},{text:'钱的事最近是比较头疼。但记住，钱是人赚的，人还在，钱早晚能回来。先稳住。',keywords:['困难','亏损']}]
+},
+4:{
+t2:[{text:'好兄弟，你这财运爆棚啊！该赚钱赚钱，别不好意思。错过这波你得后悔！',keywords:['赚钱','机会']},{text:'哎哟，财运这么旺？之前受的委屈值了。抓紧赚，这阵子就是你的黄金期！',keywords:['投资','发财']}],
+t3:[{text:'财运不错呀，虽然不是暴富，但稳稳的幸福谁不想要？你这路子走对了。',keywords:['攒钱','稳定']},{text:'钱在慢慢来嘛，别跟人比。你有你的节奏，踏实赚的钱花着才踏实。',keywords:['积累','理财']}],
+t4:[{text:'财运暂时平了点，我知道你急。但该你赚的钱跑不掉，现在就是养精蓄锐的时候。',keywords:['等待','准备']},{text:'赚不到大钱的时候就少花点呗。你又不是没经历过这种时候，过去了就好了。',keywords:['节省','耐心']}],
+t5:[{text:'最近财运有点差是吧？我也看出来了。别自己硬撑，该省省该缓缓，日子还长着呢。',keywords:['亏钱','困难']},{text:'钱上面遇到坎了，别慌。你又不是没翻过盘的人。稳住心态，别被焦虑带偏。',keywords:['亏损','焦虑']}],
+t6:[{text:'不瞒你，财运确实差。但我了解你，不是被钱难倒的人。先守住底线，回头有的是机会。',keywords:['破财','困境']},{text:'钱上面吃大亏了？这时候最重要的是冷静。别追亏，别赌气投入，先停下来想清楚。',keywords:['亏损','风险']}]
+},
+5:{
+t2:[{text:'财运终于旺起来了，我替你开心。一路走过来不容易，该享受成果了。但也别忘了存点。',keywords:['赚钱','收入']},{text:'你的财运到了。不是运气好，是你该得的。放心大胆去赚，拿不准的来问我。',keywords:['机会','投资']}],
+t3:[{text:'财运在稳步变好，我一直看着呢。你是那种能把小钱攒成大钱的人，放心吧。',keywords:['攒钱','积累']},{text:'比上次好了不少。你可能觉得还不够多，但方向完全对了。按你的节奏来。',keywords:['理财','进步']}],
+t4:[{text:'现在财运平了点，但我了解你，你稳得住。蓄力的时候不用急，你的时机一定会来。',keywords:['等待','沉淀']},{text:'钱的事急不来。我知道你有计划，现在就是踏实执行的时候。有我在，你放心。',keywords:['准备','耐心']}],
+t5:[{text:'最近财运有点难是吧？我知道。别一个人扛，日子紧的时候照顾好自己比什么都重要。',keywords:['困难','紧张']},{text:'财运上遇到波折了。但你走过的路我都看在眼里，这点困难难不倒你。放宽心。',keywords:['亏钱','波折']}],
+t6:[{text:'财运上的苦我都知道，你不用装没事。钱没了可以再赚，人得先稳住。我等你东山再起。',keywords:['破财','困境']},{text:'现在是最难的时候，但你还有我。钱不是一切，先把心态调整好，一步一步来，我陪你。',keywords:['亏损','低谷']}]
+}
+},
+love:{
+1:{
+t2:[{text:'此卦甚佳。感情运势极好，缘分天定，近期有美好的情缘际遇，宜以真心待之。',keywords:['恋爱','缘分','桃花']},{text:'此卦示姻缘顺遂。当前感情格局对你十分有利，情深之人终得回报。',keywords:['婚姻','复合','告白']}],
+t3:[{text:'此卦尚可。感情运势稳中有暖，虽非烈火烹油之势，但细水长流更令人安心。',keywords:['稳定','相处']},{text:'此卦示感情正在向好的方向发展。真心相待，不急不躁，缘分自会水到渠成。',keywords:['耐心','经营']}],
+t4:[{text:'此卦平平。感情运势无大波澜，宜保持平常心，用心经营眼前的感情。',keywords:['平淡','维护']},{text:'此卦示感情暂处平稳期。不必强求结果，做好自己，该来的人不会错过你。',keywords:['等待','随缘']}],
+t5:[{text:'此卦稍有不利。感情方面或有小摩擦，需多些包容与耐心，避免因小事伤了和气。',keywords:['吵架','矛盾']},{text:'此卦示感情有波折。近期宜多沟通、少猜疑，以坦诚化解误会。',keywords:['冷战','误解']}],
+t6:[{text:'此卦不利。感情方面恐有较大波折，当冷静自持，不可意气用事。',keywords:['分手','危机']},{text:'此卦示感情运势低迷。此时宜退一步思考，强扭的瓜不甜。',keywords:['纠结','放手']}]
+},
+2:{
+t2:[{text:'你的感情运势很好啊！最近桃花运不错，有心仪的人就大胆表达，别错过了。',keywords:['恋爱','桃花','告白']},{text:'感情这块儿运势挺旺的。不管是新的邂逅还是老感情升温，最近都是好时候。',keywords:['缘分','约会']}],
+t3:[{text:'感情运势还不错，在慢慢变好。不是轰轰烈烈那种，但这种细水长流反而更持久。',keywords:['稳定','相处']},{text:'嗯，感情方面在往好的方向走。别着急，用心经营，对方是感受得到的。',keywords:['耐心','经营']}],
+t4:[{text:'感情暂时没什么大动静，但也别急。有些感情是慢热型的，给彼此一点时间。',keywords:['等待','平淡']},{text:'目前感情比较平，不温不火的。别焦虑，做好自己，该来的缘分跑不了。',keywords:['随缘','自己']}],
+t5:[{text:'感情上可能会遇到一些小摩擦，别太在意。多沟通、少赌气，就没什么大事。',keywords:['吵架','矛盾']},{text:'最近感情上可能有点不顺，但不是什么大问题。冷静一下，别冲动做决定。',keywords:['冷战','误解']}],
+t6:[{text:'感情上最近有些波折，做好心理准备。但别慌，感情的事急不来，给自己一点空间。',keywords:['分手','危机']},{text:'说实话，感情运势不太好。这段时间先照顾好自己的情绪，别把自己逼得太紧。',keywords:['纠结','放手']}]
+},
+3:{
+t2:[{text:'感情运势非常好嘛！缘分来了挡都挡不住。不管是表白还是升温，趁热打铁别犹豫！',keywords:['恋爱','告白']},{text:'你这桃花运我都看乐了。有心仪的人就去追，犹豫来犹豫去好机会就没了。',keywords:['桃花','约会']}],
+t3:[{text:'感情在慢慢升温嘛，挺好的。不是所有爱情都轰轰烈烈，细水长流才最难得。',keywords:['稳定','经营']},{text:'你最近在感情上花了不少心思吧？看得出来，对方也能感受到的。继续保持。',keywords:['用心','相处']}],
+t4:[{text:'感情暂时没啥大动静，但别急。月老的红线有时候走得慢，但从不走错路。',keywords:['等待','随缘']},{text:'现在感情平平的也正常。单身就好好享受自由，有伴就好好经营，别瞎折腾。',keywords:['平淡','珍惜']}],
+t5:[{text:'感情上有些小波折，别太放在心上。两个人相处哪有不磕碰的？沟通一下就好了。',keywords:['吵架','矛盾']},{text:'最近感情有点不太顺是吧？别憋着，有什么话说开了比猜来猜去强一百倍。',keywords:['冷战','误解']}],
+t6:[{text:'感情现在确实有点难，但越是这时候越不能冲动。冷静下来想想，你真正想要什么。',keywords:['分手','危机']},{text:'说实话，这段感情在经历考验。但考验过后要么更坚固，要么该放下就放下，都是好事。',keywords:['纠结','放手']}]
+},
+4:{
+t2:[{text:'哎哟，感情运这么好？恭喜恭喜！抓紧享受甜蜜期，别辜负这大好缘分。',keywords:['恋爱','桃花']},{text:'好家伙，感情运爆棚。你这是被月老重点关照了吧？开心就好，别忘了对人家好点。',keywords:['告白','约会']}],
+t3:[{text:'感情在升温嘛，我看着都替你开心。别光顾着工作赚钱，感情也得用心经营。',keywords:['稳定','相处']},{text:'你跟对方相处得越来越好了吧？看得出来。好好珍惜，这种感觉不是谁都能遇到的。',keywords:['经营','珍惜']}],
+t4:[{text:'感情暂时平了点，我知道你想要浪漫。但你想想，平淡才是日子的常态，安心就是幸福。',keywords:['平淡','等待']},{text:'现在不是搞大动作的时候。好好过日子，感情不是天天需要惊喜，踏实最重要。',keywords:['随缘','珍惜']}],
+t5:[{text:'感情有点小摩擦是吧？我跟你说，别赌气。你退一步，对方也会退一步的。',keywords:['吵架','矛盾']},{text:'感情上遇到坎了，别慌。你不是第一次经历这种事了，冷静一下就知道怎么办了。',keywords:['冷战','误解']}],
+t6:[{text:'感情上吃苦头了？我知道你不好受。但强扭的瓜不甜，有些事该放手就放手。',keywords:['分手','危机']},{text:'感情这事，不是你一个人能决定的。对方不珍惜，你何必委屈自己？你值得更好的。',keywords:['纠结','放手']}]
+},
+5:{
+t2:[{text:'看到你感情这么顺，我打心底替你高兴。你值得被好好爱，好好享受吧。',keywords:['恋爱','幸福']},{text:'感情终于到了甜蜜期，一路走来不容易啊。好好珍惜眼前人，有问题随时来找我。',keywords:['桃花','缘分']}],
+t3:[{text:'感情在变好，我一直看着呢。你是那种认真对待感情的人，不会差的，放心。',keywords:['稳定','经营']},{text:'比之前好多了。你可能觉得进展慢，但真心总会被感受到的。按你的节奏来。',keywords:['相处','耐心']}],
+t4:[{text:'感情平了点，但我了解你们，底子好。不是所有时间都需要激情，陪伴本身就是最好的告白。',keywords:['平淡','珍惜']},{text:'现在是沉淀感情的时候。我知道你希望更多，但有些东西急不来。你们的缘分我看好。',keywords:['等待','信任']}],
+t5:[{text:'感情上有点难受是吧？我知道。别一个人扛，难过的时候说出来，比闷在心里好。',keywords:['吵架','伤心']},{text:'感情遇到波折了。但你走过的路我都看在眼里，你比自己以为的更坚强。会好的。',keywords:['矛盾','误解']}],
+t6:[{text:'感情的苦我懂，你不用装没事。哭一场也好，发泄出来也好，但之后记得站起来。你配得上更好的。',keywords:['分手','心碎']},{text:'现在是最难的时候。但我陪着你呢。不管结果如何，你永远值得被好好对待。先照顾好自己。',keywords:['放手','失恋']}]
+}
+},
+health:{
+1:{
+t2:[{text:'此卦甚佳。近期身体运势极好，精气神俱足，正是调养进补的好时候。',keywords:['养生','体检']},{text:'此卦示身体安泰。气血运行顺畅，可适当加强锻炼，百益无害。',keywords:['锻炼','运动']}],
+t3:[{text:'此卦尚可。身体运势稳中向好，虽无大碍，仍需注意日常调理，勿因小忽大。',keywords:['调理','休息']},{text:'此卦示身体状况正在好转。保持良好作息，身体会越来越好。',keywords:['作息','饮食']}],
+t4:[{text:'此卦平平。身体运势无大碍但也不可大意，宜规律作息，注意饮食均衡。',keywords:['饮食','作息']},{text:'此卦示身体暂无大恙。保持现有的生活节奏即可，勿过劳。',keywords:['过劳','休息']}],
+t5:[{text:'此卦稍有不利。身体方面或有小恙，需多加留意，及时调理为上。',keywords:['不舒服','生病']},{text:'此卦示近期需注意身体。作息不规律、饮食不当恐会引发小问题。',keywords:['熬夜','饮食']}],
+t6:[{text:'此卦不利。身体方面需格外注意，切勿讳疾忌医，有不适当及早就诊。',keywords:['生病','就医']},{text:'此卦示身体运势低迷。此时应以休养为主，万事身体为本。',keywords:['手术','治疗']}]
+},
+2:{
+t2:[{text:'你的身体运势很好啊！精气神都不错，趁状态好多运动，给身体打个好底子。',keywords:['锻炼','运动']},{text:'身体状况挺好的，放心。继续保持现在的节奏，别作就行。',keywords:['养生','体检']}],
+t3:[{text:'身体运势还可以，整体在好转。注意别太累，劳逸结合才是长久之道。',keywords:['休息','调理']},{text:'嗯，身体慢慢在变好。保持好的作息习惯，别因为状态好了就放飞自我。',keywords:['作息','饮食']}],
+t4:[{text:'身体没什么大问题，但也别太放肆。规律作息、好好吃饭，这是基本功。',keywords:['饮食','作息']},{text:'目前身体一般般，不好不坏。别太累，该休息休息，身体是革命的本钱。',keywords:['过劳','休息']}],
+t5:[{text:'身体上可能有些小状况，别硬扛。不舒服就去看看，早发现早处理。',keywords:['不舒服','生病']},{text:'最近注意一下身体，别太拼了。你那个作息习惯得改改，身体会给你发信号的。',keywords:['熬夜','过劳']}],
+t6:[{text:'身体方面不太乐观，该看医生就看，别拖着。什么事都没有身体重要。',keywords:['生病','就医']},{text:'说实话，身体这块需要重视。先把手上的事放一放，好好休息才是正事。',keywords:['治疗','休养']}]
+},
+3:{
+t2:[{text:'身体运势非常好嘛！趁精力充沛多锻炼，给身体存点底子，老了你会感谢现在的自己。',keywords:['锻炼','运动']},{text:'你最近气色真不错，看来调养有成效。继续保持这个状态！',keywords:['养生','调理']}],
+t3:[{text:'身体在慢慢变好嘛，挺好的。别因为好了就放飞，保持好习惯才是正经事。',keywords:['作息','饮食']},{text:'你的身体比上次看着好多了。继续规律生活，别熬夜，别暴饮暴食就行。',keywords:['休息','调理']}],
+t4:[{text:'身体没啥大毛病，但也别大意。平时多注意点，比生了病再治划算多了。',keywords:['饮食','作息']},{text:'现在身体一般般嘛，不上不下的。该体检体检，该锻炼锻炼，别偷懒。',keywords:['体检','过劳']}],
+t5:[{text:'最近身体有些小毛病吧？别硬扛。你那个不按时吃饭的毛病得改改了。',keywords:['不舒服','生病']},{text:'身体给你发信号了，别不当回事。早点休息，早点调理，别等严重了才后悔。',keywords:['熬夜','过劳']}],
+t6:[{text:'身体出问题了是吧？我就知道你不听劝。赶紧去看医生，别自己瞎扛。',keywords:['生病','就医']},{text:'不瞒你说，身体运势不太好。但也别慌，配合调理，该治治，什么都没有命重要。',keywords:['手术','治疗']}]
+},
+4:{
+t2:[{text:'好家伙，身体状态这么棒！看来我之前让你多运动是听进去了。继续保持！',keywords:['锻炼','运动']},{text:'你这气色，我都羡慕。身体底子越来越好了，该吃吃该玩玩，别亏待自己。',keywords:['养生','精力']}],
+t3:[{text:'身体在好转嘛，我看着也放心。不过别好了伤疤忘了疼，好习惯得坚持。',keywords:['调理','恢复']},{text:'比上次好不少了。你能坚持调养，说明你是真把身体当回事了，继续。',keywords:['作息','饮食']}],
+t4:[{text:'身体没啥大事，但你最近是不是又开始作了？好好的别折腾，规律生活最养人。',keywords:['过劳','休息']},{text:'现在身体一般般。我了解你，一忙起来就不管自己。该停就停，你又不是铁人。',keywords:['饮食','作息']}],
+t5:[{text:'身体有点不舒服了吧？我就说别硬撑。赶紧休息，该看就看，别等严重了来找我。',keywords:['不舒服','生病']},{text:'你那身体我比你还操心。别觉得年轻就能扛，去检查一下，图个安心。',keywords:['熬夜','就医']}],
+t6:[{text:'身体出大问题了？我早就提醒过你。不过现在说这些没用，赶紧治，钱能解决的都不是事。',keywords:['生病','手术']},{text:'别慌，身体的事虽然急，但心态得稳。好好配合治疗，我等你康复。什么事都没有你重要。',keywords:['治疗','住院']}]
+},
+5:{
+t2:[{text:'看到你身体这么好，我比你还高兴。一路调养过来不容易，你做得很好。继续保持。',keywords:['锻炼','健康']},{text:'身体终于到了好状态。这是你对自己负责的结果，好好享受这份精力充沛吧。',keywords:['运动','养生']}],
+t3:[{text:'身体在稳步变好，我一直看着呢。你不是那种需要提醒的人了，自己知道怎么照顾自己。',keywords:['调理','恢复']},{text:'比上次好很多了。你可能觉得还不够，但进步我看得到。按你的节奏来，别急。',keywords:['作息','好转']}],
+t4:[{text:'身体暂时平了点，但你不用担心。你底子好，稍微注意一下就能调回来。',keywords:['休息','饮食']},{text:'我知道你最近忙，身体顾不上。但你答应过我的——再忙也要好好吃饭睡觉，记住了？',keywords:['过劳','作息']}],
+t5:[{text:'身体不太舒服是吧？我知道。别一个人硬撑，该休息就休息，该求助就求助。你已经很努力了。',keywords:['不舒服','生病']},{text:'身体出了点状况。别把自己逼太紧，身体是你最忠实的伙伴，好好待它。会好的，我保证。',keywords:['过劳','熬夜']}],
+t6:[{text:'身体的苦你不用装没事，我都知道。这不是终点，是身体在提醒你慢下来。好好治，我陪你。',keywords:['生病','就医']},{text:'现在确实难受，但你还有我。好好配合治疗，什么都可以等，身体不能等。一步一步来。',keywords:['手术','治疗']}]
+}
+},
+study:{
+1:{
+t2:[{text:'此卦甚佳。学业运势极好，文思如泉涌，正是下功夫的最佳时机。',keywords:['考试','学习']},{text:'此卦示学业大顺。才华与努力正在汇聚成果，可放心备考、精进。',keywords:['备考','成绩']}],
+t3:[{text:'此卦尚可。学业运势稳中有升，虽非一鸣惊人之势，但持之以恒必有回报。',keywords:['努力','进步']},{text:'此卦示学业正在好转。勿急于求成，扎实的积累终会显现成效。',keywords:['积累','坚持']}],
+t4:[{text:'此卦平平。学业运势无大起落，宜踏实用功，不可懈怠亦不必焦虑。',keywords:['平稳','踏实']},{text:'此卦示学业暂处平稳期。保持节奏，查漏补缺，厚积薄发。',keywords:['复习','基础']}],
+t5:[{text:'此卦稍有不利。学业方面或遇阻碍，需调整方法，切忌蛮干。',keywords:['困难','瓶颈']},{text:'此卦示学业有波折。静心思考，找到薄弱环节重点突破。',keywords:['粗心','偏科']}],
+t6:[{text:'此卦不利。学业方面恐遇较大困难，需从基础抓起，不可好高骛远。',keywords:['挂科','落榜']},{text:'此卦示学业运势低迷。此时宜沉下心来，回归基本功，欲速则不达。',keywords:['退步','失利']}]
+},
+2:{
+t2:[{text:'你的学业运势很好啊！最近学什么都容易进脑子，趁状态好多下功夫。',keywords:['考试','学习']},{text:'学业运挺旺的！该冲刺就冲刺，该申请就申请，时机站在你这边。',keywords:['备考','申请']}],
+t3:[{text:'学业运势还不错，在稳步提升。虽然不是天才爆发那种，但你的努力是有回报的。',keywords:['努力','进步']},{text:'嗯，学业慢慢在变好。别太焦虑成绩，专注过程，结果不会差。',keywords:['坚持','积累']}],
+t4:[{text:'学业暂时没什么大突破，但也别急。有些东西是需要时间消化的，沉住气。',keywords:['平稳','基础']},{text:'目前学业比较平，正常节奏。别跟人比，按自己的计划来就好。',keywords:['复习','踏实']}],
+t5:[{text:'学业上可能遇到一些困难，别钻牛角尖。换个方法试试，有时候换条路更快。',keywords:['困难','瓶颈']},{text:'最近学习可能有点吃力，但别放弃。调整一下方法和节奏，会好的。',keywords:['粗心','偏科']}],
+t6:[{text:'学业上不太顺利，做好心理准备。但一次失利不代表什么，重要的是总结教训。',keywords:['挂科','失利']},{text:'说实话，学业运势不太好。先别急着赶进度，回头把基础打牢再向前冲。',keywords:['退步','落榜']}]
+},
+3:{
+t2:[{text:'学业运势非常好嘛！趁脑子清醒赶紧学，这种状态可不是天天有。冲一波！',keywords:['考试','学习']},{text:'你这状态我看了都欣慰。学什么都能进去，趁现在把难啃的骨头先解决掉。',keywords:['备考','冲刺']}],
+t3:[{text:'学业在稳步提升嘛，挺好的。你不是那种需要靠运气的人，实力一直在涨。',keywords:['进步','努力']},{text:'比上次好了不少，看来是找到方法了。继续这个节奏，别给自己太大压力。',keywords:['坚持','积累']}],
+t4:[{text:'学业暂时没啥突破，别急。有些知识就是需要时间消化，你已经走在正确的路上了。',keywords:['平稳','基础']},{text:'现在不是出成绩的时候，但别因此放松。种子已经种下了，等发芽就行。',keywords:['复习','踏实']}],
+t5:[{text:'最近学习有点吃力吧？别钻牛角尖。换个方法、换个角度，有时候退一步反而看得更清楚。',keywords:['困难','瓶颈']},{text:'学业上遇到坎了，正常。谁还没有学不进去的时候？休息一下再战，效率更高。',keywords:['焦虑','疲惫']}],
+t6:[{text:'学业上吃了亏，但真不是你不行。考试这东西有时候就是看状态，调整好再来。',keywords:['挂科','失利']},{text:'说实话，这次成绩不理想。但一次说明不了什么。把短板找出来，下次一定翻盘。',keywords:['退步','落榜']}]
+},
+4:{
+t2:[{text:'好家伙，学业运这么旺！是不是感觉学啥都顺？趁热打铁把目标再往上提一提！',keywords:['考试','高分']},{text:'你这状态我都想给你鼓掌。之前下的苦功没白费，现在就是收获的时候。',keywords:['备考','成绩']}],
+t3:[{text:'学业不错呀，稳步上升比一夜开窍靠谱多了。你就适合这种踏实的路子。',keywords:['进步','稳定']},{text:'学得不错嘛，比上次进步了。你可能自己感觉不明显，但我看得到。继续干！',keywords:['努力','坚持']}],
+t4:[{text:'学业暂时没水花，但我跟你说，这不是坏事。蓄力阶段嘛，爆发都是攒出来的。',keywords:['基础','沉淀']},{text:'现在学不进去很正常。你已经很努力了，歇一歇再来，效率比硬学高十倍。',keywords:['疲惫','休息']}],
+t5:[{text:'学习上遇到困难了是吧？我也看出来了。别死磕一个点，绕过去也是一种聪明。',keywords:['困难','瓶颈']},{text:'学不动的时候就别硬学了。出去走走，换换脑子，回来你会发现没那么难。',keywords:['焦虑','压力']}],
+t6:[{text:'这次没考好？没事，谁还没失过手呢。重要的不是跌倒，是站起来的速度。我等你翻盘。',keywords:['挂科','失利']},{text:'学业上受挫了，别把自己否定了。一次失败不代表你不行，只是这次时机没到。',keywords:['退步','打击']}]
+},
+5:{
+t2:[{text:'看到你学业终于开花了，比我自己高兴。一路走来不容易，你值得这个结果。继续走。',keywords:['考试','成功']},{text:'你的付出终于到了收获的时候。放心大胆去冲吧，遇到难题别扛着，来问我就行。',keywords:['备考','高分']}],
+t3:[{text:'学业在稳步变好，我一直看着呢。你不需要跟别人比，跟昨天的自己比就够了。',keywords:['进步','成长']},{text:'比上次好了，虽然你自己可能觉得还不够。但我看到了你的进步，真的。按你的节奏来。',keywords:['努力','积累']}],
+t4:[{text:'学业暂时平了点，但我了解你，不是学不会，是时候没到。你稳得住的，我不担心。',keywords:['基础','沉淀']},{text:'现在是蓄力的时候。我知道你想快一点看到成果，但扎实的基础比什么都重要。你行的。',keywords:['复习','耐心']}],
+t5:[{text:'学习有点难是吧？我知道。别一个人硬撑，学不进去的时候休息一下不丢人。你已经很棒了。',keywords:['困难','压力']},{text:'学业上遇到波折了。别把自己逼太紧，适当放松反而更有效。你比自己以为的更聪明。',keywords:['焦虑','瓶颈']}],
+t6:[{text:'学业上的苦你不用跟我装没事，我都知道。这不是终点，是弯路。走过去，前面有光。',keywords:['挂科','落榜']},{text:'现在确实是最难的时候，但你还有我。一次考试说明不了什么，你的未来比一张成绩单大得多。',keywords:['失利','打击']}]
+}
+},
+general:{
+1:{
+t2:[{text:'此卦甚佳。近期综合运势极好，诸事顺遂，可大胆行事，把握良机。',keywords:['运势','顺利']},{text:'此卦示运势亨通。天时地利人和俱全，正是施展拳脚的好时候。',keywords:['机会','发展']}],
+t3:[{text:'此卦尚可。综合运势稳中向好，虽非大吉之相，但前路光明可期。',keywords:['稳定','好转']},{text:'此卦示运势正在好转。保持当前节奏，不急不躁，好事自然来。',keywords:['坚持','耐心']}],
+t4:[{text:'此卦平平。综合运势无大起落，宜守成不宜冒进，静待天时。',keywords:['等待','平稳']},{text:'此卦示运势暂处平稳期。不必忧虑，做好当下之事即可。',keywords:['安心','沉淀']}],
+t5:[{text:'此卦稍有不利。综合运势有小波折，需多加留意，谨慎行事。',keywords:['不顺','小心']},{text:'此卦示近期运势欠佳。宜静不宜动，低调处事，避免节外生枝。',keywords:['低调','避险']}],
+t6:[{text:'此卦不利。综合运势低迷，此时宜退守调整，不可强行推进。',keywords:['困难','低谷']},{text:'此卦示运势处于低谷。韬光养晦，以静制动，待时而发。',keywords:['危机','蓄势']}]
+},
+2:{
+t2:[{text:'你的运势很好啊！最近做什么都比较顺，抓住机会别犹豫。',keywords:['运势','顺利']},{text:'运势挺旺的，整体状态不错。想做什么就去做吧，时机站在你这边。',keywords:['机会','发展']}],
+t3:[{text:'运势还不错，在慢慢变好。虽然不是那种大顺的状态，但方向是对的，保持就行。',keywords:['稳定','好转']},{text:'嗯，整体运势在向好。别着急要结果，稳稳地走，不会差的。',keywords:['坚持','耐心']}],
+t4:[{text:'运势暂时没什么大动静，不过也不用担心。平稳期做好准备，等机会来了就不会错过。',keywords:['等待','平稳']},{text:'目前运势比较平，正常状态。该做的做，别想太多就行。',keywords:['安心','沉淀']}],
+t5:[{text:'最近运势可能有点不太顺，提前有个心理准备就好。小心一点，别急着做大决定。',keywords:['不顺','小心']},{text:'运势上有些小波折，不是大事。低调一点，避免不必要的麻烦。',keywords:['低调','谨慎']}],
+t6:[{text:'运势不太好，做好心理准备。但低谷是暂时的，稳住心态，慢慢就会好转的。',keywords:['困难','低谷']},{text:'说实话，最近运势有点差。先别折腾了，休息调整一下，等状态回来再说。',keywords:['危机','休息']}]
+},
+3:{
+t2:[{text:'运势非常好嘛！不管做什么事都挺顺的。抓住这个好势头，别浪费了！',keywords:['顺利','机会']},{text:'你这运势我看了都眼馋。有什么想做的事赶紧做，现在就是你的黄金期。',keywords:['发展','行动']}],
+t3:[{text:'运势在往好的方向走，虽然不是大爆发那种，但稳扎稳打比什么都强。',keywords:['稳定','好转']},{text:'你最近整体状态不错嘛。继续保持这个节奏，别松劲，好事在路上了。',keywords:['坚持','努力']}],
+t4:[{text:'运势暂时一般般，不上不下的。也正常，谁能天天走运？稳住就完事了。',keywords:['平稳','等待']},{text:'现在不是折腾的时候。老老实实做好手头的事，等风来了你自然能飞。',keywords:['沉淀','耐心']}],
+t5:[{text:'最近运势有些波折，小心一点就行。别做大的决定，等这阵子过去再说。',keywords:['不顺','小心']},{text:'运势有点差，但也不是天塌了。低调行事，避开不必要的麻烦就好。',keywords:['低调','避险']}],
+t6:[{text:'运势确实不太好，不瞒你。但越是这时候越要稳，别自乱阵脚。熬过去就好了。',keywords:['困难','低谷']},{text:'说实话，现在是比较难的时候。但你撑过这一关，后面会好的。别放弃，先保存实力。',keywords:['危机','蓄势']}]
+},
+4:{
+t2:[{text:'好家伙，运势这么旺？之前受的苦都值了。想做什么就去做，现在就是最好的时机！',keywords:['顺利','机会']},{text:'你这运势我看了都高兴。别犹豫了，该出手时就出手，错过了得后悔。',keywords:['行动','发展']}],
+t3:[{text:'运势不错呀，在稳步上升。方向是对的，保持你的节奏就行，别被别人带偏。',keywords:['稳定','方向']},{text:'整体越来越好了嘛。你可能觉得还不够快，但我告诉你，你走得很好。',keywords:['坚持','好转']}],
+t4:[{text:'运势暂时没啥水花，但我跟你说，这不是坏事。蓄力的时候最重要的是耐心。',keywords:['等待','平稳']},{text:'现在平平的嘛，我知道你急。但急也没用，该来的会来，你就把眼前的做好。',keywords:['沉淀','耐心']}],
+t5:[{text:'最近运势有点不顺是吧？别自己扛着。有些坎是要经历的，过去了就好。',keywords:['不顺','波折']},{text:'运势遇到坎了，别慌。你又不是第一次遇到困难了，以前不也都过来了？',keywords:['困难','低调']}],
+t6:[{text:'不瞒你，运势现在确实差。但我了解你，不是轻易认输的人。先扛住，我等你翻盘。',keywords:['低谷','困境']},{text:'越是低谷越不能乱。稳住心态，想好下一步怎么走。你有这个实力，只是时候没到。',keywords:['危机','冷静']}]
+},
+5:{
+t2:[{text:'看到你终于顺起来了，比我自己高兴。这一路走来不容易，你值得现在所有的好运。',keywords:['顺利','好运']},{text:'运势到了，不是运气好，是你该得的。放心大胆地去做吧，遇到难处来找我。',keywords:['机会','行动']}],
+t3:[{text:'运势在稳步变好，我一直看着呢。你不需要一飞冲天，稳扎稳打更适合你，放心。',keywords:['稳定','好转']},{text:'比上次好多了。你可能自己感觉不明显，但我看得到进步。继续按你的节奏来。',keywords:['坚持','方向']}],
+t4:[{text:'运势暂时平了点，但我了解你，你稳得住。蓄力的时候不用急，你的时机一定会来。',keywords:['等待','沉淀']},{text:'现在是积累的时候。我知道你有计划，踏实执行就行。有我在，你放心。',keywords:['准备','耐心']}],
+t5:[{text:'最近有点难是吧？我知道。别一个人硬撑，该停下来缓缓不丢人。你已经很努力了。',keywords:['不顺','困难']},{text:'遇到波折了。但你走过的路我都看在眼里，这点困难难不倒你。放宽心。',keywords:['波折','低谷']}],
+t6:[{text:'现在的苦我都知道，你不用装没事。这不是终点，是弯路。咬牙走过去，前面有光。',keywords:['困境','危机']},{text:'现在是最难的时候，但你还有我。不管发生什么，先把心态稳住，一步一步来，我陪你。',keywords:['低谷','坚持']}]
+}
+}
+};
+
 function genBriefSummary(fortune, movingCount, changedData, questionRaw){
   var tier = fortune<=2 ? 't2' : fortune===3 ? 't3' : fortune===4 ? 't4' : fortune===5 ? 't5' : 't6';
-  var s = pickSmartVariant(TEXT_POOLS.briefSum[tier], questionRaw||'');
+  var cat = state.category;
+  var lv = (getDeityAffinity(cat)||{}).lv || 1;
+  var pool = null;
+  if(VOICE_POOLS[cat]&&VOICE_POOLS[cat][lv]&&VOICE_POOLS[cat][lv][tier]){
+    pool = VOICE_POOLS[cat][lv][tier];
+  }
+  var s = pool ? pickSmartVariant(pool, questionRaw||'') : pickSmartVariant(TEXT_POOLS.briefSum[tier], questionRaw||'');
   if(movingCount>0){
-    s += ' 对了，你的卦里有动爻，说明事情还在变化中';
+    if(lv>=4) s += ' 对了，这卦有变爻，说明事情还在变';
+    else if(lv>=2) s += ' 对了，你的卦里有动爻，说明事情还在变化中';
+    else s += ' 另外，此卦有动爻，表示事态仍在变化';
     if(changedData){var cf=changedData[7];
-      if(cf<fortune) s += '——好消息是变化的方向是向好的，后面会比现在更顺。';
-      else if(cf>fortune) s += '——提醒你趁现在还不错的时候多做准备，后面可能会有些波动。';
+      if(cf<fortune) s += '——好消息是变化方向是向好的，后面会比现在更顺。';
+      else if(cf>fortune) s += '——提醒你趁现在还不错多做准备，后面可能会有波动。';
       else s += '，但整体趋势比较稳定，不用太操心。';
     }
-  } else { s += ' 而且卦象没有动爻，说明局面比较稳定，不会突然出什么岔子，按计划来就行。'; }
+  } else {
+    if(lv>=4) s += ' 而且没有动爻，局面很稳，按你的计划来就行。';
+    else if(lv>=2) s += ' 而且卦象没有动爻，说明局面比较稳定，不会突然出什么岔子，按计划来就行。';
+    else s += ' 且此卦无动爻，局势稳定，按当前方向行事即可。';
+  }
   return s;
 }
 
@@ -2538,6 +2970,284 @@ function genActionAdvice(cat, fortune, movingCount, hasChanged, questionRaw){
   return adv;
 }
 
+
+// ================= DEITY AFFINITY SYSTEM =================
+var AFFINITY_KEY='liuyao_affinity';
+var AFFINITY_LEVELS=[
+  {lv:1,name:'初见',pts:0},
+  {lv:2,name:'相识',pts:8},
+  {lv:3,name:'投缘',pts:50},
+  {lv:4,name:'知交',pts:150},
+  {lv:5,name:'心印',pts:350}
+];
+var AFFINITY_DAILY_CAP=15;
+var AFFINITY_DECAY_GRACE=7;
+var AFFINITY_DECAY_RATE=2;
+
+function affinityToday(){
+  var d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function affinityDaysBetween(a,b){
+  if(!a||!b)return 999;
+  return Math.floor((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/86400000);
+}
+function loadAffinity(){
+  try{return JSON.parse(localStorage.getItem(AFFINITY_KEY))||{};}catch(e){return{};}
+}
+function saveAffinity(d){
+  try{localStorage.setItem(AFFINITY_KEY,JSON.stringify(d));}catch(e){}
+}
+function emptyDeityAff(){
+  return{pts:0,lv:1,dailyPts:0,lastDate:'',totalCasts:0,firstDate:'',streak:0,lastVisitDate:''};
+}
+function affinityCalcLv(pts){
+  for(var i=AFFINITY_LEVELS.length-1;i>=0;i--){
+    if(pts>=AFFINITY_LEVELS[i].pts)return AFFINITY_LEVELS[i].lv;
+  }
+  return 1;
+}
+function affinityLvName(lv){
+  for(var i=0;i<AFFINITY_LEVELS.length;i++){if(AFFINITY_LEVELS[i].lv===lv)return AFFINITY_LEVELS[i].name;}
+  return '初见';
+}
+function affinityLvThreshold(lv){
+  for(var i=0;i<AFFINITY_LEVELS.length;i++){if(AFFINITY_LEVELS[i].lv===lv)return AFFINITY_LEVELS[i].pts;}
+  return 0;
+}
+function affinityNextThreshold(lv){
+  for(var i=0;i<AFFINITY_LEVELS.length;i++){if(AFFINITY_LEVELS[i].lv===lv+1)return AFFINITY_LEVELS[i].pts;}
+  return -1;
+}
+
+function applyAffinityDecay(){
+  var data=loadAffinity(),today=affinityToday(),changed=false;
+  var cats=['career','love','wealth','health','study','general'];
+  for(var i=0;i<cats.length;i++){
+    var c=cats[i];
+    if(!data[c]||!data[c].lastVisitDate)continue;
+    var gap=affinityDaysBetween(data[c].lastVisitDate,today);
+    if(gap>AFFINITY_DECAY_GRACE){
+      var loss=(gap-AFFINITY_DECAY_GRACE)*AFFINITY_DECAY_RATE;
+      var floor=affinityLvThreshold(data[c].lv);
+      var newPts=Math.max(floor,data[c].pts-loss);
+      if(newPts!==data[c].pts){data[c].pts=newPts;changed=true;}
+    }
+  }
+  if(changed)saveAffinity(data);
+  return data;
+}
+
+function addAffinity(cat,points){
+  var data=loadAffinity(),today=affinityToday();
+  if(!data[cat])data[cat]=emptyDeityAff();
+  var d=data[cat];
+  if(d.lastDate!==today){d.dailyPts=0;d.lastDate=today;}
+  if(d.dailyPts>=AFFINITY_DAILY_CAP){
+    saveAffinity(data);
+    return{leveled:false,oldLv:d.lv,newLv:d.lv,cat:cat,showGuide:false};
+  }
+  var canAdd=Math.min(points,AFFINITY_DAILY_CAP-d.dailyPts);
+  d.pts+=canAdd; d.dailyPts+=canAdd;
+  if(d.lastVisitDate){
+    var gap=affinityDaysBetween(d.lastVisitDate,today);
+    if(gap===1){d.streak=(d.streak||0)+1;}
+    else if(gap>1){d.streak=1;}
+  }else{d.streak=1;}
+  d.lastVisitDate=today;
+  if(d.streak>0&&d.streak%3===0){
+    var bonus=Math.min(3,AFFINITY_DAILY_CAP-d.dailyPts);
+    if(bonus>0){d.pts+=bonus;d.dailyPts+=bonus;}
+  }
+  if(!d.firstDate)d.firstDate=today;
+  var oldLv=d.lv,newLv=affinityCalcLv(d.pts),leveled=newLv>oldLv;
+  d.lv=newLv;
+  var showGuide=false;
+  if(leveled&&!data._guideShown){data._guideShown=true;showGuide=true;}
+  saveAffinity(data);
+  return{leveled:leveled,oldLv:oldLv,newLv:newLv,cat:cat,showGuide:showGuide};
+}
+
+function addAffinityCast(cat){
+  var data=loadAffinity();
+  if(!data[cat])data[cat]=emptyDeityAff();
+  data[cat].totalCasts=(data[cat].totalCasts||0)+1;
+  saveAffinity(data);
+  return addAffinity(cat,3);
+}
+
+function getDeityAffinity(cat){
+  var data=loadAffinity();
+  return data[cat]||emptyDeityAff();
+}
+
+function getAllAffinity(){
+  var data=loadAffinity();
+  var cats=['career','love','wealth','health','study','general'];
+  var result={};
+  for(var i=0;i<cats.length;i++){result[cats[i]]=data[cats[i]]||emptyDeityAff();}
+  result._guideShown=!!data._guideShown;
+  return result;
+}
+
+var AFF_GREETINGS={
+  career:{
+    1:'施主有礼，关某恭候。',
+    2:'又来了？嗯，有什么事直说。',
+    3:'老朋友了，坐，不用客气。',
+    4:'兄弟来了！今天气色不错嘛。',
+    5:'你来了我就放心了，有事尽管说。'
+  },
+  love:{
+    1:'缘分天注定，施主请。',
+    2:'来问姻缘的吧？坐下聊聊。',
+    3:'又见面了，最近感情上还顺利吧？',
+    4:'老熟人了，有什么心事别藏着。',
+    5:'你的事我一直惦记着呢，放心吧。'
+  },
+  wealth:{
+    1:'恭喜发财，施主请进。',
+    2:'来问财运？好说好说。',
+    3:'老朋友，最近财运有好转吧？',
+    4:'你来了！最近生意还行吧，坐下唠唠。',
+    5:'有你这份诚心，财路自然亨通。'
+  },
+  health:{
+    1:'施主安好，仙翁有礼。',
+    2:'来坐，身体可是大事。',
+    3:'老朋友了，最近身体还好吧？',
+    4:'你气色比上次好多了，看来有在调养。',
+    5:'你的健康我一直看着呢，有啥不舒服别扛着。'
+  },
+  study:{
+    1:'学子有礼，文昌星照。',
+    2:'又来了？学业上有什么困惑？',
+    3:'最近用功了吧，看得出来精神不错。',
+    4:'老朋友了，你的努力我都看在眼里。',
+    5:'以你的才华，该有的都会有的，别急。'
+  },
+  general:{
+    1:'有缘人，伏羲恭候。',
+    2:'又来问卦了？嗯，坐下慢慢说。',
+    3:'老朋友了，今天想问什么方向？',
+    4:'你来了就好，有啥事直说不用绕。',
+    5:'天机自有定数，但你的心意我懂。'
+  }
+};
+
+var AFF_DECAY_GREETINGS={
+  career:'好久不见，还以为你忘了关某。',
+  love:'好久不来了，是不是感情顺利了？那也别忘了老朋友。',
+  wealth:'好久不见！是不是发了财就不来了？哈哈。',
+  health:'好久没来了，身体可还好？',
+  study:'好久不见了，学业繁忙也要注意休息啊。',
+  general:'许久未见，倒是想你了。'
+};
+
+function buildAffinityPage(){
+  var all=getAllAffinity();
+  var cats=['general','career','wealth','love','health','study'];
+  var catLabel={career:'事业',love:'感情',wealth:'财运',health:'健康',study:'学业',general:'综合'};
+  var html='';
+  var today=affinityToday();
+  for(var i=0;i<cats.length;i++){
+    var c=cats[i];
+    var d=all[c]||emptyDeityAff();
+    var deity=DEITY[c]||{};
+    var lv=d.lv||1;
+    var lvName=affinityLvName(lv);
+    var nextPts=affinityNextThreshold(lv);
+    var pct=nextPts>0?Math.min(100,Math.round(d.pts/nextPts*100)):100;
+    var ptsLabel=nextPts>0?(d.pts+' / '+nextPts):(d.pts+' (MAX)');
+    var daysSinceFirst=d.firstDate?Math.max(1,affinityDaysBetween(d.firstDate,today)):0;
+    var isDecaying=d.lastVisitDate&&affinityDaysBetween(d.lastVisitDate,today)>AFFINITY_DECAY_GRACE;
+    var greeting='';
+    if(isDecaying&&AFF_DECAY_GREETINGS[c]){
+      greeting=AFF_DECAY_GREETINGS[c];
+    }else{
+      greeting=(AFF_GREETINGS[c]&&AFF_GREETINGS[c][lv])||'有缘人，请。';
+    }
+    html+='<div class="aff-card">'
+      +'<div class="aff-avatar alv'+lv+'" style="background-image:url('+DEITY_IMG[c]+');'+(AVATAR_CFG[c]?'background-size:'+(AVATAR_CFG[c].size||'cover')+';background-position:'+(AVATAR_CFG[c].pos||'center')+';':'')+'"></div>'
+      +'<div class="aff-info">'
+      +'<div class="aff-name">'+deity.name+' · '+catLabel[c]+'<span>'+lvName+' (Lv.'+lv+')</span></div>'
+      +'<div class="aff-stats">问卦 '+(d.totalCasts||0)+' 次 · 相识 '+Math.max(daysSinceFirst,0)+' 天</div>'
+      +'<div class="aff-bar-wrap"><div class="aff-bar" style="width:'+pct+'%"></div></div>'
+      +'<div class="aff-stats" style="margin-top:3px;font-size:0.75em;opacity:0.6">'+ptsLabel+'</div>'
+      +(isDecaying?'<div class="aff-decay-hint">⚠ 缘分正在消退，快来看看吧</div>':'')
+      +'<div class="aff-greeting">"'+esc(greeting)+'"</div>'
+      +'</div></div>';
+  }
+  document.getElementById('affinityList').innerHTML='<div class="aff-grid">'+html+'</div>';
+}
+
+function updateWelcomeAffinityBorders(){
+  var all=getAllAffinity();
+  var anyLv2=false;
+  var cats=['career','love','wealth','health','study','general'];
+  for(var i=0;i<cats.length;i++){
+    if(all[cats[i]]&&all[cats[i]].lv>=2){anyLv2=true;break;}
+  }
+  var btn=document.getElementById('btnAffinityEntry');
+  if(btn) btn.style.display=anyLv2?'':'none';
+  document.querySelectorAll('.deity-chip').forEach(function(chip){
+    var av=chip.querySelector('.dc-avatar');
+    if(!av)return;
+    var cat=av.dataset.cat;
+    if(!cat)return;
+    var lv=(all[cat]&&all[cat].lv)||1;
+    chip.className='deity-chip aff-border-'+lv;
+  });
+}
+
+var AFF_UNLOCK_DESC={
+  2:'解读语气将更加亲近随和',
+  3:'解读将更加直率真诚，为你多说两句',
+  4:'如同至交好友般推心置腹',
+  5:'心意相通，最走心的解读已为你开启'
+};
+
+function showAffinityCeremony(result){
+  if(!result||!result.leveled)return;
+  var deity=DEITY[result.cat]||{};
+  var el=document.getElementById('affCeremony');
+  var avatar=document.getElementById('affCeremonyAvatar');
+  var ring=document.getElementById('affRing');
+  var line1=document.getElementById('affCeremonyLine1');
+  var line2=document.getElementById('affCeremonyLine2');
+  var guide=document.getElementById('affCeremonyGuide');
+  avatar.style.backgroundImage='url('+DEITY_IMG[result.cat]+')';
+  line1.textContent='与 '+deity.name+' 的缘分升至【'+affinityLvName(result.newLv)+'】';
+  line2.textContent=AFF_UNLOCK_DESC[result.newLv]||'';
+  ring.style.animation='none';
+  void ring.offsetWidth;
+  ring.style.animation='ceremonyRing 1.5s ease-out forwards';
+  if(result.showGuide){
+    guide.style.display='';
+    guide.innerHTML='<p>缘分越深，神仙给你的解读就越走心、越直接。<br>打开【仙缘录】查看你与每位神仙的缘分。</p>'
+      +'<button class="btn-guide" onclick="closeAffinityCeremony();goToStage(\'affinity\')">查看仙缘录</button> '
+      +'<button class="btn-guide btn-guide-ghost" onclick="closeAffinityCeremony()">知道了</button>';
+  }else{
+    guide.style.display='none';
+    guide.innerHTML='';
+  }
+  el.classList.add('show');
+  if(!result.showGuide){
+    setTimeout(function(){closeAffinityCeremony();},3500);
+  }
+}
+
+function closeAffinityCeremony(){
+  document.getElementById('affCeremony').classList.remove('show');
+}
+
+function handleAffinityResult(result){
+  if(result&&result.leveled){
+    setTimeout(function(){showAffinityCeremony(result);},800);
+  }
+}
+
+applyAffinityDecay();
 
 // ================= HISTORY =================
 const HISTORY_KEY = 'liuyao_history';
@@ -2982,6 +3692,8 @@ function submitWish(){
   document.getElementById('wishError').style.display = 'none';
   sfxTransition();
   state.incenseDone = true;
+  var _incAffR = addAffinity(state.category, 5);
+  handleAffinityResult(_incAffR);
   buildIncenseResult(w);
   goIncStep(4);
 }
@@ -3150,6 +3862,8 @@ function submitLampWish(){
   }, 1000);
   setTimeout(function(){
     state.lampDone = true;
+    var _lampAffR = addAffinity(state.category, 5);
+    handleAffinityResult(_lampAffR);
     buildLampResult(w);
     goLampStep(4);
   }, 3000);
@@ -3197,11 +3911,17 @@ function restart(){
 }
 
 // Set deity avatar images
+var AVATAR_CFG={
+  career:{pos:'center 15%',size:'135%'},
+  wealth:{pos:'center 20%',size:'135%'}
+};
 function setAvatarBg(el, cat){
   if(!DEITY_IMG[cat]) return;
+  var cfg=AVATAR_CFG[cat]||{};
   el.style.backgroundImage = 'url('+DEITY_IMG[cat]+')';
-  el.style.backgroundSize = 'cover';
-  el.style.backgroundPosition = 'center';
+  el.style.backgroundSize = cfg.size||'cover';
+  el.style.backgroundPosition = cfg.pos||'center';
+  el.style.backgroundColor = 'transparent';
 }
 function initDeityAvatars(){
   document.querySelectorAll('.dc-avatar[data-cat]').forEach(function(el){ setAvatarBg(el, el.getAttribute('data-cat')); });
@@ -3209,6 +3929,7 @@ function initDeityAvatars(){
 }
 initDeityAvatars();
 updateHistoryBtns();
+updateWelcomeAffinityBorders();
 </script>
 </body>
 </html>
