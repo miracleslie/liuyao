@@ -544,7 +544,7 @@ body{
 .lamp-wish-textarea{width:100%;height:100px;padding:16px;background:rgba(255,180,50,.05);border:1px solid rgba(255,180,50,.25);border-radius:8px;color:var(--ink);font-family:inherit;font-size:clamp(14px,2.2vw,17px);letter-spacing:.1em;line-height:1.8;resize:none}
 .lamp-wish-textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 20px rgba(255,180,50,.2)}
 .lamp-wish-textarea::placeholder{color:var(--ink2);opacity:.6}
-.lamp-wish-error{color:var(--red2);font-size:12px;margin-top:6px;display:none}
+.lamp-wish-error{color:var(--red2);font-size:12px;margin-top:6px;visibility:hidden}
 .btn-light{margin-top:20px;padding:14px 44px;border:1px solid var(--gold);color:var(--gold);border-radius:8px;background:rgba(255,180,50,.08);font-family:inherit;font-size:clamp(15px,2.5vw,19px);letter-spacing:.3em;cursor:pointer;transition:all .3s}
 .btn-light:hover{background:rgba(255,180,50,.18)}
 
@@ -601,7 +601,7 @@ body{
 .wish-textarea{width:100%;height:100px;padding:16px;background:rgba(212,168,71,.05);border:1px solid rgba(212,168,71,.25);border-radius:8px;color:var(--ink);font-family:inherit;font-size:clamp(14px,2.2vw,17px);letter-spacing:.1em;line-height:1.8;resize:none}
 .wish-textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 20px rgba(212,168,71,.15)}
 .wish-textarea::placeholder{color:var(--ink2);opacity:.6}
-.wish-error{color:var(--red2);font-size:12px;margin-top:6px;display:none}
+.wish-error{color:var(--red2);font-size:12px;margin-top:6px;visibility:hidden}
 .btn-pray{margin-top:20px;padding:14px 44px;border:1px solid var(--gold);color:var(--gold);border-radius:8px;background:rgba(212,168,71,.08);font-family:inherit;font-size:clamp(15px,2.5vw,19px);letter-spacing:.3em;cursor:pointer;transition:all .3s}
 .btn-pray:hover{background:rgba(212,168,71,.15)}
 
@@ -3830,7 +3830,7 @@ function initIncense(){
   document.querySelectorAll('.inc-stick').forEach(function(s){s.classList.remove('lit')});
   document.querySelectorAll('.burner-stick-item').forEach(function(s){s.classList.remove('planted')});
   document.getElementById('wishInput').value = '';
-  document.getElementById('wishError').style.display = 'none';
+  document.getElementById('wishError').style.visibility = 'hidden';
   smokeCanvas = document.getElementById('smokeCanvas');
   if(smokeCanvas){
     var par = smokeCanvas.parentElement;
@@ -3865,8 +3865,8 @@ function plantIncense(){
 }
 function submitWish(){
   var w = document.getElementById('wishInput').value.trim();
-  if(!w){ document.getElementById('wishError').style.display = 'block'; return; }
-  document.getElementById('wishError').style.display = 'none';
+  if(!w){ document.getElementById('wishError').style.visibility = 'visible'; return; }
+  document.getElementById('wishError').style.visibility = 'hidden';
   sfxTransition();
   state.incenseDone = true;
   var _incAffR = addAffinity(state.category, 5);
@@ -4008,7 +4008,7 @@ function initLamp(){
   document.querySelectorAll('.lamp-option').forEach(function(o){o.classList.remove('selected')});
   document.querySelector('.lamp-option[data-lamp="lotus"]').classList.add('selected');
   document.getElementById('lampWishInput').value = '';
-  document.getElementById('lampWishError').style.display = 'none';
+  document.getElementById('lampWishError').style.visibility = 'hidden';
   document.getElementById('lampFlame').classList.remove('lit');
   document.getElementById('lampGlow').classList.remove('on');
 }
@@ -4025,8 +4025,8 @@ function goLampStep(n){
 }
 function submitLampWish(){
   var w = document.getElementById('lampWishInput').value.trim();
-  if(!w){ document.getElementById('lampWishError').style.display = 'block'; return; }
-  document.getElementById('lampWishError').style.display = 'none';
+  if(!w){ document.getElementById('lampWishError').style.visibility = 'visible'; return; }
+  document.getElementById('lampWishError').style.visibility = 'hidden';
   sfxTransition();
   goLampStep(3);
   var lampNames = {lotus:'莲花灯',sky:'天灯',candle:'长明灯'};
