@@ -127,14 +127,21 @@ body{
 }
 
 /* ====================== WELCOME CTA ====================== */
-.welcome-cta{
-  padding:18px 60px!important;font-size:clamp(18px,3.2vw,24px)!important;
-  letter-spacing:0.5em!important;
-  border-color:var(--gold)!important;
+.welcome-dual-cta{display:flex;gap:16px;align-items:stretch;justify-content:center;margin-bottom:0;width:100%;max-width:480px;margin-left:auto;margin-right:auto}
+.welcome-dual-cta .btn{
+  flex:1!important;margin-top:0!important;padding:16px 0!important;
+  font-size:clamp(16px,3vw,20px)!important;letter-spacing:0.4em!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  border:1px solid var(--gold)!important;border-radius:6px!important;
+  color:var(--gold)!important;font-family:serif!important;cursor:pointer;
   background:linear-gradient(135deg,rgba(212,168,71,0.06),rgba(212,168,71,0.14))!important;
-  box-shadow:0 0 40px rgba(212,168,71,0.08),inset 0 0 30px rgba(212,168,71,0.03);
+  box-shadow:0 0 40px rgba(212,168,71,0.08),inset 0 0 30px rgba(212,168,71,0.03)!important;
   animation:ctaPulse 4s ease-in-out infinite;
-  margin-top:16px!important;
+  transition:all 0.35s!important;
+}
+.welcome-dual-cta .btn:hover{
+  background:linear-gradient(135deg,rgba(212,168,71,0.12),rgba(212,168,71,0.22))!important;
+  box-shadow:0 0 50px rgba(212,168,71,0.15),inset 0 0 30px rgba(212,168,71,0.05)!important;
 }
 @keyframes ctaPulse{
   0%,100%{box-shadow:0 0 30px rgba(212,168,71,0.06),inset 0 0 20px rgba(212,168,71,0.02)}
@@ -828,7 +835,8 @@ body{
   .title{font-size:clamp(24px,6vw,32px)}
   .subtitle{font-size:clamp(10px,2vw,13px);letter-spacing:0.35em}
   .welcome-quote{font-size:12px;margin:14px 0 4px}
-  .welcome-cta{padding:16px 40px!important;letter-spacing:0.35em!important;font-size:clamp(16px,4vw,20px)!important}
+  .welcome-dual-cta{gap:10px}
+  .welcome-dual-cta .btn{font-size:clamp(15px,3.8vw,18px)!important;letter-spacing:0.3em!important}
   .welcome-nav{gap:10px;margin-top:18px}
   .wnav-btn{padding:8px 14px;font-size:12px}
   .btn{padding:14px 32px;letter-spacing:0.25em;font-size:clamp(15px,3.5vw,18px);margin-top:28px}
@@ -915,7 +923,8 @@ body{
 }
 @media(max-width:375px){
   .stage{padding:16px 12px 32px}
-  .welcome-cta{padding:14px 32px!important;letter-spacing:0.25em!important;font-size:15px!important}
+  .welcome-dual-cta{gap:8px}
+  .welcome-dual-cta .btn{font-size:14px!important;letter-spacing:0.2em!important;padding:12px 0!important}
   .welcome-nav{gap:8px;margin-top:14px}
   .wnav-btn{padding:7px 12px;font-size:11px;gap:4px}
   .btn{padding:12px 24px;letter-spacing:0.2em}
@@ -1223,6 +1232,86 @@ body{
   .cal-cell{font-size:0.65em}
   .cal-streak{font-size:0.8em}
 }
+/* ===== PAIRING ===== */
+.pair-back{position:absolute;top:18px;left:18px;background:none;border:none;color:var(--gold);font-size:1.1em;cursor:pointer;opacity:0.6;z-index:2}
+.pair-page{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;width:100%;padding:30px 20px;text-align:center;position:relative;box-sizing:border-box}
+.pair-title{font-size:1.4em;color:var(--gold);margin-bottom:4px;letter-spacing:0.15em;text-shadow:0 0 18px rgba(212,168,71,0.15)}
+.pair-sub{font-size:0.85em;color:var(--ink2);margin-bottom:28px;letter-spacing:0.05em}
+.pair-step{display:none;width:100%;flex-direction:column;align-items:center;box-sizing:border-box}
+.pair-step.active{display:flex;flex-direction:column;align-items:center}
+.pair-types{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:340px;margin-bottom:20px}
+.pair-type-card{background:rgba(212,168,71,0.03);border:1px solid rgba(212,168,71,0.12);border-radius:14px;padding:22px 10px 16px;cursor:pointer;transition:all 0.35s}
+.pair-type-card:hover,.pair-type-card.active{border-color:rgba(212,168,71,0.5);background:rgba(212,168,71,0.06);box-shadow:0 0 24px rgba(212,168,71,0.08)}
+.pair-type-icon{font-size:2em;margin-bottom:8px}
+.pair-type-name{font-size:1.05em;color:var(--paper);margin-bottom:4px;letter-spacing:0.08em}
+.pair-type-deity{font-size:0.72em;color:var(--ink2);letter-spacing:0.05em}
+.pair-input-area{width:100%;max-width:300px;margin-bottom:28px}
+.pair-input{width:100%;box-sizing:border-box;background:rgba(245,237,220,0.03);border:none;border-bottom:1px solid rgba(212,168,71,0.2);color:var(--paper);font-size:1.05em;padding:14px 16px;text-align:center;font-family:serif;outline:none;transition:border-color 0.3s}
+.pair-input:focus{border-bottom-color:var(--gold)}
+.pair-input::placeholder{color:var(--ink2);font-size:0.88em}
+.pair-link{display:flex;flex-direction:column;align-items:center;margin:18px 0;color:var(--gold);opacity:0.4}
+.pair-link-char{font-size:1.5em;letter-spacing:0.15em;text-shadow:0 0 12px rgba(212,168,71,0.2)}
+.pair-link-line{width:1px;height:18px;background:linear-gradient(to bottom,transparent,rgba(212,168,71,0.2),transparent);margin:4px 0}
+.pair-anim-area{position:relative;width:100%;max-width:400px;height:180px;margin:20px 0}
+.pair-anim-name{position:absolute;top:50%;font-size:1.4em;color:var(--paper);opacity:0;transform:translateY(-50%);letter-spacing:0.1em}
+.pair-anim-name.left{left:-40px}
+.pair-anim-name.right{right:-40px}
+.pair-anim-name.fly-in.left{animation:pairFlyL 0.8s ease-out forwards}
+.pair-anim-name.fly-in.right{animation:pairFlyR 0.8s ease-out forwards}
+@keyframes pairFlyL{from{left:-40px;opacity:0}to{left:16%;opacity:1}}
+@keyframes pairFlyR{from{right:-40px;opacity:0}to{right:16%;opacity:1}}
+.pair-anim-score{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:3.5em;font-weight:bold;color:var(--gold);opacity:0;text-shadow:0 0 30px rgba(212,168,71,0.4)}
+.pair-anim-score.show{animation:pairScorePop 0.6s ease-out forwards}
+@keyframes pairScorePop{from{opacity:0;transform:translate(-50%,-50%) scale(0.3)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+.pair-anim-burst{position:absolute;top:50%;left:50%;width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:0}
+.pair-anim-burst.go{animation:pairBurst 1s ease-out forwards}
+@keyframes pairBurst{0%{opacity:0.8;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(var(--bx),var(--by)) scale(0)}}
+.pair-result{display:flex;flex-direction:column;align-items:center;width:100%;max-width:380px}
+.pair-r-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.pair-r-name-box{text-align:center}
+.pair-r-name-label{font-size:0.7em;color:var(--ink2);margin-bottom:2px;letter-spacing:0.08em}
+.pair-r-name-val{font-size:1.15em;color:var(--paper);letter-spacing:0.05em}
+.pair-r-heart{font-size:1.6em;color:var(--gold);opacity:0.5;text-shadow:0 0 12px rgba(212,168,71,0.2)}
+.pair-r-score-ring{position:relative;width:130px;height:130px;margin:0 auto 8px}
+.pair-r-score-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.pair-r-score-ring .ring-bg{fill:none;stroke:rgba(212,168,71,0.08);stroke-width:4}
+.pair-r-score-ring .ring-fg{fill:none;stroke:url(#pairGrad);stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset 1.2s ease-out}
+.pair-r-score-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2.8em;font-weight:bold;background:linear-gradient(180deg,#e0c060,#c0984a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.pair-r-score-unit{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);font-size:0.7em;color:var(--ink2);letter-spacing:0.1em}
+.pair-r-grade{display:inline-block;padding:5px 22px;border-radius:20px;font-size:0.92em;margin-bottom:22px;letter-spacing:0.12em}
+.pair-r-grade.g-destined{background:rgba(220,170,55,0.15);color:#e0b840;border:1px solid rgba(220,170,55,0.35)}
+.pair-r-grade.g-soulmate{background:rgba(200,160,60,0.12);color:#d4a848;border:1px solid rgba(200,160,60,0.25)}
+.pair-r-grade.g-kindred{background:rgba(180,150,80,0.10);color:#c0a050;border:1px solid rgba(180,150,80,0.2)}
+.pair-r-grade.g-ambiguous{background:rgba(160,155,140,0.08);color:#b0a890;border:1px solid rgba(160,155,140,0.15)}
+.pair-r-grade.g-distant{background:rgba(140,140,140,0.08);color:#9a9590;border:1px solid rgba(140,140,140,0.15)}
+.pair-r-grade.g-rival{background:rgba(160,100,90,0.08);color:#c08070;border:1px solid rgba(160,100,90,0.15)}
+.pair-r-card{width:100%;background:rgba(212,168,71,0.025);border:1px solid rgba(212,168,71,0.08);border-radius:14px;padding:20px 18px;margin-bottom:18px;box-sizing:border-box}
+.pair-r-deity-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.pair-r-avatar{width:42px;height:42px;border-radius:50%;border:1px solid rgba(212,168,71,0.2);object-fit:cover;flex-shrink:0}
+.pair-r-deity-info{text-align:left}
+.pair-r-dname{font-size:0.95em;color:var(--gold);opacity:0.8;letter-spacing:0.05em}
+.pair-r-dsay{font-size:0.72em;color:var(--ink2)}
+.pair-r-speech{font-size:0.95em;color:var(--paper);line-height:1.75;opacity:0.78;text-align:left}
+.pair-r-tip-box{width:100%;background:rgba(212,168,71,0.02);border-left:2px solid rgba(212,168,71,0.15);padding:10px 14px;margin-bottom:22px;box-sizing:border-box;text-align:left;border-radius:0 8px 8px 0}
+.pair-r-tip-label{font-size:0.72em;color:var(--gold);opacity:0.5;margin-bottom:3px;letter-spacing:0.06em}
+.pair-r-tip{font-size:0.88em;color:var(--ink2);line-height:1.5}
+.pair-r-btns{display:flex;gap:12px;align-items:center;justify-content:center;width:100%}
+.pair-r-share{background:none;border:1px solid rgba(212,168,71,0.35);color:var(--gold);padding:10px 28px;border-radius:22px;font-size:0.9em;cursor:pointer;transition:all 0.3s;font-family:serif;letter-spacing:0.08em}
+.pair-r-share:hover{background:rgba(212,168,71,0.08);border-color:var(--gold)}
+.pair-r-retry{background:none;border:none;color:var(--ink2);font-size:0.82em;cursor:pointer;font-family:serif;padding:8px 16px;transition:color 0.3s;letter-spacing:0.05em}
+.pair-r-retry:hover{color:var(--gold)}
+.pair-entry{text-align:center;margin-top:18px;padding-top:18px;border-top:1px solid rgba(212,168,71,0.06)}
+.pair-entry-hint{font-size:0.78em;color:var(--ink2);margin-bottom:8px;letter-spacing:0.03em}
+.pair-entry-btn{background:none;border:1px solid rgba(212,168,71,0.2);color:var(--gold);padding:9px 22px;border-radius:20px;font-size:0.85em;cursor:pointer;font-family:serif;transition:all 0.3s;opacity:0.65;letter-spacing:0.06em}
+.pair-entry-btn:hover{opacity:1;background:rgba(212,168,71,0.05)}
+@media(max-width:500px){
+  .pair-types{gap:10px;max-width:300px}
+  .pair-type-card{padding:18px 8px 14px}
+  .pair-anim-area{height:160px}
+  .pair-r-score-ring{width:110px;height:110px}
+  .pair-r-score-num{font-size:2.4em}
+  .pair-r-card{padding:16px 14px}
+}
 </style>
 </head>
 <body>
@@ -1261,7 +1350,10 @@ body{
       <div class="daily-msg-date" id="dailyMsgDate"></div>
     </div>
 
-    <button class="btn welcome-cta" onclick="goToStage('category')">摇 一 爻</button>
+    <div class="welcome-dual-cta">
+      <button class="btn" onclick="goToStage('category')">摇 一 爻</button>
+      <button class="btn" onclick="openPairing()">测 缘 分</button>
+    </div>
 
     <div class="welcome-nav">
       <button class="wnav-btn" id="btnAffinityEntry" style="display:none" onclick="goToStage('affinity')"><span class="wnav-icon">☰</span>仙缘录</button>
@@ -1335,19 +1427,14 @@ body{
       <div class="btn-row">
         <button class="btn btn-small" onclick="restart()">重新摇爻</button>
       </div>
-      <button class="btn-share" onclick="generateShareCard()">✦ 生成卦签卡片</button>
+      <button class="btn-share" id="btnShareCard" onclick="generateShareCard()">✦ 生成卦签卡片</button>
+      <div class="pair-entry" id="pairEntryArea">
+        <div class="pair-entry-hint">想知道你和TA的缘分如何？</div>
+        <button class="pair-entry-btn" onclick="openPairing()">💕 测测缘分配对</button>
+      </div>
     </div>
   </div>
 
-  <!-- Share Card Overlay -->
-  <div class="share-overlay" id="shareOverlay">
-    <canvas id="shareCanvas" style="display:none"></canvas>
-    <img class="share-preview" id="sharePreview" alt="卦签卡片"/>
-    <div class="share-btns">
-      <button class="btn-save-img" onclick="saveShareCard()">保存图片</button>
-      <button class="btn-close-share" onclick="closeShareCard()">关 闭</button>
-    </div>
-  </div>
 
   <!-- Stage: Lamp Blessing -->
   <div id="stage-lamp" class="stage">
@@ -1506,6 +1593,102 @@ body{
     </div>
   </div>
 
+  <!-- ===== PAIRING STAGE ===== -->
+  <div id="stage-pairing" class="stage">
+    <button class="pair-back" onclick="pairBack()">← 返回</button>
+    <div class="pair-page">
+      <!-- Step 1: Choose Relation Type -->
+      <div class="pair-step active" id="pairStep1">
+        <div class="pair-title">缘 分 配 对</div>
+        <div class="pair-sub">测测你和TA的缘分有多深</div>
+        <div class="pair-types" id="pairTypes">
+          <div class="pair-type-card" data-rel="love" onclick="pairSelectType(this)">
+            <div class="pair-type-icon">💕</div>
+            <div class="pair-type-name">情缘</div>
+            <div class="pair-type-deity">月老 · 掌管</div>
+          </div>
+          <div class="pair-type-card" data-rel="friend" onclick="pairSelectType(this)">
+            <div class="pair-type-icon">🤝</div>
+            <div class="pair-type-name">友缘</div>
+            <div class="pair-type-deity">太白 · 掌管</div>
+          </div>
+          <div class="pair-type-card" data-rel="business" onclick="pairSelectType(this)">
+            <div class="pair-type-icon">🏮</div>
+            <div class="pair-type-name">财缘</div>
+            <div class="pair-type-deity">财神 · 掌管</div>
+          </div>
+          <div class="pair-type-card" data-rel="classmate" onclick="pairSelectType(this)">
+            <div class="pair-type-icon">📚</div>
+            <div class="pair-type-name">学缘</div>
+            <div class="pair-type-deity">文曲 · 掌管</div>
+          </div>
+        </div>
+      </div>
+      <!-- Step 2: Input Names -->
+      <div class="pair-step" id="pairStep2">
+        <div class="pair-title" id="pairStep2Title">情 缘 测 试</div>
+        <div class="pair-sub">输入彼此的名字，窥探今日缘分</div>
+        <div class="pair-input-area">
+          <input class="pair-input" id="pairNameA" placeholder="你的名字 / 昵称" maxlength="12">
+          <div class="pair-link">
+            <div class="pair-link-line"></div>
+            <div class="pair-link-char">缘</div>
+            <div class="pair-link-line"></div>
+          </div>
+          <input class="pair-input" id="pairNameB" placeholder="TA的名字 / 昵称" maxlength="12">
+        </div>
+        <button class="action-btn" style="min-width:140px" onclick="pairStartCalc()">开始测算</button>
+      </div>
+      <!-- Step 3: Animation -->
+      <div class="pair-step" id="pairStep3">
+        <div class="pair-sub" style="margin-bottom:10px">缘分测算中…</div>
+        <div class="pair-anim-area" id="pairAnimArea">
+          <div class="pair-anim-name left" id="pairAnimL"></div>
+          <div class="pair-anim-name right" id="pairAnimR"></div>
+          <div class="pair-anim-score" id="pairAnimScore"></div>
+        </div>
+      </div>
+      <!-- Step 4: Result -->
+      <div class="pair-step" id="pairStep4">
+        <div class="pair-result" id="pairResultArea">
+          <div class="pair-r-header">
+            <div class="pair-r-name-box"><div class="pair-r-name-label">你</div><div class="pair-r-name-val" id="pairRNameA"></div></div>
+            <div class="pair-r-heart" id="pairRHeartIcon">❤</div>
+            <div class="pair-r-name-box"><div class="pair-r-name-label">TA</div><div class="pair-r-name-val" id="pairRNameB"></div></div>
+          </div>
+          <div class="pair-r-score-ring">
+            <svg viewBox="0 0 120 120">
+              <defs><linearGradient id="pairGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#c0984a"/><stop offset="100%" stop-color="#e0c060"/></linearGradient></defs>
+              <circle class="ring-bg" cx="60" cy="60" r="52"/>
+              <circle class="ring-fg" id="pairRingFg" cx="60" cy="60" r="52"/>
+            </svg>
+            <div class="pair-r-score-num" id="pairRScore"></div>
+            <div class="pair-r-score-unit">缘分值</div>
+          </div>
+          <div class="pair-r-grade" id="pairRGrade"></div>
+          <div class="pair-r-card">
+            <div class="pair-r-deity-row">
+              <img class="pair-r-avatar" id="pairRAvatar" src="">
+              <div class="pair-r-deity-info">
+                <div class="pair-r-dname" id="pairRDName"></div>
+                <div class="pair-r-dsay" id="pairRDSay"></div>
+              </div>
+            </div>
+            <div class="pair-r-speech" id="pairRSpeech"></div>
+          </div>
+          <div class="pair-r-tip-box">
+            <div class="pair-r-tip-label">今日缘分小建议</div>
+            <div class="pair-r-tip" id="pairRTip"></div>
+          </div>
+          <div class="pair-r-btns">
+            <button class="pair-r-share" onclick="pairShare()">分享结果</button>
+            <button class="pair-r-retry" onclick="pairRetry()">换人再测 →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Abandon Modal -->
   <div class="modal-overlay" id="abandonModal" style="display:none">
     <div class="modal-box">
@@ -1515,6 +1698,16 @@ body{
         <button class="btn btn-small btn-ghost" style="white-space:nowrap;padding:12px 0;width:42%;text-indent:0.15em" onclick="closeAbandonModal()">继续摇爻</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Share Card Overlay (global) -->
+<div class="share-overlay" id="shareOverlay">
+  <canvas id="shareCanvas" style="display:none"></canvas>
+  <img class="share-preview" id="sharePreview" alt="卦签卡片"/>
+  <div class="share-btns">
+    <button class="btn-save-img" onclick="saveShareCard()">保存图片</button>
+    <button class="btn-close-share" onclick="closeShareCard()">关 闭</button>
   </div>
 </div>
 
@@ -1540,6 +1733,7 @@ body{
   </div>
   <div class="aff-ceremony-guide" id="affCeremonyGuide" style="display:none"></div>
 </div>
+
 
 <script>
 // ================= TEXT POOLS (inline) =================
@@ -2736,9 +2930,13 @@ function buildResult(){
   var incEntry = document.getElementById('incenseEntry');
   var lampEntry = document.getElementById('lampEntry');
   var restartArea = document.getElementById('resultRestartArea');
+  var pairEntry = document.getElementById('pairEntryArea');
   incEntry.classList.remove('show');
   lampEntry.classList.remove('show');
   restartArea.style.display = 'none';
+  pairEntry.style.display = '';
+  var btnShare = document.getElementById('btnShareCard');
+  if(btnShare) btnShare.style.display = (fortune <= 3) ? '' : 'none';
   if(fortune >= 4 && !state.incenseDone){
     var hintPool = INCENSE_HINTS[fortune];
     var hint = hintPool ? (hintPool[state.category]||'') : '';
@@ -4060,7 +4258,6 @@ function goLampStep(n){
 }
 function submitLampWish(){
   var w = document.getElementById('lampWishInput').value.trim();
-  if(!w){ document.getElementById('lampWishError').style.visibility = 'visible'; return; }
   document.getElementById('lampWishError').style.visibility = 'hidden';
   sfxTransition();
   goLampStep(3);
@@ -4706,6 +4903,407 @@ initDeityAvatars();
 updateHistoryBtns();
 updateWelcomeAffinityBorders();
 showDailyMsg();
+
+// ================= PAIRING SYSTEM =================
+var PAIR_REL_MAP = {love:'love',friend:'general',business:'wealth',classmate:'study'};
+var PAIR_REL_NAMES = {love:'情缘',friend:'友缘',business:'财缘',classmate:'学缘'};
+var PAIR_REL_DEITY = {love:'月老',friend:'伏羲',business:'赵公明',classmate:'文昌帝君'};
+var PAIR_GRADES = [
+  {key:'destined',label:'天作之合',min:90,cls:'g-destined'},
+  {key:'soulmate',label:'心有灵犀',min:75,cls:'g-soulmate'},
+  {key:'kindred',label:'志同道合',min:55,cls:'g-kindred'},
+  {key:'ambiguous',label:'若即若离',min:35,cls:'g-ambiguous'},
+  {key:'distant', label:'渐行渐远',min:15,cls:'g-distant'},
+  {key:'rival',   label:'前世冤家',min:0, cls:'g-rival'}
+];
+function pairGrade(score){
+  for(var i=0;i<PAIR_GRADES.length;i++){if(score>=PAIR_GRADES[i].min)return PAIR_GRADES[i];}
+  return PAIR_GRADES[PAIR_GRADES.length-1];
+}
+function pairHash(str){
+  var h=0;for(var i=0;i<str.length;i++){h=((h<<5)-h)+str.charCodeAt(i);h|=0;}return Math.abs(h);
+}
+function pairSeed(a,b,rel){
+  var sorted=[a.trim(),b.trim()].sort().join('|');
+  var ds=new Date();var dstr=ds.getFullYear()+'-'+(ds.getMonth()+1)+'-'+ds.getDate();
+  return pairHash(sorted+'#'+rel+'#'+dstr);
+}
+function seededRand(seed){var x=Math.sin(seed)*10000;return x-Math.floor(x);}
+function pairCalcScore(a,b,rel){
+  var r1=Math.random(),r2=Math.random(),r3=Math.random();
+  var raw=Math.max(r1,r2,r3)*100;
+  if(raw<30)raw=30+Math.random()*25;
+  if(raw>98)raw=90+Math.random()*8;
+  return Math.round(Math.min(99,Math.max(20,raw)));
+}
+
+var PAIR_TEXT={
+love:{
+  destined:{
+    reads:["老夫牵了几千年的线，你们这根是最粗的那条！珍惜吧年轻人","这缘分上辈子就已经注定，这辈子不过是来兑现的","老夫的红线库里，你们这对是VIP级别的","天上牛郎织女看了都眼红，说的就是你们","红线穿过三世，绕指千年，这份缘老夫亲手打的结","缘分浓厚得老夫都怕打翻墨瓶"],
+    tips:["今天适合一起看星星，别看手机","找个借口约TA吃碗热馄饨","发条消息就说想TA了，别犹豫","晚上散步走慢一点，牵手的概率+50%","今日宜甜言蜜语，忌已读不回","给TA带杯奶茶，什么味都行"]
+  },
+  soulmate:{
+    reads:["你们的默契程度，老夫看了都微微点头","心意相通不用说，眼神里全是故事","红线虽然没拉满，但已经系了个蝴蝶结","缘分不浅，再加把劲就能修成正果","老夫给你们打个八折——已经是很高的分了","彼此心里都有对方，就差捅破那层窗户纸"],
+    tips:["今天适合聊聊心里话","送个小礼物，不用贵，走心就行","回复快一点，别玩欲擒故纵","一起做顿饭，比下馆子亲密十倍","今日宜坦诚，忌猜来猜去","约个运动出出汗，感情升温快"]
+  },
+  kindred:{
+    reads:["缘分在路上了，快递还没到而已","老夫看你们有戏，但剧本还没写完","红线连着，就是绕了几个弯","有缘无分是假的，有缘少分是真的","再熟络一些，好戏才刚开场","种子已经种下，开花还需浇水"],
+    tips:["多找话题聊聊，冷场就完了","偶尔制造点小巧合","点赞TA的朋友圈，适度就好","节日记得发个祝福","今日宜主动，忌装高冷","一起追个剧也是缘分的开始"]
+  },
+  ambiguous:{
+    reads:["这份缘嘛……老夫也在观望中","红线有点松，需要双方一起拽紧","时机未到，别急着下结论","缘分这东西忽远忽近的，正常","暂时看不透，可能是剧情需要","老夫翻了翻簿子，你们的篇章还在序言"],
+    tips:["别急，做好自己最重要","保持联系但别太黏","今天适合各自冷静一下","提升自己的魅力值才是正道","有话直说比暗示管用","缘分急不来，先把自己活精彩"]
+  },
+  distant:{
+    reads:["红线倒是有，就是风太大吹散了","老夫努力牵了牵，线有点短","这份缘分需要时间来酿","不是没戏，是还没开场","命运的齿轮还在调试中","老夫建议你先攒攒人品"],
+    tips:["今天别表白，改天再说","先做朋友，路要慢慢走","多参加社交活动","独处时想想真正想要的是什么","放轻松，一切都是最好的安排","与其焦虑不如先健个身"]
+  },
+  rival:{
+    reads:["老夫看了看，上辈子你们可能互相欠过钱","欢喜冤家也是缘，只是这个缘有点辣","红线打了个死结，得慢慢解","这对组合……老夫需要加班处理","别怕，前世冤家今生宝——有时候","这段缘分口味比较重，不适合所有人"],
+    tips:["今天适合保持安全距离","少抬杠多倾听","幽默是化解冲突的最佳武器","有不爽先写日记别直接说","深呼吸三次再开口","冤家路窄不如绕道走"]
+  }
+},
+friend:{
+  destined:{
+    reads:["此二人友情之深，连老夫都感动了","知己难求，你们已经互相找到了","八字合得来，星座也对味，这友情铁了","你们的友谊可以写进《世说新语》","管鲍之交不过如此，令人欣慰","这种朋友，一辈子有一个就够了"],
+    tips:["今天适合约出来叙叙旧","分享一首歌或一本书","许久不见就主动联系","一起去个没去过的地方","今日宜交心，忌敷衍","对方需要时第一时间回应"]
+  },
+  soulmate:{
+    reads:["心灵相通的好朋友，值得珍惜","友情浓度超标，质检合格","聊天永远不冷场，这就是默契","你们之间的信任值拉满了","伏羲观卦，此二人意气相投","好友如茶，越品越有味"],
+    tips:["定期聚一聚，别光线上聊","偶尔互相吐槽也是友情的调味料","TA的重要日子别忘了","一起运动一起吃，快乐加倍","把好消息第一个告诉对方","今日宜分享，忌已读不回"]
+  },
+  kindred:{
+    reads:["有共同话题，还需要更多故事来填满","友情种子已发芽，记得浇水","你们适合做搭子，但还没到铁哥们级别","多走动走动，感情就上来了","缘分到了，就差一起经历点什么","友谊的小船稳得很，别随便浪"],
+    tips:["主动组个局，把关系推进一步","找个共同兴趣爱好","今天适合一起打游戏","群聊别总是潜水","周末约个饭，面对面聊更香","互帮个小忙，关系升温快"]
+  },
+  ambiguous:{
+    reads:["点头之交，握手之谊，还在磨合中","友情处于试用期，转正看缘分","彼此还在互相观察，别急","还没到掏心窝子的阶段","友谊的信号时强时弱","好的开始，但后面的路还长"],
+    tips:["别太热情也别太冷淡","找个共同话题破破冰","先从点赞之交升级","今天适合寒暄，不适合深聊","一起参加个活动增进了解","耐心是经营友情的第一步"]
+  },
+  distant:{
+    reads:["好像没什么共同语言……但也没什么矛盾","友情信号较弱，需要增强天线","你们可能活在不同的频率上","大概是那种见面微笑、转身就忘的关系","缘分很薄，像纸一样","老夫建议顺其自然"],
+    tips:["没必要强求，做好自己","社交圈不同很正常","如果想靠近就主动一步","今天适合结交新朋友","别把精力都花在一个人身上","有缘再聚，无缘微笑"]
+  },
+  rival:{
+    reads:["你们一见面就互相看不顺眼，是有前世因果的","互怼日常可能就是你们的友情模式","老夫看了看八字，冤家型友情","别担心，有些最铁的哥们都是吵出来的","你们的友情需要加点催化剂","互相折磨也是一种缘，不过不推荐"],
+    tips:["少争论多干活","求同存异，别非要说服对方","保持适当距离反而更和谐","今天最好别约，各自安好","有火气先忍忍，过了就好了","尊重差异是友谊的必修课"]
+  }
+},
+business:{
+  destined:{
+    reads:["财神一看这组合就笑了，妥妥的财运搭档","联手做事，钱途无量啊","这对搭档在生意场上堪称天作之合","老夫很少见到这么旺的财运组合","一加一大于二，说的就是你们","合作起来能把石头变成金子"],
+    tips:["今天适合讨论合作方案","签合同的好日子","大胆提出你的商业想法","双方资源互补才是关键","见面聊比线上谈效率高","财运当头，抓住机会别犹豫"]
+  },
+  soulmate:{
+    reads:["合作默契度很高，财神赞许","彼此在商业嗅觉上很搭","你们的组合有赚钱的潜力","财运搭配度上佳，值得深入合作","一个主外一个主内，配合得当","天时地利人和，差不多齐了"],
+    tips:["制定一个靠谱的合作计划","今天适合碰碰想法","互相交个底，坦诚是合作基础","目标一致才能走得远","小项目先试水，别一上来就赌大的","今日宜谈钱，忌画大饼"]
+  },
+  kindred:{
+    reads:["方向一致，但还需磨合细节","财运组合有潜力，但还没完全激活","你们需要一个契机来引爆合作","商业缘分在酝酿中，别急","有合作基础，但火候差一点","财神在等你们拿出诚意"],
+    tips:["先从小事合作建立信任","多沟通各自的资源和优势","别急着签约，先考察一番","今天适合列个合作清单","找个共同认可的切入点","耐心谈判比冲动出手好"]
+  },
+  ambiguous:{
+    reads:["财运上不太确定，需要再观察","合作前景扑朔迷离","财神翻了翻账本，暂时没看到大财","可以合作但风险不小","现在不是最佳的合作时机","商业缘分有一点，但不够浓"],
+    tips:["谨慎投资，别冲动","先各自发展，时机到了再合作","今天适合学习充电","把自己的底盘稳住再说","多看少动，观望为上","风险评估比激情更重要"]
+  },
+  distant:{
+    reads:["在生意场上你们不太搭","财运组合偏弱，各干各的更好","财神摇了摇头，暂时不推荐合作","你们的商业理念差异较大","路不同不相为谋，各有各的财路","合作风险大于收益"],
+    tips:["别勉强合作，先发展自己","今天适合独立思考","做好自己的事比依赖别人好","财路千万条，适合自己最重要","有合作机会也要三思","保护好自己的钱包"]
+  },
+  rival:{
+    reads:["你们在钱的问题上天生犯冲","合作可能变成互相拆台","财神看了都觉得头疼的组合","商场如战场，你们可能站在对立面","上辈子可能在生意上坑过对方","这组合做生意十有八九要吵架"],
+    tips:["千万别合伙做生意","保持商业上的距离","今天适合各赚各的","谈钱伤感情，别谈了","有竞争意识是好的，但别针锋相对","把精力花在靠谱的合作上"]
+  }
+},
+classmate:{
+  destined:{
+    reads:["文曲星一看就乐了，这对同窗缘分极深","你们的学缘堪比伯牙子期","一起学习的效率直接拉满","这种同窗情谊，毕业了也散不了","学霸组合已就位，别人只能仰望","书山有路你们结伴行，事半功倍"],
+    tips:["今天适合一起自习","互相出题考对方，效率翻倍","分享一下笔记和学习方法","遇到难题一起讨论","约个图书馆，学累了一起吃饭","今日宜共同进步"]
+  },
+  soulmate:{
+    reads:["学习上很搭，互相激励效果明显","你们的脑回路在学业上很同步","课堂上的最佳同桌搭配","一起做小组作业不会想打人","文曲星给你们的学缘打了高分","互相带动学习热情，这很棒"],
+    tips:["组个学习小组事半功倍","今天适合交流学习心得","考试前互相划划重点","别总竞争，合作才能共赢","一起参加个讲座或活动","分享学习资源，共同成长"]
+  },
+  kindred:{
+    reads:["同窗情谊在线，但还需更多共同经历","学习节奏差不多，可以做搭子","你们适合坐同一个教室","学缘不错，多走动就更铁了","文曲星说你们还需要一起考几次试","课堂上的点头之交正在升级"],
+    tips:["主动问问TA的学习进度","约个自习室位置","一起备考能减轻焦虑","交换一下擅长的科目","今天适合破冰聊聊","从借笔记开始也是一种缘分"]
+  },
+  ambiguous:{
+    reads:["同班不同频，学缘还在调试中","你们的交集目前仅限于教室","文曲星翻了翻册子，还在考虑","学业上暂时互不干扰","认识但不熟，大概就这种感觉","缘分需要一个共同的课题来激活"],
+    tips:["别太在意，做好自己的功课","有机会就多交流","今天适合各自安静学习","不用刻意接近，顺其自然","先把自己的成绩搞上去","如果需要帮忙不妨开口问"]
+  },
+  distant:{
+    reads:["在学业上你们各走各的路","同窗但不同道，正常的","文曲星觉得你们暂时不太搭","学缘较浅，各有各的精彩","可能连对方学什么的都不太清楚","不是所有同学都能成为朋友"],
+    tips:["专注自己的学业目标","不用勉强交朋友","今天适合独立钻研","每个人都有自己的节奏","把时间花在真正志同道合的人身上","独处也是一种学习方式"]
+  },
+  rival:{
+    reads:["在学业上你们天生是竞争对手","互相不服气，但也因此进步了","文曲星说这对冤家在成绩榜上总是较劲","今天你第一明天我第一的那种关系","学业上的宿敌，但也是最了解对方的人","没有对方你可能还没这么努力"],
+    tips:["把竞争变成动力","别在分数上计较太多","今天适合各自冲刺","良性竞争比恶性内卷好","尊重对手就是尊重自己","考完试可以握个手"]
+  }
+}
+};
+
+var _pairState={rel:'',nameA:'',nameB:'',score:0,grade:null};
+
+var _pairReturnStage='welcome';
+function openPairing(){
+  var cur=document.querySelector('.stage.active');
+  _pairReturnStage=(cur&&cur.id)?cur.id.replace('stage-',''):'welcome';
+  _pairState={rel:'',nameA:'',nameB:'',score:0,grade:null,_speech:'',_tip:''};
+  document.querySelectorAll('.pair-step').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('pairStep1').classList.add('active');
+  document.querySelectorAll('.pair-type-card').forEach(function(c){c.classList.remove('active');});
+  document.getElementById('pairNameA').value='';
+  document.getElementById('pairNameB').value='';
+  goToStage('pairing');
+}
+
+function pairBack(){
+  var activeStep=document.querySelector('.pair-step.active');
+  if(!activeStep)return;
+  var id=activeStep.id;
+  if(id==='pairStep1'){goToStage(_pairReturnStage||'welcome');return;}
+  if(id==='pairStep2'){_goStep(1);return;}
+  if(id==='pairStep4'){_goStep(1);return;}
+  goToStage(_pairReturnStage||'welcome');
+}
+
+function _goStep(n){
+  document.querySelectorAll('.pair-step').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('pairStep'+n).classList.add('active');
+}
+
+function pairSelectType(el){
+  document.querySelectorAll('.pair-type-card').forEach(function(c){c.classList.remove('active');});
+  el.classList.add('active');
+  _pairState.rel=el.getAttribute('data-rel');
+  var tMap={love:'情 缘 测 试',friend:'友 缘 测 试',business:'财 缘 测 试',classmate:'学 缘 测 试'};
+  document.getElementById('pairStep2Title').textContent=tMap[_pairState.rel]||'缘 分 测 试';
+  setTimeout(function(){_goStep(2);},200);
+}
+
+function pairStartCalc(){
+  var a=document.getElementById('pairNameA').value.trim();
+  var b=document.getElementById('pairNameB').value.trim();
+  if(!a||!b){
+    var msg=!a?'请输入你的名字':'请输入TA的名字';
+    var inp=!a?document.getElementById('pairNameA'):document.getElementById('pairNameB');
+    inp.style.borderBottomColor='#c06050';
+    inp.setAttribute('placeholder',msg);
+    setTimeout(function(){inp.style.borderBottomColor='';inp.setAttribute('placeholder',!a?'你的名字 / 昵称':'TA的名字 / 昵称');},1500);
+    return;
+  }
+  _pairState.nameA=a;
+  _pairState.nameB=b;
+  _pairState.score=pairCalcScore(a,b,_pairState.rel);
+  _pairState.grade=pairGrade(_pairState.score);
+  _goStep(3);
+  pairRunAnimation();
+}
+
+function pairRunAnimation(){
+  var area=document.getElementById('pairAnimArea');
+  var elL=document.getElementById('pairAnimL');
+  var elR=document.getElementById('pairAnimR');
+  var elS=document.getElementById('pairAnimScore');
+  elL.textContent=_pairState.nameA;
+  elR.textContent=_pairState.nameB;
+  elL.className='pair-anim-name left';
+  elR.className='pair-anim-name right';
+  elS.className='pair-anim-score';
+  elS.textContent='';
+  var oldBursts=area.querySelectorAll('.pair-anim-burst');
+  oldBursts.forEach(function(b){b.remove();});
+  setTimeout(function(){elL.classList.add('fly-in');},100);
+  setTimeout(function(){elR.classList.add('fly-in');},400);
+  setTimeout(function(){
+    elS.textContent=_pairState.score;
+    elS.classList.add('show');
+    for(var i=0;i<18;i++){
+      var p=document.createElement('div');
+      p.className='pair-anim-burst';
+      var angle=Math.random()*Math.PI*2;
+      var dist=60+Math.random()*80;
+      p.style.setProperty('--bx',Math.cos(angle)*dist+'px');
+      p.style.setProperty('--by',Math.sin(angle)*dist+'px');
+      p.style.animationDelay=(Math.random()*0.3)+'s';
+      p.style.background=Math.random()>0.5?'var(--gold)':'rgba(245,237,220,0.6)';
+      area.appendChild(p);
+      setTimeout(function(){p.classList.add('go');},10);
+    }
+  },1000);
+  setTimeout(function(){pairShowResult();},2200);
+}
+
+function pairShowResult(){
+  _goStep(4);
+  var g=_pairState.grade;
+  var rel=_pairState.rel;
+  var cat=PAIR_REL_MAP[rel];
+  var deityInfo=DEITY[cat];
+  document.getElementById('pairRNameA').textContent=_pairState.nameA;
+  document.getElementById('pairRNameB').textContent=_pairState.nameB;
+  var relHeartIcons={love:'❤',friend:'✦',business:'⚜',classmate:'✧'};
+  document.getElementById('pairRHeartIcon').textContent=relHeartIcons[rel]||'❤';
+  document.getElementById('pairRScore').textContent=_pairState.score;
+  var circ=2*Math.PI*52;
+  var ring=document.getElementById('pairRingFg');
+  ring.style.strokeDasharray=circ;
+  ring.style.strokeDashoffset=circ;
+  requestAnimationFrame(function(){
+    ring.style.strokeDashoffset=circ*(1-_pairState.score/100);
+  });
+  var gradeEl=document.getElementById('pairRGrade');
+  gradeEl.textContent=g.label;
+  gradeEl.className='pair-r-grade '+g.cls;
+  var avatarEl=document.getElementById('pairRAvatar');
+  if(DEITY_IMG[cat])avatarEl.src=DEITY_IMG[cat];
+  document.getElementById('pairRDName').textContent=PAIR_REL_DEITY[rel];
+  document.getElementById('pairRDSay').textContent='为你解读'+PAIR_REL_NAMES[rel];
+  var pool=PAIR_TEXT[rel]&&PAIR_TEXT[rel][g.key];
+  var speech='',tip='';
+  if(pool){
+    speech=pool.reads[Math.floor(Math.random()*pool.reads.length)];
+    tip=pool.tips[Math.floor(Math.random()*pool.tips.length)];
+  }
+  _pairState._speech=speech;_pairState._tip=tip;
+  document.getElementById('pairRSpeech').textContent=speech;
+  document.getElementById('pairRTip').textContent=tip;
+  if(typeof addAffinity==='function'){addAffinity(cat,3);}
+}
+
+function pairRetry(){
+  document.getElementById('pairNameA').value='';
+  document.getElementById('pairNameB').value='';
+  _goStep(1);
+  document.querySelectorAll('.pair-type-card').forEach(function(c){c.classList.remove('active');});
+}
+
+function pairShare(){
+  generatePairingCard();
+}
+
+function generatePairingCard(){
+  var CW=380,PAD=24,MX=CW/2;
+  var g=_pairState.grade;
+  var rel=_pairState.rel;
+  var cat=PAIR_REL_MAP[rel];
+  var speech=_pairState._speech||'';
+  var tip=_pairState._tip||'';
+  var gColors={destined:'#e0b840',soulmate:'#d4a848',kindred:'#c0a050',ambiguous:'#b0a890',distant:'#9a9590',rival:'#c08070'};
+  var gc=gColors[g.key]||'#d4a847';
+
+  var cvs=document.getElementById('shareCanvas');
+  cvs.width=CW;cvs.height=900;
+  var ctx=cvs.getContext('2d');
+
+  ctx.font='13px serif';ctx.textAlign='center';
+  var speechLines=speech?wrapText(ctx,'"'+speech+'"',CW-70):[];
+  var tipLines=tip?wrapText(ctx,'建议：'+tip,CW-70):[];
+
+  var HC=40+20+24+16+70+18+22+12+18+speechLines.length*19+10+tipLines.length*17+30+18+20+18+24;
+  if(DEITY_IMG[cat])HC+=44;
+  cvs.height=HC;
+  ctx=cvs.getContext('2d');
+
+  ctx.fillStyle='#1a1610';ctx.fillRect(0,0,CW,HC);
+  var grd=ctx.createRadialGradient(MX,100,10,MX,100,CW*0.8);
+  grd.addColorStop(0,'rgba(212,168,71,0.07)');grd.addColorStop(1,'transparent');
+  ctx.fillStyle=grd;ctx.fillRect(0,0,CW,HC);
+  for(var i=0;i<30;i++){
+    ctx.beginPath();ctx.arc(Math.random()*CW,Math.random()*HC,Math.random()*1,0,Math.PI*2);
+    ctx.fillStyle='rgba(212,168,71,'+(0.06+Math.random()*0.1)+')';ctx.fill();
+  }
+  ctx.strokeStyle='rgba(212,168,71,0.1)';ctx.lineWidth=0.5;
+  ctx.strokeRect(12,12,CW-24,HC-24);
+
+  var Y=40;
+  ctx.textAlign='center';
+
+  ctx.font='12px serif';ctx.fillStyle='rgba(212,168,71,0.55)';
+  ctx.fillText('瑶爻好运小馆 · '+PAIR_REL_NAMES[rel],MX,Y);
+  Y+=24;
+
+  var relIcons={love:'♥',friend:'✦',business:'⚜',classmate:'✧'};
+  var relIcon=relIcons[rel]||'♥';
+  ctx.font='15px serif';ctx.fillStyle='rgba(245,237,220,0.75)';
+  ctx.fillText(_pairState.nameA+'  '+relIcon+'  '+_pairState.nameB,MX,Y);
+  Y+=16;
+
+  var ringR=30,ringCY=Y+ringR+5;
+  ctx.beginPath();ctx.arc(MX,ringCY,ringR+3,0,Math.PI*2);
+  ctx.fillStyle='rgba(212,168,71,0.04)';ctx.fill();
+  ctx.beginPath();ctx.arc(MX,ringCY,ringR,0,Math.PI*2);
+  ctx.strokeStyle='rgba(212,168,71,0.1)';ctx.lineWidth=3;ctx.stroke();
+  var pct=_pairState.score/100;
+  ctx.beginPath();
+  ctx.arc(MX,ringCY,ringR,-Math.PI/2,-Math.PI/2+Math.PI*2*pct);
+  ctx.strokeStyle=gc;ctx.lineWidth=3;ctx.lineCap='round';ctx.stroke();
+  ctx.font='bold 28px serif';ctx.fillStyle=gc;ctx.textAlign='center';
+  ctx.fillText(_pairState.score,MX,ringCY+10);
+  Y=ringCY+ringR+18;
+
+  ctx.font='bold 14px serif';ctx.fillStyle=gc;
+  ctx.fillText(g.label,MX,Y);
+  Y+=22;
+
+  ctx.beginPath();ctx.moveTo(PAD+50,Y);ctx.lineTo(CW-PAD-50,Y);
+  ctx.strokeStyle='rgba(212,168,71,0.12)';ctx.lineWidth=0.5;ctx.stroke();
+  Y+=12;
+
+  if(DEITY_IMG[cat]){
+    var avS=36;var avImg=new Image();avImg.src=DEITY_IMG[cat];
+    try{
+      ctx.save();ctx.beginPath();ctx.arc(MX,Y+avS/2,avS/2,0,Math.PI*2);ctx.clip();
+      ctx.drawImage(avImg,MX-avS/2,Y,avS,avS);ctx.restore();
+      ctx.beginPath();ctx.arc(MX,Y+avS/2,avS/2+1,0,Math.PI*2);
+      ctx.strokeStyle='rgba(212,168,71,0.15)';ctx.lineWidth=0.5;ctx.stroke();
+    }catch(e){}
+    Y+=avS+4;
+  }
+
+  ctx.font='12px serif';ctx.fillStyle='rgba(212,168,71,0.5)';
+  ctx.fillText(PAIR_REL_DEITY[rel]+' 有言',MX,Y);
+  Y+=18;
+
+  if(speechLines.length){
+    ctx.font='13px serif';ctx.fillStyle='rgba(245,237,220,0.65)';
+    for(var li=0;li<speechLines.length;li++){ctx.fillText(speechLines[li],MX,Y);Y+=19;}
+    Y+=10;
+  }
+
+  if(tipLines.length){
+    ctx.font='11px serif';ctx.fillStyle='rgba(212,168,71,0.35)';
+    for(var ti=0;ti<tipLines.length;ti++){ctx.fillText(tipLines[ti],MX,Y);Y+=17;}
+  }
+
+  Y+=30;
+  ctx.beginPath();ctx.moveTo(PAD+60,Y);ctx.lineTo(CW-PAD-60,Y);
+  ctx.strokeStyle='rgba(212,168,71,0.08)';ctx.lineWidth=0.5;ctx.stroke();
+  Y+=18;
+  ctx.font='11px serif';ctx.fillStyle='rgba(245,237,220,0.4)';
+  ctx.fillText('你和TA的缘分有多高？来测测吧',MX,Y);
+  Y+=20;
+  ctx.font='bold 12px serif';ctx.fillStyle='rgba(212,168,71,0.5)';
+  ctx.fillText('✦ 我也来测缘分',MX,Y);
+  Y+=18;
+  ctx.font='9px serif';ctx.fillStyle='rgba(212,168,71,0.2)';
+  var ds=new Date();ctx.fillText(ds.getFullYear()+'.'+(ds.getMonth()+1)+'.'+ds.getDate(),MX,Y);
+
+  HC=Y+16;
+  var finalCvs=document.createElement('canvas');
+  finalCvs.width=CW;finalCvs.height=HC;
+  var fctx=finalCvs.getContext('2d');
+  fctx.drawImage(cvs,0,0);
+
+  var shareImg=document.getElementById('sharePreview');
+  shareImg.src=finalCvs.toDataURL('image/png');
+  shareImg.style.display='block';
+  cvs.style.display='none';
+  document.getElementById('shareOverlay').classList.add('show');
+}
+
 </script>
 </body>
 </html>
