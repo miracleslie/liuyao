@@ -4245,6 +4245,26 @@ function saveCalendarRecord(){
     saveCalendar(cal);
   }
 }
+function migrateHistoryToCalendar(){
+  var cal=loadCalendar();
+  var list=loadHistory();
+  if(!list||list.length===0)return;
+  var changed=false;
+  for(var i=0;i<list.length;i++){
+    var r=list[i];
+    if(!r.date||!r.fortune)continue;
+    var dateStr=r.date.substring(0,10);
+    var cat=r.category||'general';
+    var deityName=(DEITY[cat]&&DEITY[cat].name)||'';
+    if(!cal[dateStr]||r.fortune<cal[dateStr].fortune){
+      cal[dateStr]={fortune:r.fortune,cat:cat,deity:deityName};
+      changed=true;
+    }
+  }
+  if(changed)saveCalendar(cal);
+}
+migrateHistoryToCalendar();
+
 function getCalendarStreak(){
   var cal=loadCalendar();
   var today=new Date();
