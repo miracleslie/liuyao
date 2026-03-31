@@ -1443,22 +1443,6 @@ body{
     </div>
   </div>
 
-  <!-- Abandon Modal -->
-  <div class="modal-overlay" id="abandonModal" style="display:none">
-    <div class="modal-box">
-      <div class="modal-text">确定要放弃本次摇爻吗？<br><span style="font-size:0.85em;color:var(--ink2)">当前进度将不会保存</span></div>
-      <div class="modal-btns">
-        <button class="btn btn-small" style="white-space:nowrap;padding:12px 0;width:42%;text-indent:0.15em" onclick="confirmAbandon()">确定放弃</button>
-        <button class="btn btn-small btn-ghost" style="white-space:nowrap;padding:12px 0;width:42%;text-indent:0.15em" onclick="closeAbandonModal()">继续摇爻</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Sound Toggle -->
-<button class="sound-toggle" id="soundToggle" onclick="toggleSound()" title="音效开关">🔊</button>
-
-<!-- Affinity Level-Up Ceremony -->
   <!-- Stage: Fortune Calendar -->
   <div id="stage-calendar" class="stage">
     <div class="calendar-page">
@@ -1486,6 +1470,21 @@ body{
       <button class="cal-back" onclick="goToStage('welcome')">返 回</button>
     </div>
   </div>
+
+  <!-- Abandon Modal -->
+  <div class="modal-overlay" id="abandonModal" style="display:none">
+    <div class="modal-box">
+      <div class="modal-text">确定要放弃本次摇爻吗？<br><span style="font-size:0.85em;color:var(--ink2)">当前进度将不会保存</span></div>
+      <div class="modal-btns">
+        <button class="btn btn-small" style="white-space:nowrap;padding:12px 0;width:42%;text-indent:0.15em" onclick="confirmAbandon()">确定放弃</button>
+        <button class="btn btn-small btn-ghost" style="white-space:nowrap;padding:12px 0;width:42%;text-indent:0.15em" onclick="closeAbandonModal()">继续摇爻</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sound Toggle -->
+<button class="sound-toggle" id="soundToggle" onclick="toggleSound()" title="音效开关">🔊</button>
 
 <!-- Daily Message Modal (first visit of the day) -->
 <div class="daily-msg-modal" id="dailyMsgModal">
