@@ -70,77 +70,91 @@ body{
   100%{opacity:1;transform:scale(1);filter:blur(0)}
 }
 
-/* ====================== TYPOGRAPHY ====================== */
+/* ====================== WELCOME TOP ====================== */
+.welcome-top{text-align:center;margin-bottom:8px}
 .title{
-  font-size:clamp(36px,8vw,60px);letter-spacing:0.3em;color:var(--ink);
+  font-size:clamp(32px,7vw,52px);letter-spacing:0.35em;color:var(--ink);
   font-weight:normal;line-height:1.2;position:relative;
-  text-shadow:0 0 60px rgba(212,168,71,0.2), 0 0 120px rgba(212,168,71,0.1);
+  text-shadow:0 0 60px rgba(212,168,71,0.15);
 }
 .title::after{
-  content:'';position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);
-  width:60%;height:1px;
+  content:'';position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);
+  width:50%;height:1px;
   background:linear-gradient(90deg,transparent,var(--gold),transparent);
-  animation:lineGlow 3s ease-in-out infinite;
+  animation:lineGlow 4s ease-in-out infinite;
 }
 @keyframes lineGlow{
-  0%,100%{opacity:0.3;width:40%}
-  50%{opacity:1;width:70%}
+  0%,100%{opacity:0.2;width:30%}
+  50%{opacity:0.8;width:60%}
 }
 .subtitle{
-  font-size:clamp(18px,3vw,24px);color:var(--ink2);letter-spacing:0.5em;
-  margin-top:16px;
+  font-size:clamp(12px,2vw,16px);color:var(--gold);letter-spacing:0.6em;
+  margin-top:20px;opacity:0.5;
 }
-.desc{
-  font-size:clamp(16px,2.5vw,20px);line-height:2.2;color:var(--ink2);
-  text-align:center;max-width:480px;margin-top:28px;letter-spacing:0.1em;
+
+/* ====================== WELCOME QUOTE ====================== */
+.welcome-quote{
+  font-size:clamp(13px,2.2vw,16px);color:var(--ink2);letter-spacing:0.2em;
+  text-align:center;margin:20px 0 6px;opacity:0.55;
+  font-style:italic;
 }
 
 /* ====================== DEITY STRIP ====================== */
 .deity-strip{
-  display:flex;gap:clamp(6px,1.5vw,12px);justify-content:center;flex-wrap:nowrap;
-  margin-top:28px;max-width:100%;
+  display:flex;gap:clamp(10px,2vw,18px);justify-content:center;flex-wrap:nowrap;
+  margin:24px 0 8px;max-width:100%;
 }
 .deity-chip{
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  padding:10px 8px 8px;min-width:56px;
-  border:1px solid rgba(212,168,71,0.12);
-  background:rgba(212,168,71,0.03);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:12px 6px 10px;min-width:52px;
+  border:none;background:transparent;
   transition:all 0.4s ease;cursor:default;
-  animation:chipFloat 3s ease-in-out infinite;
 }
-.deity-chip:nth-child(2){animation-delay:0.5s}
-.deity-chip:nth-child(3){animation-delay:1s}
-.deity-chip:nth-child(4){animation-delay:1.5s}
-.deity-chip:nth-child(5){animation-delay:2s}
-.deity-chip:nth-child(6){animation-delay:2.5s}
-.deity-chip:hover{
-  border-color:var(--gold);background:rgba(212,168,71,0.08);
-  transform:translateY(-4px);box-shadow:0 6px 20px rgba(212,168,71,0.12);
-}
-@keyframes chipFloat{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-3px)}
+.deity-chip:hover .dc-avatar{
+  transform:translateY(-4px) scale(1.08);
+  box-shadow:0 8px 24px rgba(212,168,71,0.2),inset 0 1px 4px rgba(255,255,255,0.2);
 }
 .dc-avatar{
-  width:clamp(40px,8vw,52px);height:clamp(40px,8vw,52px);border-radius:50%;
+  width:clamp(46px,9vw,58px);height:clamp(46px,9vw,58px);border-radius:50%;
   background-size:cover;background-position:center;
-  box-shadow:0 3px 14px rgba(0,0,0,0.35),inset 0 1px 4px rgba(255,255,255,0.2);
-  border:2px solid rgba(212,168,71,0.3);
+  box-shadow:0 4px 16px rgba(0,0,0,0.4),inset 0 1px 4px rgba(255,255,255,0.15);
+  border:2px solid rgba(212,168,71,0.25);
+  transition:all 0.4s ease;
 }
-.dc-name{font-size:clamp(10px,1.5vw,13px);color:var(--ink2);letter-spacing:0.1em;opacity:0.7}
+.dc-name{
+  font-size:clamp(10px,1.6vw,12px);color:var(--ink2);
+  letter-spacing:0.12em;opacity:0.6;
+}
 
 /* ====================== WELCOME CTA ====================== */
 .welcome-cta{
-  padding:20px 64px!important;font-size:clamp(20px,3.5vw,26px)!important;
+  padding:18px 60px!important;font-size:clamp(18px,3.2vw,24px)!important;
   letter-spacing:0.5em!important;
   border-color:var(--gold)!important;
-  box-shadow:0 0 40px rgba(212,168,71,0.1),inset 0 0 30px rgba(212,168,71,0.04);
-  animation:ctaPulse 3s ease-in-out infinite;
+  background:linear-gradient(135deg,rgba(212,168,71,0.06),rgba(212,168,71,0.14))!important;
+  box-shadow:0 0 40px rgba(212,168,71,0.08),inset 0 0 30px rgba(212,168,71,0.03);
+  animation:ctaPulse 4s ease-in-out infinite;
+  margin-top:16px!important;
 }
 @keyframes ctaPulse{
-  0%,100%{box-shadow:0 0 30px rgba(212,168,71,0.08),inset 0 0 20px rgba(212,168,71,0.03)}
-  50%{box-shadow:0 0 50px rgba(212,168,71,0.2),inset 0 0 40px rgba(212,168,71,0.06)}
+  0%,100%{box-shadow:0 0 30px rgba(212,168,71,0.06),inset 0 0 20px rgba(212,168,71,0.02)}
+  50%{box-shadow:0 0 50px rgba(212,168,71,0.18),inset 0 0 40px rgba(212,168,71,0.05)}
 }
+
+/* ====================== WELCOME NAV ====================== */
+.welcome-nav{
+  display:flex;gap:16px;justify-content:center;margin-top:24px;flex-wrap:wrap;
+}
+.wnav-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:10px 20px;font-size:clamp(12px,2vw,14px);
+  color:var(--ink2);letter-spacing:0.1em;
+  border:1px solid rgba(212,168,71,0.1);border-radius:20px;
+  background:rgba(212,168,71,0.03);
+  font-family:inherit;cursor:pointer;transition:all 0.3s;
+}
+.wnav-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(212,168,71,0.08)}
+.wnav-icon{font-size:0.85em;opacity:0.5}
 
 /* ====================== DECORATIONS ====================== */
 .divider{
@@ -787,10 +801,12 @@ body{
 /* ====================== RESPONSIVE ====================== */
 @media(max-width:480px){
   .stage{padding:20px 16px 36px;overflow-x:hidden}
-  .title{font-size:clamp(22px,5.5vw,30px)}
-  .subtitle{font-size:clamp(11px,2.5vw,14px);letter-spacing:0.3em}
-  .desc{font-size:clamp(13px,3vw,15px);padding:0 4px}
-  .welcome-cta{padding:16px 36px!important;letter-spacing:0.3em!important;font-size:clamp(16px,4vw,20px)!important}
+  .title{font-size:clamp(24px,6vw,32px)}
+  .subtitle{font-size:clamp(10px,2vw,13px);letter-spacing:0.35em}
+  .welcome-quote{font-size:12px;margin:14px 0 4px}
+  .welcome-cta{padding:16px 40px!important;letter-spacing:0.35em!important;font-size:clamp(16px,4vw,20px)!important}
+  .welcome-nav{gap:10px;margin-top:18px}
+  .wnav-btn{padding:8px 14px;font-size:12px}
   .btn{padding:14px 32px;letter-spacing:0.25em;font-size:clamp(15px,3.5vw,18px);margin-top:28px}
   .btn:hover{letter-spacing:0.3em}
   .result-content,.remedy-content,.deity-speech p{word-break:break-all;word-break:break-word}
@@ -800,10 +816,10 @@ body{
   .btn-row{gap:10px;margin-top:28px}
   .btn-ghost{padding:12px 24px;letter-spacing:0.2em;font-size:clamp(14px,3vw,16px)}
   .restart-area{margin-top:20px;padding-top:16px}
-  .deity-strip{gap:clamp(4px,1vw,8px);overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;justify-content:center}
-  .deity-chip{min-width:50px;padding:6px 4px}
-  .dc-avatar{width:clamp(32px,8vw,40px);height:clamp(32px,8vw,40px)}
-  .dc-name{font-size:clamp(10px,2.2vw,12px)}
+  .deity-strip{gap:clamp(6px,1.5vw,12px);overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;justify-content:center}
+  .deity-chip{min-width:46px;padding:8px 4px 6px}
+  .dc-avatar{width:clamp(36px,9vw,44px);height:clamp(36px,9vw,44px)}
+  .dc-name{font-size:clamp(9px,2vw,11px)}
   .cat-title{font-size:clamp(20px,5vw,26px)}
   .cat-sub{font-size:clamp(11px,2.5vw,14px)}
   .cat-grid{gap:10px;max-width:100%}
@@ -875,17 +891,18 @@ body{
 }
 @media(max-width:375px){
   .stage{padding:16px 12px 32px}
-  .welcome-cta{padding:14px 28px!important;letter-spacing:0.2em!important;font-size:15px!important}
-  .btn-affinity-entry{padding:14px 28px;letter-spacing:0.2em;font-size:15px}
+  .welcome-cta{padding:14px 32px!important;letter-spacing:0.25em!important;font-size:15px!important}
+  .welcome-nav{gap:8px;margin-top:14px}
+  .wnav-btn{padding:7px 12px;font-size:11px;gap:4px}
   .btn{padding:12px 24px;letter-spacing:0.2em}
   .btn-small{padding:10px 18px;letter-spacing:0.15em;font-size:13px}
   .btn-incense{padding:10px 22px;letter-spacing:0.15em;font-size:14px}
   .btn-pray{padding:10px 24px;letter-spacing:0.2em;font-size:14px}
   .btn-ghost{padding:10px 18px;letter-spacing:0.15em;font-size:13px}
-  .deity-strip{gap:2px}
-  .deity-chip{min-width:46px;padding:5px 2px}
-  .dc-avatar{width:30px;height:30px}
-  .dc-name{font-size:10px}
+  .deity-strip{gap:4px}
+  .deity-chip{min-width:42px;padding:6px 2px 4px}
+  .dc-avatar{width:34px;height:34px}
+  .dc-name{font-size:9px}
   .cat-grid{gap:8px}
   .cat-card{padding:12px 4px}
   .cat-card .icon{width:40px;height:40px}
@@ -911,14 +928,6 @@ body{
 }
 
 /* ====================== DEITY AFFINITY SYSTEM ====================== */
-.btn-affinity-entry{
-  margin-top:18px;display:inline-block;box-sizing:border-box;max-width:90%;
-  padding:20px 64px;font-size:clamp(20px,3.5vw,26px);letter-spacing:0.5em;
-  background:linear-gradient(135deg,rgba(212,168,71,0.08),rgba(212,168,71,0.18));
-  border:1.5px solid var(--gold);color:var(--gold);border-radius:8px;
-  font-family:inherit;cursor:pointer;transition:all 0.3s;
-}
-.btn-affinity-entry:hover{background:rgba(212,168,71,0.22);box-shadow:0 0 16px rgba(212,168,71,0.2)}
 
 .aff-border-1 .dc-avatar{box-shadow:none}
 .aff-border-2 .dc-avatar{box-shadow:0 0 0 2px rgba(180,170,150,0.6)}
@@ -993,7 +1002,6 @@ body{
   .aff-card{padding:12px;gap:10px}
   .aff-avatar{width:48px;height:48px}
   .aff-name{font-size:0.9em}
-  .btn-affinity-entry{padding:16px 36px;letter-spacing:0.3em;font-size:clamp(16px,4vw,20px)}
 }
 @media(max-width:375px){
   .aff-avatar{width:42px;height:42px}
@@ -1065,7 +1073,6 @@ body{
   .aff-subtitle{font-size:0.75em}
   .aff-greeting{font-size:0.7em}
   .aff-back{padding:9px 24px;font-size:0.82em}
-  .btn-affinity-entry{padding:14px 28px;letter-spacing:0.2em;font-size:15px}
 }
 
 /* ====================== DAILY DEITY MESSAGE ====================== */
@@ -1129,15 +1136,6 @@ body{
 }
 
 /* ====================== FORTUNE CALENDAR ====================== */
-.btn-calendar-entry{
-  display:inline-block;margin-top:10px;padding:8px 24px;
-  font-size:0.82em;letter-spacing:0.15em;color:var(--ink2);
-  border:1px solid rgba(212,168,71,0.12);border-radius:6px;
-  background:transparent;cursor:pointer;font-family:inherit;
-  transition:all 0.3s;
-}
-.btn-calendar-entry:hover{border-color:var(--gold);color:var(--gold)}
-
 .calendar-page{padding:30px 20px;max-width:480px;margin:0 auto}
 .cal-title{text-align:center;font-size:1.4em;letter-spacing:0.35em;color:var(--ink);margin-bottom:4px}
 .cal-subtitle{text-align:center;font-size:0.82em;color:var(--gold);opacity:0.5;margin-bottom:8px;letter-spacing:0.1em}
@@ -1210,22 +1208,22 @@ body{
 <div id="app">
   <!-- Stage 1: Welcome -->
   <div id="stage-welcome" class="stage active">
-    <div class="title">摇爻好运小馆</div>
-    <div class="subtitle">解 惑 · 问 运 · 趋 吉 避 凶</div>
-    <div class="divider"></div>
+    <div class="welcome-top">
+      <div class="title">摇爻好运小馆</div>
+      <div class="subtitle">解 惑 · 问 运 · 趋 吉 避 凶</div>
+    </div>
+
     <div class="deity-strip">
-      <div class="deity-chip"><div class="dc-avatar" data-cat="general"></div><span class="dc-name">看综合</span></div>
-      <div class="deity-chip"><div class="dc-avatar" data-cat="career"></div><span class="dc-name">断事业</span></div>
-      <div class="deity-chip"><div class="dc-avatar" data-cat="love"></div><span class="dc-name">牵姻缘</span></div>
-      <div class="deity-chip"><div class="dc-avatar" data-cat="wealth"></div><span class="dc-name">旺财运</span></div>
-      <div class="deity-chip"><div class="dc-avatar" data-cat="health"></div><span class="dc-name">保安康</span></div>
-      <div class="deity-chip"><div class="dc-avatar" data-cat="study"></div><span class="dc-name">佑学业</span></div>
+      <div class="deity-chip"><div class="dc-avatar" data-cat="general"></div><span class="dc-name">看综合</span><span class="aff-lv-badge"></span></div>
+      <div class="deity-chip"><div class="dc-avatar" data-cat="career"></div><span class="dc-name">断事业</span><span class="aff-lv-badge"></span></div>
+      <div class="deity-chip"><div class="dc-avatar" data-cat="love"></div><span class="dc-name">牵姻缘</span><span class="aff-lv-badge"></span></div>
+      <div class="deity-chip"><div class="dc-avatar" data-cat="wealth"></div><span class="dc-name">旺财运</span><span class="aff-lv-badge"></span></div>
+      <div class="deity-chip"><div class="dc-avatar" data-cat="health"></div><span class="dc-name">保安康</span><span class="aff-lv-badge"></span></div>
+      <div class="deity-chip"><div class="dc-avatar" data-cat="study"></div><span class="dc-name">佑学业</span><span class="aff-lv-badge"></span></div>
     </div>
-    <div class="desc">
-      工作不顺？感情纠结？财运不佳？<br>
-      选一个方向，摇一爻<br><br>
-      <span style="color:var(--gold);letter-spacing:0.2em">答案马上揭晓</span>
-    </div>
+
+    <div class="welcome-quote">心之所惑，爻中自有答案</div>
+
     <div class="daily-msg" id="dailyMsgBox">
       <div class="daily-msg-head">
         <div class="daily-msg-avatar" id="dailyMsgAvatar"></div>
@@ -1234,10 +1232,14 @@ body{
       <div class="daily-msg-text" id="dailyMsgText"></div>
       <div class="daily-msg-date" id="dailyMsgDate"></div>
     </div>
+
     <button class="btn welcome-cta" onclick="goToStage('category')">摇 一 爻</button>
-    <button class="btn-affinity-entry" id="btnAffinityEntry" style="display:none" onclick="goToStage('affinity')">仙 缘 录</button>
-    <button class="btn-calendar-entry" id="btnCalendarEntry" onclick="goToStage('calendar')">运 势 月 历</button>
-    <button class="btn btn-small" id="btnWelcomeHistory" style="margin-top:12px;border-color:var(--ink2);color:var(--ink2);display:none" onclick="goToStage('history')">历史记录</button>
+
+    <div class="welcome-nav">
+      <button class="wnav-btn" id="btnAffinityEntry" style="display:none" onclick="goToStage('affinity')"><span class="wnav-icon">☰</span>仙缘录</button>
+      <button class="wnav-btn" id="btnCalendarEntry" onclick="goToStage('calendar')"><span class="wnav-icon">◇</span>运势月历</button>
+      <button class="wnav-btn" id="btnWelcomeHistory" style="display:none" onclick="goToStage('history')"><span class="wnav-icon">◈</span>历史记录</button>
+    </div>
   </div>
 
   <!-- Stage 2: Category -->
@@ -2321,7 +2323,7 @@ function goToStage(name){
 function updateHistoryBtns(){
   var has = loadHistory().length > 0;
   var wb = document.getElementById('btnWelcomeHistory');
-  if(wb) wb.style.display = has ? '' : 'none';
+  if(wb) wb.style.display = has ? 'flex' : 'none';
   document.querySelectorAll('.btn-history-cond').forEach(function(b){ b.style.display = has ? '' : 'none'; });
 }
 
@@ -3365,7 +3367,7 @@ function updateWelcomeAffinityBorders(){
     if(all[cats[i]]&&all[cats[i]].lv>=2){anyLv2=true;break;}
   }
   var btn=document.getElementById('btnAffinityEntry');
-  if(btn) btn.style.display=anyLv2?'':'none';
+  if(btn) btn.style.display=anyLv2?'flex':'none';
   document.querySelectorAll('.deity-chip').forEach(function(chip){
     var av=chip.querySelector('.dc-avatar');
     if(!av)return;
