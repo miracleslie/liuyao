@@ -1156,10 +1156,10 @@ body{
 .cal-weekday{text-align:center;font-size:0.7em;color:var(--ink2);opacity:0.5;letter-spacing:0.05em;padding:4px 0}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .cal-cell{
-  height:78px;border-radius:8px;display:flex;flex-direction:column;
+  border-radius:8px;display:flex;flex-direction:column;
   align-items:center;justify-content:center;font-size:0.78em;color:var(--ink2);
   background:rgba(255,255,255,0.02);border:1px solid transparent;
-  position:relative;transition:all 0.2s;padding:4px 0;box-sizing:border-box;
+  position:relative;transition:all 0.2s;padding:6px 0;
 }
 .cal-cell.today{border-color:var(--gold);box-shadow:0 0 8px rgba(212,168,71,0.15)}
 .cal-cell.has-record{cursor:pointer}
@@ -1188,13 +1188,13 @@ body{
 @media(max-width:480px){
   .calendar-page{padding:20px 12px}
   .cal-title{font-size:1.2em;letter-spacing:0.25em}
-  .cal-cell{font-size:0.7em;border-radius:6px;height:66px}
+  .cal-cell{font-size:0.7em;border-radius:6px}
   .cal-cell .cal-dot{width:6px;height:6px}
   .cal-cell .cal-deity{display:none}
 }
 @media(max-width:375px){
   .cal-title{font-size:1.05em}
-  .cal-cell{font-size:0.65em;height:56px}
+  .cal-cell{font-size:0.65em}
   .cal-streak{font-size:0.8em}
 }
 </style>
@@ -4313,7 +4313,10 @@ function renderCalendar(){
     html+='<div class="cal-day">'+d+'</div>';
     if(rec){
       html+='<div class="cal-dot"></div>';
-      html+='<div class="cal-deity">'+(rec.deity||'')+'</div>';
+      html+='<div class="cal-deity">'+(rec.deity||'占卜')+'</div>';
+    }else{
+      html+='<div class="cal-dot" style="visibility:hidden"></div>';
+      html+='<div class="cal-deity" style="visibility:hidden">占位符号</div>';
     }
     html+='</div>';
   }
