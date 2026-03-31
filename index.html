@@ -1067,6 +1067,136 @@ body{
   .aff-back{padding:9px 24px;font-size:0.82em}
   .btn-affinity-entry{padding:14px 28px;letter-spacing:0.2em;font-size:15px}
 }
+
+/* ====================== DAILY DEITY MESSAGE ====================== */
+.daily-msg{
+  display:none;max-width:420px;width:90%;margin:0 auto 18px;
+  padding:16px 20px;border-radius:10px;text-align:center;
+  background:linear-gradient(145deg,rgba(40,36,28,0.7),rgba(30,27,22,0.55));
+  border:1px solid rgba(212,168,71,0.12);position:relative;
+}
+.daily-msg-head{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px}
+.daily-msg-avatar{
+  width:36px;height:36px;border-radius:50%;background-size:cover;background-position:center;
+  border:1.5px solid var(--gold);flex-shrink:0;
+}
+.daily-msg-name{font-size:0.85em;color:var(--gold);letter-spacing:0.15em}
+.daily-msg-text{
+  font-size:clamp(13px,2.2vw,16px);color:var(--ink);line-height:1.9;
+  letter-spacing:0.08em;font-style:italic;opacity:0.85;
+}
+.daily-msg-date{font-size:0.7em;color:var(--ink2);opacity:0.4;margin-top:6px;letter-spacing:0.1em}
+
+.daily-msg-modal{
+  position:fixed;top:0;left:0;width:100%;height:100%;z-index:9998;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  background:rgba(20,18,14,0);opacity:0;pointer-events:none;
+  transition:opacity 0.6s,background 0.6s;
+}
+.daily-msg-modal.show{opacity:1;pointer-events:auto;background:rgba(20,18,14,0.88)}
+.daily-msg-modal-avatar{
+  width:80px;height:80px;border-radius:50%;background-size:cover;background-position:center;
+  border:2.5px solid var(--gold);margin-bottom:16px;
+  transform:scale(0.5);opacity:0;transition:transform 0.6s cubic-bezier(.17,.67,.28,1.2),opacity 0.5s;
+}
+.daily-msg-modal.show .daily-msg-modal-avatar{transform:scale(1);opacity:1}
+.daily-msg-modal-body{
+  text-align:center;max-width:320px;padding:0 24px;
+  opacity:0;transform:translateY(16px);transition:opacity 0.5s 0.3s,transform 0.5s 0.3s;
+}
+.daily-msg-modal.show .daily-msg-modal-body{opacity:1;transform:translateY(0)}
+.daily-msg-modal-name{font-size:1.1em;color:var(--gold);letter-spacing:0.25em;margin-bottom:12px}
+.daily-msg-modal-text{font-size:clamp(14px,2.5vw,17px);color:var(--ink);line-height:2;letter-spacing:0.08em;opacity:0.9}
+.daily-msg-modal-dismiss{
+  margin-top:28px;padding:10px 36px;font-size:0.88em;letter-spacing:0.2em;
+  border:1px solid var(--gold);color:var(--gold);background:transparent;
+  border-radius:6px;cursor:pointer;font-family:inherit;
+  opacity:0;transition:opacity 0.4s 0.7s,background 0.3s;
+}
+.daily-msg-modal.show .daily-msg-modal-dismiss{opacity:1}
+.daily-msg-modal-dismiss:hover{background:rgba(212,168,71,0.15)}
+@media(max-width:480px){
+  .daily-msg{padding:14px 16px;margin-bottom:14px}
+  .daily-msg-avatar{width:32px;height:32px}
+  .daily-msg-modal-avatar{width:68px;height:68px}
+  .daily-msg-modal-body{max-width:280px;padding:0 16px}
+}
+@media(max-width:375px){
+  .daily-msg{padding:12px 12px;margin-bottom:12px}
+  .daily-msg-text{font-size:12px}
+  .daily-msg-modal-avatar{width:60px;height:60px}
+  .daily-msg-modal-body{max-width:260px;padding:0 12px}
+}
+
+/* ====================== FORTUNE CALENDAR ====================== */
+.btn-calendar-entry{
+  display:inline-block;margin-top:10px;padding:8px 24px;
+  font-size:0.82em;letter-spacing:0.15em;color:var(--ink2);
+  border:1px solid rgba(212,168,71,0.12);border-radius:6px;
+  background:transparent;cursor:pointer;font-family:inherit;
+  transition:all 0.3s;
+}
+.btn-calendar-entry:hover{border-color:var(--gold);color:var(--gold)}
+
+.calendar-page{padding:30px 20px;max-width:480px;margin:0 auto}
+.cal-title{text-align:center;font-size:1.4em;letter-spacing:0.35em;color:var(--ink);margin-bottom:4px}
+.cal-subtitle{text-align:center;font-size:0.82em;color:var(--gold);opacity:0.5;margin-bottom:8px;letter-spacing:0.1em}
+.cal-streak{text-align:center;font-size:0.88em;color:var(--gold);letter-spacing:0.12em;margin-bottom:20px}
+.cal-streak span{font-size:1.3em;font-weight:bold}
+.cal-nav{display:flex;align-items:center;justify-content:center;gap:20px;margin-bottom:16px}
+.cal-nav-btn{
+  background:none;border:1px solid rgba(212,168,71,0.2);color:var(--gold);
+  width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1em;
+  display:flex;align-items:center;justify-content:center;font-family:inherit;
+  transition:all 0.3s;
+}
+.cal-nav-btn:hover{border-color:var(--gold);background:rgba(212,168,71,0.1)}
+.cal-month-label{font-size:1em;color:var(--ink);letter-spacing:0.2em;min-width:120px;text-align:center}
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}
+.cal-weekday{text-align:center;font-size:0.7em;color:var(--ink2);opacity:0.5;letter-spacing:0.05em;padding:4px 0}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-cell{
+  aspect-ratio:1;border-radius:8px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-size:0.78em;color:var(--ink2);
+  background:rgba(255,255,255,0.02);border:1px solid transparent;
+  position:relative;transition:all 0.2s;
+}
+.cal-cell.today{border-color:var(--gold);box-shadow:0 0 8px rgba(212,168,71,0.15)}
+.cal-cell.has-record{cursor:pointer}
+.cal-cell.has-record:hover{transform:scale(1.08);border-color:rgba(212,168,71,0.3)}
+.cal-cell .cal-day{font-size:0.9em;margin-bottom:2px}
+.cal-cell .cal-dot{
+  width:8px;height:8px;border-radius:50%;
+}
+.cal-cell.empty{background:transparent}
+.cal-cell.streak-7{border-color:var(--gold);background:rgba(212,168,71,0.06)}
+.cal-fortune-1 .cal-dot{background:#d4a847;box-shadow:0 0 6px rgba(212,168,71,0.5)}
+.cal-fortune-2 .cal-dot{background:#c9a84a}
+.cal-fortune-3 .cal-dot{background:#a09060}
+.cal-fortune-4 .cal-dot{background:#706858}
+.cal-fortune-5 .cal-dot{background:#a05050}
+.cal-fortune-6 .cal-dot{background:#c43c3c;box-shadow:0 0 4px rgba(196,60,60,0.4)}
+.cal-cell .cal-deity{font-size:0.55em;color:var(--ink2);opacity:0.5;margin-top:1px}
+.cal-back{
+  display:block;margin:20px auto 0;padding:12px 36px;font-size:0.95em;
+  border:1px solid var(--ink2);color:var(--ink2);background:transparent;
+  border-radius:6px;cursor:pointer;font-family:inherit;letter-spacing:0.15em;
+}
+.cal-legend{display:flex;justify-content:center;gap:14px;margin-top:16px;flex-wrap:wrap}
+.cal-legend-item{display:flex;align-items:center;gap:4px;font-size:0.68em;color:var(--ink2);opacity:0.6}
+.cal-legend-dot{width:8px;height:8px;border-radius:50%}
+@media(max-width:480px){
+  .calendar-page{padding:20px 12px}
+  .cal-title{font-size:1.2em;letter-spacing:0.25em}
+  .cal-cell{font-size:0.7em;border-radius:6px}
+  .cal-cell .cal-dot{width:6px;height:6px}
+  .cal-cell .cal-deity{display:none}
+}
+@media(max-width:375px){
+  .cal-title{font-size:1.05em}
+  .cal-cell{font-size:0.65em}
+  .cal-streak{font-size:0.8em}
+}
 </style>
 </head>
 <body>
@@ -1096,8 +1226,17 @@ body{
       选一个方向，摇一爻<br><br>
       <span style="color:var(--gold);letter-spacing:0.2em">答案马上揭晓</span>
     </div>
+    <div class="daily-msg" id="dailyMsgBox">
+      <div class="daily-msg-head">
+        <div class="daily-msg-avatar" id="dailyMsgAvatar"></div>
+        <div class="daily-msg-name" id="dailyMsgName"></div>
+      </div>
+      <div class="daily-msg-text" id="dailyMsgText"></div>
+      <div class="daily-msg-date" id="dailyMsgDate"></div>
+    </div>
     <button class="btn welcome-cta" onclick="goToStage('category')">摇 一 爻</button>
     <button class="btn-affinity-entry" id="btnAffinityEntry" style="display:none" onclick="goToStage('affinity')">仙 缘 录</button>
+    <button class="btn-calendar-entry" id="btnCalendarEntry" onclick="goToStage('calendar')">运 势 月 历</button>
     <button class="btn btn-small" id="btnWelcomeHistory" style="margin-top:12px;border-color:var(--ink2);color:var(--ink2);display:none" onclick="goToStage('history')">历史记录</button>
   </div>
 
@@ -1320,6 +1459,44 @@ body{
 <button class="sound-toggle" id="soundToggle" onclick="toggleSound()" title="音效开关">🔊</button>
 
 <!-- Affinity Level-Up Ceremony -->
+  <!-- Stage: Fortune Calendar -->
+  <div id="stage-calendar" class="stage">
+    <div class="calendar-page">
+      <div class="cal-title">运 势 月 历</div>
+      <div class="cal-subtitle">每一天的运势痕迹</div>
+      <div class="cal-streak" id="calStreak"></div>
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="calNavMonth(-1)">◀</button>
+        <div class="cal-month-label" id="calMonthLabel"></div>
+        <button class="cal-nav-btn" onclick="calNavMonth(1)">▶</button>
+      </div>
+      <div class="cal-weekdays">
+        <div class="cal-weekday">日</div><div class="cal-weekday">一</div><div class="cal-weekday">二</div>
+        <div class="cal-weekday">三</div><div class="cal-weekday">四</div><div class="cal-weekday">五</div><div class="cal-weekday">六</div>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-legend">
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#d4a847"></div>大吉</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#c9a84a"></div>吉</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#a09060"></div>小吉</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#706858"></div>平</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#a05050"></div>小凶</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#c43c3c"></div>凶</div>
+      </div>
+      <button class="cal-back" onclick="goToStage('welcome')">返 回</button>
+    </div>
+  </div>
+
+<!-- Daily Message Modal (first visit of the day) -->
+<div class="daily-msg-modal" id="dailyMsgModal">
+  <div class="daily-msg-modal-avatar" id="dailyMsgModalAvatar"></div>
+  <div class="daily-msg-modal-body">
+    <div class="daily-msg-modal-name" id="dailyMsgModalName"></div>
+    <div class="daily-msg-modal-text" id="dailyMsgModalText"></div>
+    <button class="daily-msg-modal-dismiss" onclick="dismissDailyModal()">知 道 了</button>
+  </div>
+</div>
+
 <div class="aff-ceremony" id="affCeremony">
   <div class="aff-ceremony-ring" id="affRing"></div>
   <div class="aff-ceremony-avatar" id="affCeremonyAvatar"></div>
@@ -2140,6 +2317,7 @@ function goToStage(name){
   if(name==='incense'){ if(state.incenseDone){ goToStage('result'); return; } initIncense(); }
   if(name==='lamp'){ if(state.lampDone){ goToStage('result'); return; } initLamp(); }
   if(name==='affinity') buildAffinityPage();
+  if(name==='calendar') buildCalendarPage();
 }
 function updateHistoryBtns(){
   var has = loadHistory().length > 0;
@@ -2519,7 +2697,7 @@ function buildResult(){
   var dp = document.getElementById('resultDetail');
   dp.classList.remove('active'); dp.innerHTML = ''; dp.dataset.built = '';
 
-  if(!state.saved){ state.saved = true; saveToHistory(); state.affinityResult = addAffinityCast(state.category); handleAffinityResult(state.affinityResult); }
+  if(!state.saved){ state.saved = true; saveToHistory(); saveCalendarRecord(); state.affinityResult = addAffinityCast(state.category); handleAffinityResult(state.affinityResult); }
 
   var incEntry = document.getElementById('incenseEntry');
   var lampEntry = document.getElementById('lampEntry');
@@ -3926,9 +4104,216 @@ function initDeityAvatars(){
   document.querySelectorAll('.dc-avatar[data-cat]').forEach(function(el){ setAvatarBg(el, el.getAttribute('data-cat')); });
   document.querySelectorAll('.cat-card .icon[data-cat]').forEach(function(el){ setAvatarBg(el, el.getAttribute('data-cat')); });
 }
+
+// ================= DAILY DEITY MESSAGE =================
+var DAILY_MSG_KEY='liuyao_daily_msg';
+var DAILY_MSG_POOLS={
+  career:{
+    2:['刀锋所向，皆有因果。今日行事，先辨忠奸。','兵法云：不动如山。未见良机前，守比攻更难。','义之所在，虽千万人吾往矣。今日可问问自己何为义。','大丈夫立于天地间，不惧风雨，惧的是心中无主。','战场之上，胜负在于一念。职场亦然，今日慎思而行。'],
+    3:['刀虽利，不斩无名之辈。今日别跟不值得的事较劲。','我看你今天适合闷头干活，少说多做，晚上自然心安。','有些仗不是靠蛮力，是靠等。今天就是等的日子。','事业这条路，走得慢不要紧，走错了才麻烦。今日看准再动。','老话说得好——谋定而后动。今天先谋，明天再动。'],
+    4:['乱世出英雄，但英雄也要吃饭睡觉。今天先把小事做好。','别急，该来的战功跑不掉。今天养精蓄锐，明天再战。','你最近的路走得不错，但别忘了回头看看——有些人值得感谢。','今天适合磨刀。不是要砍谁，是把自己的本事再打磨打磨。','风平浪静的日子，最适合想清楚下一步棋怎么走。'],
+    5:['今天你身上有股劲，我看得到。信自己，别犹豫。放手去做。','我等你的好消息。记住，你不是一个人在战斗。','有些路只有你能走，但你走的每一步，我都看着。今天稳住。','不管外面多乱，你心里得有数。今天的你，比昨天更强。','你这阵子辛苦了，我知道。但你撑过去了，后面就是坦途。']
+  },
+  wealth:{
+    2:['财聚财散，皆有定数。今日宜守不宜攻，静待时机。','黄金万两不如心安一刻。今日先求心安，财自然来。','商道如水，善利万物而不争。今日不争，反得更多。','财运如潮，有涨有落。今日潮退之时，正好拾贝。','不是每笔账都要今天算清。放长线，才能钓大鱼。'],
+    3:['今天财运还行，但别贪。见好就收，落袋为安。','我观你今日气色不错，适合谈点小买卖。大的先放放。','钱这东西嘛，你不追它它就来了。今天放松点。','该花的别省，该省的别花。今天的每一笔都算数。','有人说钱是身外之物。但我告诉你，今天这个身外之物对你不错。'],
+    4:['别光盯着钱包看了。今天多想想值得投资的是什么——包括你自己。','今天没有大财运，但有小确幸。注意身边那些被你忽略的机会。','财神也有休息的时候。今天就当陪我歇歇，明天继续。','你最近的财运在蓄力，像弹簧压到底。时候到了，弹得更高。','平平淡淡也是福。今天不亏就是赚。'],
+    5:['今天我特意来跟你说一句：最近有个机会，你得抓住。','看着你一步步走过来，不容易。今天的你值得所有的好运。','我把今天最好的财气留给你了。怎么用，你自己决定。','别人看的是运气，我看的是你的努力。今天该收获了。','有我在一天，你的财路就不会断。今天放心大胆去做。']
+  },
+  love:{
+    2:['缘分天注定，但也要自己伸手接。今日留心身边人。','情之一字，最怕急。今日不妨慢一点，看清楚再走。','月下之缘，讲究时辰。今日适合想，不适合说。','红线虽早已系好，但路要一步步走。今日且耐心。','感情的事，三分靠缘，七分靠心。今日多用心。'],
+    3:['今天感情运不错。有话想说就说，别憋着。','你最近是不是在想一个人？直觉没骗你，顺着感觉走。','有些人值得等，有些人不值得。今天你心里应该有答案了。','感情这东西啊，不是你想清楚就能想清楚的。今天就感受吧。','今天适合跟在乎的人说句软话。别端着了。'],
+    4:['感情的路上，走慢一点没关系。今天就享受当下这个状态吧。','不是每天都要有进展的。今天就安安静静想想，你要的到底是什么。','月老的线不会断，但有时候会绕几个弯。今天就是个弯。','一个人也挺好的。但如果你想遇见谁，先把自己活好。','今天就别纠结了。该来的人不会因为你纠结就来得更快。'],
+    5:['我看你最近的气色里带着桃花。信不信由你，留意就好。','你值得被好好对待。今天如果遇到温暖，大方接受就好。','我给你系的这根线，从来没松过。你只管往前走。','感情里最难的不是遇见，是认定之后不放手。今天你做得很好。','有些话我不方便明说。但今天——保持微笑，会有惊喜。']
+  },
+  health:{
+    2:['天地有常，人身亦然。今日宜早睡，养足精气。','养生之道，在于顺时。今日不可逆天而行，当随遇而安。','身为根本，气为枝叶。今日固本培元，万事可期。','药补不如食补，食补不如心补。今日养心为上。','四时更替，各有其养。今日顺应天时，不做劳心之事。'],
+    3:['今天注意别贪凉。胃暖了，人才精神。','我看你最近有点累，今天早点休息，别硬撑。','身体是本钱。今天这个本钱，你得好好存着。','多喝点热水——我知道你嫌烦，但这次是真的有用。','今天适合散散步，晒晒太阳。别老闷在屋里。'],
+    4:['今天身体状况还行，但别因为感觉好就放纵。规律最重要。','健康就像存钱，每天存一点，老了才有得花。今天存了吗？','你最近作息还行，继续保持。别功亏一篑。','平平安安就是福。今天没什么大事，就是最好的事。','心静自然凉。今天别生气，气大伤身——这话我说了几千年了。'],
+    5:['看你精神头不错，我放心了。继续保持，长命百岁不是梦。','你是个惜福的人，身体自然不会亏待你。今天好好享受。','有什么比健康更重要的？今天你拥有的，比你以为的多得多。','我守着你的气脉呢，放心。今天想吃什么就吃什么。','你最近的状态让我高兴。保持下去，我给你多添几年寿。']
+  },
+  study:{
+    2:['学问之道，在于日积月累。今日宜静读，勿求速成。','笔墨之间藏乾坤。今日所学，他日皆为利器。','书山有路勤为径。今日不必登顶，但须前行一步。','才思如泉，需有源头。今日多读多看，源头自然充沛。','学海无涯，但有灯塔。今日认准方向，不惧远路。'],
+    3:['今天脑子挺清楚的，适合啃硬骨头。把最难的那个先搞定。','别看手机了，今天的专注力很宝贵。用在该用的地方。','你最近的积累快要到临界点了。再坚持一下，就通了。','学东西不是要全记住。今天记住一个关键点就够了。','今天适合整理笔记。把散的知识串起来，比学新东西更重要。'],
+    4:['今天学不进去也别硬来。休息也是学习的一部分。','脑子有时候需要放空才能装新东西。今天就放空吧。','你已经比大多数人努力了。今天允许自己偷个小懒。','不是每天都要有突破的。今天就复习复习，温故知新。','学习这件事啊，最怕的不是慢，是停。今天哪怕翻一页也好。'],
+    5:['我给你点了一盏长明灯，今日思路必清。去做你想做的事。','你的才华我看在眼里。今天别浪费它，写点什么、创造点什么。','从你第一天来问学业，我就知道你能成。今天更确定了。','今天你学的东西，会在未来某个关键时刻帮到你。相信我。','你不只是在学知识。你在成为一个更好的人。今天继续。']
+  },
+  general:{
+    2:['天道有常，不为尧存，不为桀亡。今日随遇而安。','阴阳交替，是为常道。今日不必强求，顺势而为即可。','万物负阴而抱阳，冲气以为和。今日求和，不求胜。','卦象千变万化，不变的是你的心。今日守住本心。','天地不仁，以万物为刍狗。但我看你今日有福，勿忧。'],
+    3:['今天的气场不错嘛。有什么小事赶紧处理了，省得拖着。','总体运势还行。没什么大风大浪，正好稳扎稳打。','今天就做一个正确的小决定就够了。不用贪多。','你最近在纠结一件事对不对？其实你心里已经有答案了，今天就听自己的。','日子一天天过，但不是每天都一样的。今天这一天，值得你认真过。'],
+    4:['今天平平淡淡的。但你知道吗，平淡才是真正的奢侈。','不是每天都要精彩纷呈。今天就安安静静做自己。','有时候什么都不做，也是一种智慧。今天就是这样的日子。','运势在蓄力。你现在做的每一件小事，都在为未来铺路。','别焦虑了。今天的你，已经在正确的路上了。'],
+    5:['今天我有句话想单独跟你说——你比你以为的要强得多。','这一路走来，你变了很多。变得更沉稳了。今天我很欣慰。','天机不可泄露太多。但今天我可以告诉你：你的方向是对的。','有我看着你呢。今天不管遇到什么，都会过去的。放心。','你我相识到今天，缘分不浅。今天的话不多说了，一切尽在不言中。']
+  }
+};
+
+function getDailyMsgDate(){
+  var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function dailyMsgSeed(dateStr){
+  var h=0;for(var i=0;i<dateStr.length;i++){h=((h<<5)-h)+dateStr.charCodeAt(i);h|=0;}return Math.abs(h);
+}
+function pickDailyDeity(){
+  var data=loadAffinity();
+  var cats=['career','love','wealth','health','study','general'];
+  var best=null;var bestPts=-1;var bestFirst='9999';
+  for(var i=0;i<cats.length;i++){
+    var d=data[cats[i]];
+    if(!d||d.lv<2)continue;
+    if(d.pts>bestPts||(d.pts===bestPts&&(d.firstDate||'9999')<bestFirst)){
+      best=cats[i];bestPts=d.pts;bestFirst=d.firstDate||'9999';
+    }
+  }
+  return best;
+}
+function getDailyMessage(cat,dateStr){
+  var data=loadAffinity();
+  var lv=(data[cat]&&data[cat].lv)||1;
+  if(lv<2)lv=2;
+  var pool=DAILY_MSG_POOLS[cat]&&DAILY_MSG_POOLS[cat][lv];
+  if(!pool||pool.length===0){
+    var fallbackLv=lv;
+    while(fallbackLv>=2&&(!DAILY_MSG_POOLS[cat]||!DAILY_MSG_POOLS[cat][fallbackLv]||DAILY_MSG_POOLS[cat][fallbackLv].length===0)){fallbackLv--;}
+    pool=(fallbackLv>=2&&DAILY_MSG_POOLS[cat]&&DAILY_MSG_POOLS[cat][fallbackLv])||['今日万事顺遂。'];
+  }
+  var seed=dailyMsgSeed(dateStr+cat);
+  return pool[seed%pool.length];
+}
+function showDailyMsg(){
+  var cat=pickDailyDeity();
+  if(!cat)return;
+  var dateStr=getDailyMsgDate();
+  var msg=getDailyMessage(cat,dateStr);
+  var deity=DEITY[cat]||{};
+  var box=document.getElementById('dailyMsgBox');
+  var av=document.getElementById('dailyMsgAvatar');
+  var cfg=AVATAR_CFG[cat]||{};
+  if(DEITY_IMG[cat]){
+    av.style.backgroundImage='url('+DEITY_IMG[cat]+')';
+    av.style.backgroundSize=cfg.size||'cover';
+    av.style.backgroundPosition=cfg.pos||'center';
+  }
+  document.getElementById('dailyMsgName').textContent=deity.name||'';
+  document.getElementById('dailyMsgText').textContent='「'+msg+'」';
+  var dd=new Date();var month=dd.getMonth()+1;var day=dd.getDate();
+  var weekNames=['日','一','二','三','四','五','六'];
+  document.getElementById('dailyMsgDate').textContent=month+'月'+day+'日 周'+weekNames[dd.getDay()];
+  box.style.display='block';
+
+  var shownKey='liuyao_daily_shown';
+  var lastShown=localStorage.getItem(shownKey)||'';
+  if(lastShown!==dateStr){
+    localStorage.setItem(shownKey,dateStr);
+    showDailyModal(cat,msg,deity);
+  }
+}
+function showDailyModal(cat,msg,deity){
+  var modal=document.getElementById('dailyMsgModal');
+  var av=document.getElementById('dailyMsgModalAvatar');
+  var cfg=AVATAR_CFG[cat]||{};
+  if(DEITY_IMG[cat]){
+    av.style.backgroundImage='url('+DEITY_IMG[cat]+')';
+    av.style.backgroundSize=cfg.size||'cover';
+    av.style.backgroundPosition=cfg.pos||'center';
+  }
+  document.getElementById('dailyMsgModalName').textContent=deity.name+' · 今日寄语';
+  document.getElementById('dailyMsgModalText').textContent='「'+msg+'」';
+  setTimeout(function(){modal.classList.add('show');},400);
+}
+function dismissDailyModal(){
+  var modal=document.getElementById('dailyMsgModal');
+  modal.classList.remove('show');
+}
+
+// ================= FORTUNE CALENDAR =================
+var CAL_KEY='liuyao_calendar';
+var _calYear,_calMonth;
+function loadCalendar(){
+  try{return JSON.parse(localStorage.getItem(CAL_KEY))||{};}catch(e){return{};}
+}
+function saveCalendar(d){
+  try{localStorage.setItem(CAL_KEY,JSON.stringify(d));}catch(e){}
+}
+function saveCalendarRecord(){
+  var hex=calcHexagram(state.lines);
+  var data=H[hex.key];
+  if(!data)return;
+  var fortune=data[7];
+  var dateStr=affinityToday();
+  var cal=loadCalendar();
+  if(!cal[dateStr]||fortune<cal[dateStr].fortune){
+    cal[dateStr]={fortune:fortune,cat:state.category,deity:(DEITY[state.category]||{}).name||''};
+    saveCalendar(cal);
+  }
+}
+function getCalendarStreak(){
+  var cal=loadCalendar();
+  var today=new Date();
+  var streak=0;
+  for(var i=0;i<365;i++){
+    var d=new Date(today);d.setDate(d.getDate()-i);
+    var key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    if(cal[key])streak++;
+    else break;
+  }
+  return streak;
+}
+function buildCalendarPage(){
+  if(!_calYear){var n=new Date();_calYear=n.getFullYear();_calMonth=n.getMonth();}
+  renderCalendar();
+}
+function calNavMonth(dir){
+  _calMonth+=dir;
+  if(_calMonth<0){_calMonth=11;_calYear--;}
+  if(_calMonth>11){_calMonth=0;_calYear++;}
+  renderCalendar();
+}
+function renderCalendar(){
+  var cal=loadCalendar();
+  var today=new Date();
+  var todayStr=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+  var streak=getCalendarStreak();
+  document.getElementById('calStreak').innerHTML=streak>0?'连续摇爻 <span>'+streak+'</span> 天':'尚无连续记录';
+  document.getElementById('calMonthLabel').textContent=_calYear+'年'+(_calMonth+1)+'月';
+  var firstDay=new Date(_calYear,_calMonth,1).getDay();
+  var daysInMonth=new Date(_calYear,_calMonth+1,0).getDate();
+  var fortuneNames={1:'大吉',2:'吉',3:'小吉',4:'平',5:'小凶',6:'凶'};
+  var grid=document.getElementById('calGrid');
+  var html='';
+  for(var i=0;i<firstDay;i++){html+='<div class="cal-cell empty"></div>';}
+  for(var d=1;d<=daysInMonth;d++){
+    var key=_calYear+'-'+String(_calMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    var rec=cal[key];
+    var isToday=key===todayStr;
+    var cls='cal-cell';
+    if(isToday)cls+=' today';
+    if(rec){
+      cls+=' has-record cal-fortune-'+rec.fortune;
+      if(streak>=7&&isStreakDay(key,cal))cls+=' streak-7';
+    }
+    html+='<div class="'+cls+'">';
+    html+='<div class="cal-day">'+d+'</div>';
+    if(rec){
+      html+='<div class="cal-dot"></div>';
+      html+='<div class="cal-deity">'+(rec.deity||'')+'</div>';
+    }
+    html+='</div>';
+  }
+  grid.innerHTML=html;
+}
+function isStreakDay(key,cal){
+  var d=new Date(key+'T00:00:00');
+  for(var i=0;i<7;i++){
+    var check=new Date(d);check.setDate(check.getDate()-i);
+    var k=check.getFullYear()+'-'+String(check.getMonth()+1).padStart(2,'0')+'-'+String(check.getDate()).padStart(2,'0');
+    if(!cal[k])return false;
+  }
+  return true;
+}
+
 initDeityAvatars();
 updateHistoryBtns();
 updateWelcomeAffinityBorders();
+showDailyMsg();
 </script>
 </body>
 </html>
