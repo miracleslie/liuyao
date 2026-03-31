@@ -1636,8 +1636,8 @@ body{
           </div>
           <input class="pair-input" id="pairNameB" placeholder="TA的名字 / 昵称" maxlength="12">
         </div>
-        <div style="display:flex;gap:14px;align-items:center;justify-content:center;margin-top:8px">
-          <button class="action-btn" style="min-width:140px" onclick="pairStartCalc()">开始测算</button>
+        <div style="display:flex;gap:14px;align-items:center;justify-content:center;margin-top:16px">
+          <button class="btn btn-small" onclick="pairStartCalc()">开始测算</button>
           <button class="btn btn-small" onclick="pairBack()">返 回</button>
         </div>
       </div>
@@ -5188,7 +5188,7 @@ function pairShare(){
 }
 
 function generatePairingCard(){
-  var CW=380,PAD=24,MX=CW/2;
+  var CW=660,PAD=50,MX=CW/2;
   var g=_pairState.grade;
   var rel=_pairState.rel;
   var cat=PAIR_REL_MAP[rel];
@@ -5198,103 +5198,106 @@ function generatePairingCard(){
   var gc=gColors[g.key]||'#d4a847';
 
   var cvs=document.getElementById('shareCanvas');
-  cvs.width=CW;cvs.height=900;
+  cvs.width=CW;cvs.height=1200;
   var ctx=cvs.getContext('2d');
 
-  ctx.font='13px serif';ctx.textAlign='center';
-  var speechLines=speech?wrapText(ctx,'"'+speech+'"',CW-70):[];
-  var tipLines=tip?wrapText(ctx,'建议：'+tip,CW-70):[];
+  ctx.font='18px serif';ctx.textAlign='center';
+  var speechLines=speech?wrapText(ctx,'"'+speech+'"',CW-120):[];
+  var tipLines=tip?wrapText(ctx,'建议：'+tip,CW-120):[];
 
-  var HC=40+20+24+16+70+18+22+12+20+speechLines.length*19+10+tipLines.length*17+30+18+20+18+24;
-  if(DEITY_IMG[cat])HC+=54;
+  var HC=70+32+40+28+140+30+36+20+28+speechLines.length*28+16+tipLines.length*24+50+24+28+24+30;
+  if(DEITY_IMG[cat])HC+=80;
   cvs.height=HC;
   ctx=cvs.getContext('2d');
 
   ctx.fillStyle='#1a1610';ctx.fillRect(0,0,CW,HC);
-  var grd=ctx.createRadialGradient(MX,100,10,MX,100,CW*0.8);
-  grd.addColorStop(0,'rgba(212,168,71,0.07)');grd.addColorStop(1,'transparent');
+  var grd=ctx.createRadialGradient(MX,160,10,MX,160,CW*0.8);
+  grd.addColorStop(0,'rgba(212,168,71,0.08)');grd.addColorStop(1,'transparent');
   ctx.fillStyle=grd;ctx.fillRect(0,0,CW,HC);
-  for(var i=0;i<30;i++){
-    ctx.beginPath();ctx.arc(Math.random()*CW,Math.random()*HC,Math.random()*1,0,Math.PI*2);
-    ctx.fillStyle='rgba(212,168,71,'+(0.06+Math.random()*0.1)+')';ctx.fill();
+  var grd2=ctx.createRadialGradient(MX,HC*0.6,10,MX,HC*0.6,CW*0.6);
+  grd2.addColorStop(0,'rgba(212,168,71,0.04)');grd2.addColorStop(1,'transparent');
+  ctx.fillStyle=grd2;ctx.fillRect(0,0,CW,HC);
+  for(var i=0;i<50;i++){
+    ctx.beginPath();ctx.arc(Math.random()*CW,Math.random()*HC,Math.random()*1.5,0,Math.PI*2);
+    ctx.fillStyle='rgba(212,168,71,'+(0.05+Math.random()*0.1)+')';ctx.fill();
   }
-  ctx.strokeStyle='rgba(212,168,71,0.1)';ctx.lineWidth=0.5;
-  ctx.strokeRect(12,12,CW-24,HC-24);
+  ctx.strokeStyle='rgba(212,168,71,0.12)';ctx.lineWidth=0.5;
+  ctx.strokeRect(18,18,CW-36,HC-36);
 
-  var Y=40;
+  var Y=70;
   ctx.textAlign='center';
 
-  ctx.font='12px serif';ctx.fillStyle='rgba(212,168,71,0.55)';
+  ctx.font='16px serif';ctx.fillStyle='rgba(212,168,71,0.6)';
   ctx.fillText('瑶爻好运小馆 · '+PAIR_REL_NAMES[rel],MX,Y);
-  Y+=24;
+  Y+=40;
 
   var relIcons={love:'♥',friend:'✦',business:'⚜',classmate:'✧'};
   var relIcon=relIcons[rel]||'♥';
-  ctx.font='15px serif';ctx.fillStyle='rgba(245,237,220,0.75)';
-  ctx.fillText(_pairState.nameA+'  '+relIcon+'  '+_pairState.nameB,MX,Y);
-  Y+=16;
+  ctx.font='bold 26px serif';ctx.fillStyle='rgba(245,237,220,0.85)';
+  ctx.fillText(_pairState.nameA+'   '+relIcon+'   '+_pairState.nameB,MX,Y);
+  Y+=28;
 
-  var ringR=30,ringCY=Y+ringR+5;
-  ctx.beginPath();ctx.arc(MX,ringCY,ringR+3,0,Math.PI*2);
-  ctx.fillStyle='rgba(212,168,71,0.04)';ctx.fill();
+  var ringR=55,ringCY=Y+ringR+8;
+  ctx.beginPath();ctx.arc(MX,ringCY,ringR+5,0,Math.PI*2);
+  ctx.fillStyle='rgba(212,168,71,0.03)';ctx.fill();
   ctx.beginPath();ctx.arc(MX,ringCY,ringR,0,Math.PI*2);
-  ctx.strokeStyle='rgba(212,168,71,0.1)';ctx.lineWidth=3;ctx.stroke();
+  ctx.strokeStyle='rgba(212,168,71,0.1)';ctx.lineWidth=5;ctx.stroke();
   var pct=_pairState.score/100;
   ctx.beginPath();
   ctx.arc(MX,ringCY,ringR,-Math.PI/2,-Math.PI/2+Math.PI*2*pct);
-  ctx.strokeStyle=gc;ctx.lineWidth=3;ctx.lineCap='round';ctx.stroke();
-  ctx.font='bold 28px serif';ctx.fillStyle=gc;ctx.textAlign='center';
-  ctx.fillText(_pairState.score,MX,ringCY+10);
-  Y=ringCY+ringR+18;
+  ctx.strokeStyle=gc;ctx.lineWidth=5;ctx.lineCap='round';ctx.stroke();
+  ctx.font='bold 52px serif';ctx.fillStyle=gc;ctx.textAlign='center';
+  ctx.fillText(_pairState.score,MX,ringCY+18);
+  Y=ringCY+ringR+30;
 
-  ctx.font='bold 14px serif';ctx.fillStyle=gc;
+  ctx.font='bold 24px serif';ctx.fillStyle=gc;
   ctx.fillText(g.label,MX,Y);
-  Y+=22;
+  Y+=36;
 
-  ctx.beginPath();ctx.moveTo(PAD+50,Y);ctx.lineTo(CW-PAD-50,Y);
+  ctx.beginPath();ctx.moveTo(PAD+80,Y);ctx.lineTo(CW-PAD-80,Y);
   ctx.strokeStyle='rgba(212,168,71,0.12)';ctx.lineWidth=0.5;ctx.stroke();
-  Y+=12;
+  Y+=20;
 
   if(DEITY_IMG[cat]){
-    var avS=36;var avImg=new Image();avImg.src=DEITY_IMG[cat];
+    var avS=56;var avImg=new Image();avImg.src=DEITY_IMG[cat];
     try{
       ctx.save();ctx.beginPath();ctx.arc(MX,Y+avS/2,avS/2,0,Math.PI*2);ctx.clip();
       ctx.drawImage(avImg,MX-avS/2,Y,avS,avS);ctx.restore();
       ctx.beginPath();ctx.arc(MX,Y+avS/2,avS/2+1,0,Math.PI*2);
-      ctx.strokeStyle='rgba(212,168,71,0.15)';ctx.lineWidth=0.5;ctx.stroke();
+      ctx.strokeStyle='rgba(212,168,71,0.2)';ctx.lineWidth=0.5;ctx.stroke();
     }catch(e){}
-    Y+=avS+14;
+    Y+=avS+18;
   }
 
-  ctx.font='12px serif';ctx.fillStyle='rgba(212,168,71,0.5)';
+  ctx.font='15px serif';ctx.fillStyle='rgba(212,168,71,0.55)';
   ctx.fillText(PAIR_REL_DEITY[rel]+' 有言',MX,Y);
-  Y+=20;
+  Y+=28;
 
   if(speechLines.length){
-    ctx.font='13px serif';ctx.fillStyle='rgba(245,237,220,0.65)';
-    for(var li=0;li<speechLines.length;li++){ctx.fillText(speechLines[li],MX,Y);Y+=19;}
-    Y+=10;
+    ctx.font='18px serif';ctx.fillStyle='rgba(245,237,220,0.7)';
+    for(var li=0;li<speechLines.length;li++){ctx.fillText(speechLines[li],MX,Y);Y+=28;}
+    Y+=16;
   }
 
   if(tipLines.length){
-    ctx.font='11px serif';ctx.fillStyle='rgba(212,168,71,0.35)';
-    for(var ti=0;ti<tipLines.length;ti++){ctx.fillText(tipLines[ti],MX,Y);Y+=17;}
+    ctx.font='15px serif';ctx.fillStyle='rgba(212,168,71,0.4)';
+    for(var ti=0;ti<tipLines.length;ti++){ctx.fillText(tipLines[ti],MX,Y);Y+=24;}
   }
 
-  Y+=30;
-  ctx.beginPath();ctx.moveTo(PAD+60,Y);ctx.lineTo(CW-PAD-60,Y);
+  Y+=50;
+  ctx.beginPath();ctx.moveTo(PAD+100,Y);ctx.lineTo(CW-PAD-100,Y);
   ctx.strokeStyle='rgba(212,168,71,0.08)';ctx.lineWidth=0.5;ctx.stroke();
-  Y+=18;
-  ctx.font='11px serif';ctx.fillStyle='rgba(245,237,220,0.4)';
+  Y+=24;
+  ctx.font='15px serif';ctx.fillStyle='rgba(245,237,220,0.45)';
   ctx.fillText('你和TA的缘分有多高？来测测吧',MX,Y);
-  Y+=20;
-  ctx.font='bold 12px serif';ctx.fillStyle='rgba(212,168,71,0.5)';
+  Y+=28;
+  ctx.font='bold 16px serif';ctx.fillStyle='rgba(212,168,71,0.55)';
   ctx.fillText('✦ 我也来测缘分',MX,Y);
-  Y+=18;
-  ctx.font='9px serif';ctx.fillStyle='rgba(212,168,71,0.2)';
+  Y+=24;
+  ctx.font='12px serif';ctx.fillStyle='rgba(212,168,71,0.2)';
   var ds=new Date();ctx.fillText(ds.getFullYear()+'.'+(ds.getMonth()+1)+'.'+ds.getDate(),MX,Y);
 
-  HC=Y+16;
+  HC=Y+24;
   var finalCvs=document.createElement('canvas');
   finalCvs.width=CW;finalCvs.height=HC;
   var fctx=finalCvs.getContext('2d');
