@@ -1233,7 +1233,6 @@ body{
   .cal-streak{font-size:0.8em}
 }
 /* ===== PAIRING ===== */
-.pair-back{position:absolute;top:18px;left:18px;background:none;border:none;color:var(--gold);font-size:1.1em;cursor:pointer;opacity:0.6;z-index:2}
 .pair-page{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;width:100%;padding:30px 20px;text-align:center;position:relative;box-sizing:border-box}
 .pair-title{font-size:1.4em;color:var(--gold);margin-bottom:4px;letter-spacing:0.15em;text-shadow:0 0 18px rgba(212,168,71,0.15)}
 .pair-sub{font-size:0.85em;color:var(--ink2);margin-bottom:28px;letter-spacing:0.05em}
@@ -1595,7 +1594,6 @@ body{
 
   <!-- ===== PAIRING STAGE ===== -->
   <div id="stage-pairing" class="stage">
-    <button class="pair-back" onclick="pairBack()">← 返回</button>
     <div class="pair-page">
       <!-- Step 1: Choose Relation Type -->
       <div class="pair-step active" id="pairStep1">
@@ -1623,6 +1621,7 @@ body{
             <div class="pair-type-deity">文曲 · 掌管</div>
           </div>
         </div>
+        <button class="btn btn-small" style="margin-top:28px" onclick="pairBack()">返 回</button>
       </div>
       <!-- Step 2: Input Names -->
       <div class="pair-step" id="pairStep2">
@@ -1637,7 +1636,10 @@ body{
           </div>
           <input class="pair-input" id="pairNameB" placeholder="TA的名字 / 昵称" maxlength="12">
         </div>
-        <button class="action-btn" style="min-width:140px" onclick="pairStartCalc()">开始测算</button>
+        <div style="display:flex;gap:14px;align-items:center;justify-content:center;margin-top:8px">
+          <button class="action-btn" style="min-width:140px" onclick="pairStartCalc()">开始测算</button>
+          <button class="btn btn-small" onclick="pairBack()">返 回</button>
+        </div>
       </div>
       <!-- Step 3: Animation -->
       <div class="pair-step" id="pairStep3">
@@ -1683,6 +1685,7 @@ body{
           <div class="pair-r-btns">
             <button class="pair-r-share" onclick="pairShare()">分享结果</button>
             <button class="pair-r-retry" onclick="pairRetry()">换人再测 →</button>
+            <button class="btn btn-small" style="margin-top:6px;width:100%" onclick="pairBack()">返 回</button>
           </div>
         </div>
       </div>
@@ -5202,8 +5205,8 @@ function generatePairingCard(){
   var speechLines=speech?wrapText(ctx,'"'+speech+'"',CW-70):[];
   var tipLines=tip?wrapText(ctx,'建议：'+tip,CW-70):[];
 
-  var HC=40+20+24+16+70+18+22+12+18+speechLines.length*19+10+tipLines.length*17+30+18+20+18+24;
-  if(DEITY_IMG[cat])HC+=44;
+  var HC=40+20+24+16+70+18+22+12+20+speechLines.length*19+10+tipLines.length*17+30+18+20+18+24;
+  if(DEITY_IMG[cat])HC+=54;
   cvs.height=HC;
   ctx=cvs.getContext('2d');
 
@@ -5260,12 +5263,12 @@ function generatePairingCard(){
       ctx.beginPath();ctx.arc(MX,Y+avS/2,avS/2+1,0,Math.PI*2);
       ctx.strokeStyle='rgba(212,168,71,0.15)';ctx.lineWidth=0.5;ctx.stroke();
     }catch(e){}
-    Y+=avS+4;
+    Y+=avS+14;
   }
 
   ctx.font='12px serif';ctx.fillStyle='rgba(212,168,71,0.5)';
   ctx.fillText(PAIR_REL_DEITY[rel]+' 有言',MX,Y);
-  Y+=18;
+  Y+=20;
 
   if(speechLines.length){
     ctx.font='13px serif';ctx.fillStyle='rgba(245,237,220,0.65)';
