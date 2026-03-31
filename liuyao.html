@@ -614,6 +614,32 @@ body{
 
 .restart-area{text-align:center;margin-top:24px;padding-top:20px;
   border-top:1px solid rgba(212,168,71,0.06)}
+.btn-share{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:10px 28px;border:1px solid rgba(212,168,71,0.35);color:var(--gold);
+  background:rgba(212,168,71,0.06);border-radius:8px;
+  font-family:inherit;font-size:clamp(13px,2vw,15px);letter-spacing:0.15em;
+  cursor:pointer;transition:all 0.3s;margin-top:12px;
+}
+.btn-share:hover{background:rgba(212,168,71,0.15);border-color:var(--gold)}
+.share-overlay{
+  position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;
+  background:rgba(16,14,10,0.92);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;opacity:0;pointer-events:none;
+  transition:opacity 0.4s;backdrop-filter:blur(6px);
+}
+.share-overlay.show{opacity:1;pointer-events:auto}
+.share-preview{max-width:90vw;max-height:65vh;border-radius:10px;box-shadow:0 4px 40px rgba(0,0,0,0.6)}
+.share-btns{margin-top:20px;display:flex;gap:12px}
+.share-btns button{
+  padding:12px 32px;border-radius:8px;font-family:inherit;
+  font-size:clamp(14px,2.2vw,16px);letter-spacing:0.15em;cursor:pointer;
+  transition:all 0.3s;
+}
+.btn-save-img{border:1px solid var(--gold);color:var(--gold);background:rgba(212,168,71,0.1)}
+.btn-save-img:hover{background:rgba(212,168,71,0.2)}
+.btn-close-share{border:1px solid rgba(245,237,220,0.25);color:var(--ink2);background:transparent}
+.btn-close-share:hover{border-color:rgba(245,237,220,0.5)}
 
 /* ====================== HISTORY ====================== */
 .history-header{
@@ -1308,8 +1334,18 @@ body{
     <div class="restart-area" id="resultRestartArea">
       <div class="btn-row">
         <button class="btn btn-small" onclick="restart()">重新摇爻</button>
-        <button class="btn btn-small btn-history-cond" style="border-color:var(--ink2);color:var(--ink2)" onclick="goToStage('history')">历史记录</button>
       </div>
+      <button class="btn-share" onclick="generateShareCard()">✦ 生成卦签卡片</button>
+    </div>
+  </div>
+
+  <!-- Share Card Overlay -->
+  <div class="share-overlay" id="shareOverlay">
+    <canvas id="shareCanvas" style="display:none"></canvas>
+    <img class="share-preview" id="sharePreview" alt="卦签卡片"/>
+    <div class="share-btns">
+      <button class="btn-save-img" onclick="saveShareCard()">保存图片</button>
+      <button class="btn-close-share" onclick="closeShareCard()">关 闭</button>
     </div>
   </div>
 
@@ -1358,9 +1394,8 @@ body{
       </div>
       <div class="lamp-step" id="lampStepResult">
         <div class="lamp-result" id="lampResultContent"></div>
-        <div class="btn-row" style="margin-top:28px">
-          <button class="btn btn-small" onclick="restart()">重新摇爻</button>
-          <button class="btn btn-small" style="border-color:var(--ink2);color:var(--ink2)" onclick="goToStage('result')">返回卦象</button>
+        <div style="margin-top:28px;text-align:center">
+          <button class="btn btn-small" onclick="goToStage('result')">返回卦象</button>
         </div>
       </div>
     </div>
@@ -1404,9 +1439,8 @@ body{
       </div>
       <div class="inc-step" id="incStepResult">
         <div class="incense-result" id="incenseResultContent"></div>
-        <div class="btn-row" style="margin-top:28px">
-          <button class="btn btn-small" onclick="restart()">重新摇爻</button>
-          <button class="btn btn-small" style="border-color:var(--ink2);color:var(--ink2)" onclick="goToStage('result')">返回卦象</button>
+        <div style="margin-top:28px;text-align:center">
+          <button class="btn btn-small" onclick="goToStage('result')">返回卦象</button>
         </div>
       </div>
     </div>
@@ -3893,6 +3927,7 @@ function buildIncenseResult(wish){
       +'<div class="deity-speech-tag">想跟你说几句心里话</div></div></div>'
       +'<p>我收到你的心意了，别焦虑，听我慢慢说——</p></div>';
   }
+  state.ritualData = {type:'incense',wish:wish,advice:remedy,lucky:lucky,closing:closing};
   h += '<div class="wish-echo">「'+esc(wish)+'」</div>';
   h += '<div class="remedy-block"><div class="remedy-title">给 你 的 建 议</div><div class="remedy-content">'+remedy+'</div></div>';
   h += '<div class="remedy-block"><div class="remedy-title">今 日 小 贴 士</div><div class="remedy-content">'+lucky+'</div></div>';
@@ -4061,6 +4096,7 @@ function buildLampResult(wish){
       +'<div class="deity-speech-tag">为你送上祝福</div></div></div>'
       +'<p>灯火已亮，好运加持！听我跟你说——</p></div>';
   }
+  state.ritualData = {type:'lamp',wish:wish,advice:bless,lucky:lucky,closing:closing,lamp:lampState.type};
   h += '<div class="wish-echo">「'+esc(wish)+'」</div>';
   h += '<div class="blessing-block"><div class="blessing-title">好 运 解 读</div><div class="blessing-content">'+bless+'</div></div>';
   h += '<div class="blessing-block"><div class="blessing-title">锦 上 添 花</div><div class="blessing-content">'+lucky+'</div></div>';
@@ -4072,6 +4108,339 @@ function buildLampResult(wish){
       +'<p>'+closing+'</p></div>';
   }
   document.getElementById('lampResultContent').innerHTML = h;
+}
+
+// ================= SHARE CARD =================
+function generateShareCard(){
+  sfxClick();
+  var hex=calcHexagram(state.lines),data=H[hex.key];if(!data)return;
+  var fortune=data[7],deity=DEITY[state.category]||{},catName=CAT_NAMES[state.category]||'综合';
+  var q=state.question||'',ritual=state.ritualData||null;
+  var hasR=!!(ritual&&(state.incenseDone||state.lampDone));
+  var summary=genBriefSummary(fortune,hex.movingLines?hex.movingLines.length:0,null,q).replace(/<[^>]+>/g,'');
+  var fLabel=FMAP[fortune];
+
+  var W=660,M=50,CW=W-M*2;
+  var tmpC=document.createElement('canvas');tmpC.width=W;tmpC.height=100;
+  var tm=tmpC.getContext('2d');
+  tm.font='18px serif';var gcL=wrapText(tm,data[3],CW-80);
+  tm.font='15px serif';var smL=wrapText(tm,summary,CW-80);
+  var raL=[],rcL=[];
+  if(hasR&&ritual.advice){tm.font='14px serif';raL=wrapText(tm,ritual.advice,CW-80);}
+  if(hasR&&ritual.closing){tm.font='13px serif';rcL=wrapText(tm,(deity.name||'')+'：'+ritual.closing,CW-60);}
+
+  // Height calc
+  var HC=0;
+  HC+=76;    // brand header
+  HC+=130;   // fortune seal
+  HC+=90;    // hexagram name + spacing
+  HC+=40;    // divider
+  HC+=gcL.length*32+46; // gua ci panel (18px font, 32px line-height)
+  HC+=40;    // xiang ci (may wrap)
+  HC+=36;    // divider
+  if(q) HC+=44;
+  HC+=86;    // deity avatar centered
+  HC+=smL.length*28+38; // deity speech (15px font, 28px line-height)
+  HC+=30;
+  if(hasR){
+    HC+=44;
+    if(ritual.wish) HC+=38;
+    if(raL.length) HC+=raL.length*26+32;
+    if(rcL.length) HC+=rcL.length*24+20;
+    HC+=20;
+  }
+  HC+=130; // invite CTA + footer
+  HC=Math.max(HC,1000);
+
+  var cvs=document.getElementById('shareCanvas');
+  cvs.width=W;cvs.height=HC;
+  var ctx=cvs.getContext('2d');ctx.textAlign='center';
+
+  // === BG ===
+  var bg=ctx.createLinearGradient(0,0,0,HC);
+  bg.addColorStop(0,'#201c13');bg.addColorStop(0.15,'#28241a');bg.addColorStop(0.5,'#22201a');bg.addColorStop(0.85,'#1a1810');bg.addColorStop(1,'#12100c');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,HC);
+
+  // Warm glow top area (behind fortune seal)
+  var gw1=ctx.createRadialGradient(W/2,180,30,W/2,180,300);
+  gw1.addColorStop(0,'rgba(212,168,71,0.08)');gw1.addColorStop(0.5,'rgba(212,168,71,0.03)');gw1.addColorStop(1,'transparent');
+  ctx.fillStyle=gw1;ctx.fillRect(0,0,W,HC);
+
+  // Subtle secondary glow mid-card
+  var gw2=ctx.createRadialGradient(W/2,HC*0.55,40,W/2,HC*0.55,280);
+  gw2.addColorStop(0,'rgba(180,140,60,0.035)');gw2.addColorStop(1,'transparent');
+  ctx.fillStyle=gw2;ctx.fillRect(0,0,W,HC);
+
+  // Gold dust particles
+  for(var p=0;p<60;p++){
+    var px=Math.random()*W,py=Math.random()*HC,pr=Math.random()*1.5+0.3;
+    ctx.fillStyle='rgba(212,168,71,'+(Math.random()*0.06+0.015)+')';
+    ctx.beginPath();ctx.arc(px,py,pr,0,Math.PI*2);ctx.fill();
+  }
+
+  // Corner ornaments (subtle L-shapes)
+  ctx.strokeStyle='rgba(212,168,71,0.2)';ctx.lineWidth=1.5;
+  var co=M-6,cl=24;
+  ctx.beginPath();ctx.moveTo(co,co+cl);ctx.lineTo(co,co);ctx.lineTo(co+cl,co);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(W-co-cl,co);ctx.lineTo(W-co,co);ctx.lineTo(W-co,co+cl);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(co,HC-co-cl);ctx.lineTo(co,HC-co);ctx.lineTo(co+cl,HC-co);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(W-co,HC-co-cl);ctx.lineTo(W-co,HC-co);ctx.lineTo(W-co-cl,HC-co);ctx.stroke();
+
+  // === FRAME ===
+  ctx.strokeStyle='rgba(212,168,71,0.28)';ctx.lineWidth=1.2;
+  roundRect(ctx,M-12,M-12,W-M*2+24,HC-M*2+24,12);ctx.stroke();
+  ctx.strokeStyle='rgba(212,168,71,0.09)';ctx.lineWidth=0.7;
+  roundRect(ctx,M-4,M-4,W-M*2+8,HC-M*2+8,8);ctx.stroke();
+
+  var Y=M+16;
+
+  // === BRAND ===
+  ctx.font='13px serif';ctx.fillStyle='rgba(212,168,71,0.35)';
+  ctx.fillText('瑶 爻 好 运 小 馆',W/2,Y);Y+=8;
+  var now=new Date();
+  ctx.font='11px serif';ctx.fillStyle='rgba(245,237,220,0.2)';
+  ctx.fillText(now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 · '+catName+'占',W/2,Y+14);Y+=38;
+
+  // === FORTUNE HERO (visual center) ===
+  var fC=fortune<=2?[210,55,50]:fortune===3?[220,170,55]:fortune===4?[140,130,110]:[210,55,50];
+  var fcs='rgba('+fC[0]+','+fC[1]+','+fC[2]+',';
+
+  // Seal size adapts: wider for multi-char
+  var sH=48, sW=fLabel.length===1?48:fLabel.length*40+20;
+  var sX=W/2, sY=Y+sH+2;
+  ctx.save();ctx.translate(sX,sY);ctx.rotate(-0.03);ctx.translate(-sX,-sY);
+  // Radial glow behind seal
+  var sg=ctx.createRadialGradient(sX,sY,20,sX,sY,200);
+  sg.addColorStop(0,fcs+'0.14)');sg.addColorStop(0.4,fcs+'0.05)');sg.addColorStop(1,'transparent');
+  ctx.fillStyle=sg;ctx.fillRect(sX-200,sY-200,400,400);
+  // Seal box
+  ctx.fillStyle=fcs+'0.08)';ctx.fillRect(sX-sW,sY-sH+2,sW*2,sH*2);
+  ctx.strokeStyle=fcs+'0.75)';ctx.lineWidth=2.5;ctx.strokeRect(sX-sW,sY-sH,sW*2,sH*2);
+  ctx.strokeStyle=fcs+'0.35)';ctx.lineWidth=0.8;ctx.strokeRect(sX-sW+5,sY-sH+5,sW*2-10,sH*2-10);
+  // Fortune text - always horizontal
+  ctx.fillStyle=fcs+'0.92)';ctx.textAlign='center';
+  ctx.font='bold 58px serif';
+  ctx.fillText(fLabel,sX,sY+21);
+  ctx.restore();ctx.textAlign='center';
+
+  // Yao lines - left side of seal
+  var yaoX=M+42;
+  for(var yi=5;yi>=0;yi--){
+    var yy=Y+12+(5-yi)*18;
+    var line=state.lines[yi],isV=line&&(line.sum===6||line.sum===9);
+    ctx.strokeStyle=isV?'rgba(212,168,71,0.65)':'rgba(245,237,220,0.25)';ctx.lineWidth=2;
+    if(line&&!line.isYang){
+      ctx.beginPath();ctx.moveTo(yaoX-20,yy);ctx.lineTo(yaoX-3,yy);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(yaoX+3,yy);ctx.lineTo(yaoX+20,yy);ctx.stroke();
+    }else{
+      ctx.beginPath();ctx.moveTo(yaoX-20,yy);ctx.lineTo(yaoX+20,yy);ctx.stroke();
+    }
+  }
+
+  Y+=sH*2+24;
+
+  // === Hexagram name - clearly below seal with generous spacing ===
+  Y+=16;
+  ctx.font='bold 34px serif';ctx.fillStyle='rgba(245,237,220,0.92)';
+  ctx.fillText(data[2],W/2,Y);
+  ctx.font='13px serif';ctx.fillStyle='rgba(212,168,71,0.35)';
+  ctx.fillText(data[1],W/2,Y+26);
+  Y+=58;
+
+  // === Decorative divider with diamond ===
+  var dY=Y;
+  _goldLine(ctx,M+30,dY,W/2-12,dY,0.3);
+  _goldLine(ctx,W/2+12,dY,W-M-30,dY,0.3);
+  ctx.save();ctx.translate(W/2,dY);ctx.rotate(Math.PI/4);
+  ctx.fillStyle='rgba(212,168,71,0.35)';ctx.fillRect(-4,-4,8,8);
+  ctx.restore();
+  Y+=30;
+
+  // === GUA CI - no panel, just text ===
+  ctx.font='18px serif';ctx.fillStyle='rgba(245,237,220,0.72)';ctx.textAlign='center';
+  gcL.forEach(function(l,i){ctx.fillText(l,W/2,Y+i*32);});
+  Y+=gcL.length*32+12;
+
+  // Xiang ci
+  ctx.font='14px serif';ctx.fillStyle='rgba(212,168,71,0.35)';ctx.textAlign='center';
+  var xiL=wrapText(ctx,'象曰：'+data[4],CW-40);
+  xiL.forEach(function(l,i){ctx.fillText(l,W/2,Y+i*24);});
+  Y+=xiL.length*24+6;
+
+  // === Divider ===
+  _goldLine(ctx,M+50,Y,W-M-50,Y,0.15);Y+=28;
+
+  // === QUESTION ===
+  if(q){
+    ctx.font='15px serif';ctx.fillStyle='rgba(212,168,71,0.5)';
+    ctx.fillText('所问「'+q+'」',W/2,Y);Y+=36;
+  }
+
+  // === DEITY (centered, larger avatar) ===
+  var afterDeity=function(){
+    if(hasR){
+      _goldLine(ctx,M+40,Y,W-M-40,Y,0.10);Y+=22;
+      var rLabel=ritual.type==='lamp'?'点灯祈福':'上香改运';
+      ctx.font='bold 14px serif';ctx.fillStyle='rgba(212,168,71,0.55)';
+      ctx.fillText('✦ '+rLabel,W/2,Y);Y+=8;
+      if(ritual.wish){
+        ctx.font='14px serif';ctx.fillStyle='rgba(245,237,220,0.42)';
+        ctx.fillText('心愿：'+ritual.wish,W/2,Y+16);Y+=30;
+      }
+      if(raL.length){
+        var raH=raL.length*26+20;
+        ctx.fillStyle='rgba(212,168,71,0.02)';
+        roundRect(ctx,M+30,Y,CW-60,raH,6);ctx.fill();
+        ctx.strokeStyle='rgba(212,168,71,0.05)';ctx.lineWidth=0.6;
+        roundRect(ctx,M+30,Y,CW-60,raH,6);ctx.stroke();
+        ctx.font='14px serif';ctx.fillStyle='rgba(245,237,220,0.55)';
+        raL.forEach(function(l,i){ctx.fillText(l,W/2,Y+16+i*26);});
+        Y+=raH+8;
+      }
+      if(rcL.length){
+        ctx.font='13px serif';ctx.fillStyle='rgba(212,168,71,0.38)';
+        rcL.forEach(function(l,i){ctx.fillText(l,W/2,Y+i*24);});
+        Y+=rcL.length*24+8;
+      }
+    }
+
+    // === INVITE CTA ===
+    Y+=6;
+    _goldLine(ctx,M+30,Y,W-M-30,Y,0.2);Y+=28;
+
+    // Invite phrases per fortune level
+    var invites=[
+      '大凶之卦，速来化解！','此卦凶险，你敢测吗？',
+      '运势起伏不定，你的呢？','测测你今日的运势如何？',
+      '好运已至！你也来沾沾喜气','今日运势大吉！你也来试试',
+      '天降好运！快来测测你的','大吉大利！看看你的运势如何'
+    ];
+    var invIdx=fortune<=1?Math.floor(Math.random()*2):fortune===2?2+Math.floor(Math.random()*2):fortune<=4?4+Math.floor(Math.random()*2):6+Math.floor(Math.random()*2);
+    var invTxt=invites[invIdx];
+
+    ctx.font='bold 17px serif';ctx.fillStyle='rgba(245,237,220,0.8)';ctx.textAlign='center';
+    ctx.fillText(invTxt,W/2,Y);Y+=30;
+
+    // CTA button-like area
+    var btnW=220,btnH=40,btnX=W/2-btnW/2,btnY=Y;
+    var btnG=ctx.createLinearGradient(btnX,0,btnX+btnW,0);
+    btnG.addColorStop(0,'rgba(212,168,71,0.15)');btnG.addColorStop(0.5,'rgba(212,168,71,0.25)');btnG.addColorStop(1,'rgba(212,168,71,0.15)');
+    ctx.fillStyle=btnG;
+    roundRect(ctx,btnX,btnY,btnW,btnH,20);ctx.fill();
+    ctx.strokeStyle='rgba(212,168,71,0.5)';ctx.lineWidth=1;
+    roundRect(ctx,btnX,btnY,btnW,btnH,20);ctx.stroke();
+    ctx.font='bold 16px serif';ctx.fillStyle='rgba(212,168,71,0.9)';
+    ctx.fillText('✦ 我也来摇一卦',W/2,btnY+26);
+    Y+=btnH+20;
+
+    // Footer
+    var botY=Math.max(Y+4,HC-40);
+    ctx.font='11px serif';ctx.fillStyle='rgba(245,237,220,0.18)';
+    ctx.fillText('瑶爻好运小馆 · 心之所惑，爻中自有答案',W/2,botY);
+
+    var img=document.getElementById('sharePreview');
+    img.src=cvs.toDataURL('image/png');
+    document.getElementById('shareOverlay').classList.add('show');
+  };
+
+  if(deity.name){
+    var avatarSrc=DEITY_IMG[state.category];
+    var avR=28; // avatar radius
+    var drawDT=function(){
+      // Deity name centered below avatar
+      ctx.font='bold 17px serif';ctx.fillStyle='rgba(212,168,71,0.75)';ctx.textAlign='center';
+      ctx.fillText(deity.name,W/2,Y);
+      ctx.font='13px serif';ctx.fillStyle='rgba(212,168,71,0.38)';
+      ctx.fillText(deity.say,W/2,Y+20);Y+=40;
+
+      ctx.font='15px serif';ctx.fillStyle='rgba(245,237,220,0.65)';ctx.textAlign='center';
+      smL.forEach(function(l,i){ctx.fillText(l,W/2,Y+i*28);});
+      Y+=smL.length*28+20;
+      afterDeity();
+    };
+    if(avatarSrc){
+      var avI=new Image();
+      avI.onload=function(){
+        // Centered avatar
+        var acx=W/2,acy=Y+avR;
+        ctx.save();ctx.beginPath();ctx.arc(acx,acy,avR,0,Math.PI*2);ctx.closePath();ctx.clip();
+        ctx.drawImage(avI,acx-avR,acy-avR,avR*2,avR*2);ctx.restore();
+        // Ring
+        ctx.strokeStyle='rgba(212,168,71,0.3)';ctx.lineWidth=1.2;
+        ctx.beginPath();ctx.arc(acx,acy,avR+1,0,Math.PI*2);ctx.stroke();
+        // Subtle outer glow
+        ctx.strokeStyle='rgba(212,168,71,0.08)';ctx.lineWidth=0.6;
+        ctx.beginPath();ctx.arc(acx,acy,avR+5,0,Math.PI*2);ctx.stroke();
+        Y+=avR*2+14;
+        drawDT();
+      };
+      avI.onerror=function(){Y+=10;drawDT();};
+      avI.src=avatarSrc;
+    }else{Y+=10;drawDT();}
+  }else{afterDeity();}
+}
+
+function _goldLine(ctx,x1,y1,x2,y2,a){
+  var g=ctx.createLinearGradient(x1,0,x2,0);
+  g.addColorStop(0,'transparent');g.addColorStop(0.5,'rgba(212,168,71,'+a+')');g.addColorStop(1,'transparent');
+  ctx.strokeStyle=g;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+}
+
+function _drawSeal(ctx,x,y,fortune){
+  var t=FMAP[fortune];
+  var c=fortune<=2?[180,50,50]:fortune===3?[180,130,50]:fortune===4?[110,105,85]:[180,50,50];
+  var cs='rgba('+c[0]+','+c[1]+','+c[2]+',';
+  ctx.save();ctx.translate(x,y);ctx.rotate(-0.06);ctx.translate(-x,-y);
+  ctx.fillStyle=cs+'0.08)';ctx.fillRect(x-26,y-26+2,52,52);
+  ctx.strokeStyle=cs+'0.65)';ctx.lineWidth=2;ctx.strokeRect(x-26,y-26,52,52);
+  ctx.strokeStyle=cs+'0.35)';ctx.lineWidth=0.6;ctx.strokeRect(x-21,y-21,42,42);
+  ctx.fillStyle=cs+'0.75)';ctx.textAlign='center';
+  if(t.length===1){ctx.font='bold 28px serif';ctx.fillText(t,x,y+10);}
+  else{ctx.font='bold 22px serif';ctx.fillText(t.charAt(0),x,y+2);ctx.font='bold 16px serif';ctx.fillText(t.charAt(1),x,y+22);}
+  ctx.restore();ctx.textAlign='center';
+}
+
+function wrapText(ctx, text, maxWidth){
+  var lines = [];
+  var chars = text.split('');
+  var line = '';
+  for(var i=0;i<chars.length;i++){
+    var test = line + chars[i];
+    if(ctx.measureText(test).width > maxWidth && line.length>0){
+      lines.push(line);
+      line = chars[i];
+    } else {
+      line = test;
+    }
+  }
+  if(line) lines.push(line);
+  return lines;
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+
+function saveShareCard(){
+  var cvs = document.getElementById('shareCanvas');
+  var link = document.createElement('a');
+  link.download = '卦签_'+new Date().getTime()+'.png';
+  link.href = cvs.toDataURL('image/png');
+  link.click();
+}
+
+function closeShareCard(){
+  document.getElementById('shareOverlay').classList.remove('show');
 }
 
 function restart(){
