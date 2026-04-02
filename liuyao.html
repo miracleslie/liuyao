@@ -1380,12 +1380,12 @@ body{
       <textarea class="question-input" id="questionInput" placeholder="比如：最近想跳槽去大厂，不知道时机对不对..." maxlength="200"></textarea>
       <div class="question-hint">选填，但写了会让解卦更贴合你的情况</div>
     </div>
-    <button class="btn btn-small btn-disabled" id="btnConfirmCat" onclick="confirmCat()">开始摇卦</button>
+    <button class="btn btn-small btn-disabled" id="btnConfirmCat" onclick="confirmCat()">开始摇爻</button>
   </div>
 
   <!-- Stage 3: Casting -->
   <div id="stage-casting" class="stage">
-    <div class="cast-title">虔心摇卦</div>
+    <div class="cast-title">虔心摇爻</div>
     <div class="deity-pray" id="deityPray"></div>
     <div class="cast-round" id="castRound">第 一 摇</div>
     <div class="tokens-area" id="tokensArea"></div>
@@ -1394,7 +1394,7 @@ body{
     <div class="yao-progress" id="yaoProgress"></div>
     <div class="cast-btns">
       <button class="btn btn-small" id="btnCast" onclick="castCoins()">摇 卦</button>
-      <button class="btn btn-small btn-ghost" id="btnQuickCast" onclick="quickCast()">一键摇卦</button>
+      <button class="btn btn-small btn-ghost" id="btnQuickCast" onclick="quickCast()">一键摇爻</button>
     </div>
     <button class="btn btn-small btn-ghost" id="btnAbandon" style="display:none;margin-top:12px;padding:8px 24px;font-size:13px;letter-spacing:0.15em;border-color:var(--ink2);color:var(--ink2);opacity:0.6" onclick="showAbandonModal()">放弃摇爻</button>
   </div>
@@ -3544,7 +3544,7 @@ var AFF_GREETINGS={
   },
   general:{
     1:'有缘人，伏羲恭候。',
-    2:'又来问卦了？嗯，坐下慢慢说。',
+    2:'又来摇爻了？嗯，坐下慢慢说。',
     3:'老朋友了，今天想问什么方向？',
     4:'你来了就好，有啥事直说不用绕。',
     5:'天机自有定数，但你的心意我懂。'
@@ -3587,7 +3587,7 @@ function buildAffinityPage(){
       +'<div class="aff-avatar alv'+lv+'" style="background-image:url('+DEITY_IMG[c]+');'+(AVATAR_CFG[c]?'background-size:'+(AVATAR_CFG[c].size||'cover')+';background-position:'+(AVATAR_CFG[c].pos||'center')+';':'')+'"></div>'
       +'<div class="aff-info">'
       +'<div class="aff-name">'+deity.name+' · '+catLabel[c]+'<span>'+lvName+' (Lv.'+lv+')</span></div>'
-      +'<div class="aff-stats">问卦 '+(d.totalCasts||0)+' 次 · 相识 '+Math.max(daysSinceFirst,0)+' 天</div>'
+      +'<div class="aff-stats">摇爻 '+(d.totalCasts||0)+' 次 · 相识 '+Math.max(daysSinceFirst,0)+' 天</div>'
       +'<div class="aff-bar-wrap"><div class="aff-bar" style="width:'+pct+'%"></div></div>'
       +'<div class="aff-stats" style="margin-top:3px;font-size:0.75em;opacity:0.6">'+ptsLabel+'</div>'
       +(isDecaying?'<div class="aff-decay-hint">⚠ 缘分正在消退，快来看看吧</div>':'')
@@ -4534,7 +4534,7 @@ function generateShareCard(){
     ctx.strokeStyle='rgba(212,168,71,0.5)';ctx.lineWidth=1;
     roundRect(ctx,btnX,btnY,btnW,btnH,20);ctx.stroke();
     ctx.font='bold 16px serif';ctx.fillStyle='rgba(212,168,71,0.9)';
-    ctx.fillText('✦ 我也来摇一卦',W/2,btnY+26);
+    ctx.fillText('✦ 我也来摇一爻',W/2,btnY+26);
     Y+=btnH+20;
 
     // Footer
@@ -4887,7 +4887,7 @@ function renderCalendar(){
     html+='<div class="cal-day">'+d+'</div>';
     if(rec){
       html+='<div class="cal-dot"></div>';
-      html+='<div class="cal-deity">'+(rec.deity||'占卜')+'</div>';
+      html+='<div class="cal-deity">'+(rec.deity||'摇爻')+'</div>';
     }else{
       html+='<div class="cal-dot" style="visibility:hidden"></div>';
       html+='<div class="cal-deity" style="visibility:hidden">占位符号</div>';
